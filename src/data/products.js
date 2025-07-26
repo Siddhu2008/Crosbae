@@ -1,0 +1,118 @@
+// Updated sample product data with additional details
+const products = [
+  {
+    id: 1,
+    productName: "Gold Necklace",
+    name: " Stud Earrings",
+    description: "Elegant gold necklace",
+    category: "Gold",
+    price: 25000,
+    purity: "18KT",
+    occasion: "Necklace",
+    rating: 4.5,
+    image:
+      "https://www.tanishq.co.in/dw/image/v2/BKCK_PRD/on/demandware.static/-/Library-Sites-TanishqSharedLibrary/default/dw1226b98b/homepage/shopByCategory/bangles-cat.jpg",
+    tags: ["NEW"],
+  },
+  {
+    id: 2,
+    productName: "Earrings",
+    name: "Diamond Stud Earrings",
+    description: "Elegant 18KT diamond earrings for parties.",
+    image:
+      "https://www.tanishq.co.in/dw/image/v2/BKCK_PRD/on/demandware.static/-/Library-Sites-TanishqSharedLibrary/default/dw1226b98b/homepage/shopByCategory/bangles-cat.jpg",
+    purity: "18KT",
+    price: 78000,
+    category: "Diamond",
+    occasion: "Party",
+    rating: 4.8,
+    tags: ["NEW"],
+  },
+  {
+    id: 3,
+    productName: "Rings",
+    name: "Platinum Couple Rings",
+    description: "PT950 platinum rings for engagements.",
+    image:
+      "https://www.tanishq.co.in/dw/image/v2/BKCK_PRD/on/demandware.static/-/Library-Sites-TanishqSharedLibrary/default/dw1226b98b/homepage/shopByCategory/bangles-cat.jpg",
+    purity: "PT950",
+    price: 42000,
+    category: "Platinum",
+    occasion: "Engagement",
+    rating: 4.2,
+    tags: ["Flat 50% OFF"],
+  },
+  {
+    id: 4,
+    productName: "Anklet",
+    name: "Silver Payal",
+    description: "925 silver payal for festive occasions.",
+    image:
+      "https://www.tanishq.co.in/dw/image/v2/BKCK_PRD/on/demandware.static/-/Library-Sites-TanishqSharedLibrary/default/dw1226b98b/homepage/shopByCategory/bangles-cat.jpg",
+    purity: "925",
+    price: 9000,
+    occasion: "Festive",
+    category: "Silver",
+    rating: 4.0,
+    tags: ["Best Seller"],
+  },
+  {
+    id: 5,
+    productName: "Pendant",
+    name: "Diamond Pendant Set",
+    description: "Beautiful 18KT diamond pendant for anniversaries.",
+    image:
+      "https://www.tanishq.co.in/dw/image/v2/BKCK_PRD/on/demandware.static/-/Library-Sites-TanishqSharedLibrary/default/dw1226b98b/homepage/shopByCategory/bangles-cat.jpg",
+    purity: "18KT",
+    price: 64000,
+    occasion: "Anniversary",
+    category: "Diamond",
+    rating: 4.6,
+    tags: ["Flat 50% OFF"],
+  },
+  {
+    id: 6,
+    productName: "Bangles",
+    name: "Gold Bangles",
+    description: "Elegant 22KT gold bangles.",
+    image:
+      "https://www.tanishq.co.in/dw/image/v2/BKCK_PRD/on/demandware.static/-/Library-Sites-TanishqSharedLibrary/default/dw1226b98b/homepage/shopByCategory/bangles-cat.jpg",
+    purity: "22KT",
+    price: 39000,
+    occasion: "Festive",
+    category: "Gold",
+    rating: 4.3,
+
+    tags: ["Flat 50% OFF"],
+  },
+  {
+    id: 7,
+    productName: "Bracelet",
+    name: "Platinum Bracelet",
+    description: "Stylish PT950 platinum bracelet for gifting.",
+    image:
+      "https://www.tanishq.co.in/dw/image/v2/BKCK_PRD/on/demandware.static/-/Library-Sites-TanishqSharedLibrary/default/dw1226b98b/homepage/shopByCategory/bangles-cat.jpg",
+    purity: "PT950",
+    price: 61000,
+    occasion: "Anniversary",
+    category: "Platinum",
+    rating: 4.4,
+    tags: ["Best Seller"],
+  },
+  {
+    id: 8,
+    productName: "Earrings",
+    name: "Silver Earrings",
+    description: "925 silver earrings for daily wear.",
+    image:
+      "https://www.tanishq.co.in/dw/image/v2/BKCK_PRD/on/demandware.static/-/Library-Sites-TanishqSharedLibrary/default/dw1226b98b/homepage/shopByCategory/bangles-cat.jpg",
+    purity: "925",
+    price: 3500,
+    occasion: "Daily Wear",
+    category: "Silver",
+    rating: 4.1,
+    tags: ["NEW"],
+  },
+];
+
+export default products;

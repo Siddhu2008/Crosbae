@@ -1,0 +1,139 @@
+
+/* Reset some base styles */
+.container {
+    max-width: 1200px;
+    margin: auto;
+    padding: 1rem;
+    font-family: 'Poppins', sans-serif;
+    background-color: #f9f5f0;
+}
+
+/* Filters Sidebar */
+.filter-drawer {
+    transition: transform 0.3s ease-in-out;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+    border-top-right-radius: 1rem;
+    border-bottom-right-radius: 1rem;
+}
+
+/* Overlay */
+.filter-drawer+.position-fixed {
+    backdrop-filter: blur(4px);
+}
+
+/* Card Styling */
+.card {
+    border-radius: 16px;
+    overflow: hidden;
+    border: none;
+    background-color: #fffdf9;
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s;
+}
+
+.card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+}
+
+.card-body {
+    padding: 1rem;
+}
+
+.card-img-top {
+    border-top-left-radius: 16px;
+    border-top-right-radius: 16px;
+    height: 220px;
+    object-fit: cover;
+}
+
+.product-tag .badge {
+    font-size: 0.7rem;
+    font-weight: 600;
+    padding: 0.4em 0.6em;
+    border-radius: 0.5rem;
+}
+
+.like-btn {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: #fff;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    color: #bfa17f;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.like-btn.liked {
+    background-color: #bfa17f;
+    color: white;
+    border-color: transparent;
+}
+
+/* Buttons */
+.btn-outline-primary,
+.btn-outline-danger {
+    border-radius: 12px;
+    font-weight: 600;
+    padding: 0.4rem 1rem;
+}
+
+.btn-outline-primary:hover,
+.btn-outline-danger:hover {
+    background-color: #bfa17f;
+    color: #fff;
+    border-color: #bfa17f;
+}
+
+/* Pagination */
+.pagination .page-item.active .page-link {
+    background-color: #bfa17f;
+    border-color: #bfa17f;
+    color: white;
+    border-radius: 10px;
+    font-weight: bold;
+}
+
+.pagination .page-link {
+    border-radius: 10px;
+    color: #333;
+    font-weight: 500;
+}
+
+/* Mobile-first layout */
+@media (max-width: 768px) {
+    .filter-drawer {
+        width: 100% !important;
+        border-radius: 0;
+    }
+
+    .card-img-top {
+        height: 180px;
+    }
+
+    .card-body h6 {
+        font-size: 1rem;
+    }
+
+    .card-body p {
+        font-size: 0.9rem;
+    }
+
+    .btn {
+        font-size: 0.9rem;
+    }
+}
+
+/* Typography */
+h5,
+h6 {
+    color: #5a4634;
+    font-weight: 600;
+}

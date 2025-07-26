@@ -1,0 +1,60 @@
+/* ========== Base Styles ========== */
+.section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.75rem;
+    font-weight: bold;
+    color: #333;
+}
+
+.testimonial-card {
+    background-color: #fff;
+    border: 1px solid #eee;
+    transition: all 0.3s ease;
+}
+
+.testimonial-card:hover {
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+}
+
+.testimonial-card p {
+    font-size: 0.95rem;
+    line-height: 1.5;
+    color: #444;
+}
+
+/* ========== Stars ========== */
+.testimonial-card .text-warning {
+    font-size: 1.1rem;
+    margin: 0 2px;
+}
+
+/* ========== Button ========== */
+.btn-gradient {
+    background: linear-gradient(135deg, #c5a880, #e7d3a1);
+    color: #fff;
+    font-weight: 500;
+    border: none;
+    border-radius: 30px;
+    transition: background 0.3s ease;
+}
+
+.btn-gradient:hover {
+    background: linear-gradient(135deg, #b3925a, #d8c18f);
+    color: #fff;
+}
+
+/* ========== Responsive Layout ========== */
+@media (min-width: 768px) {
+    .section-title {
+        font-size: 2.2rem;
+    }
+
+    .testimonial-card p {
+        font-size: 1rem;
+    }
+
+    .btn-gradient {
+        padding: 0.75rem 2rem;
+        font-size: 1rem;
+    }
+}

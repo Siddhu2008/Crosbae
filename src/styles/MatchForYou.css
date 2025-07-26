@@ -1,0 +1,75 @@
+/* ========== Section Styling ========== */
+.PerfectMatch {
+    padding: 3rem 1rem;
+    background-color: #fefcf9;
+}
+
+.PerfectMatch .section-title {
+    font-size: 2.2rem;
+    font-weight: bold;
+    font-family: 'Playfair Display', serif;
+    color: #2c2c2c;
+    margin-bottom: 0.5rem;
+}
+
+.PerfectMatch h5 {
+    font-size: 1.1rem;
+    color: #888;
+    margin-bottom: 2rem;
+    font-weight: 400;
+}
+
+/* ========== Grid Layout ========== */
+.PerfectMatch .row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+   
+}
+
+/* ========== Card Styling ========== */
+.product-card {
+    background-color: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+    padding: 1rem;
+}
+
+.product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+}
+
+.product-card img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+    border-radius: 10px;
+}
+
+.product-card:hover img {
+    transform: scale(1.05);
+}
+
+.product-card h4 {
+    margin-top: 1rem;
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: #3c3c3c;
+}
+
+/* ========== Responsive Adjustments ========== */
+@media (max-width: 768px) {
+    .PerfectMatch .section-title {
+        font-size: 1.7rem;
+    }
+
+    
+
+    .product-card h4 {
+        font-size: 1rem;
+    }
+}

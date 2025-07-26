@@ -1,0 +1,246 @@
+/* ========== General Layout ========== */
+.admin-dashboard {
+    padding: 2rem;
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #fdfaf6, #f4f1ec);
+    color: #2c2c2c;
+    min-height: 100vh;
+}
+
+/* ========== Header ========== */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.header h1 {
+    font-size: 2.8rem;
+    font-weight: 700;
+    color: #3a2c27;
+    font-family: 'Playfair Display', serif;
+}
+
+.header p {
+    font-size: 1rem;
+    color: #888;
+}
+
+/* ========== Add Product Button ========== */
+.add-product-btn {
+    background: linear-gradient(135deg, #c5a880, #e7d3a1);
+    color: #fff;
+    padding: 10px 24px;
+    font-weight: 600;
+    border: none;
+    border-radius: 30px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(197, 168, 128, 0.3);
+}
+
+.add-product-btn:hover {
+    background: linear-gradient(135deg, #b3925a, #d6c089);
+    box-shadow: 0 6px 18px rgba(179, 146, 90, 0.35);
+}
+
+/* ========== Tabs ========== */
+.tabs {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+}
+
+.tab {
+    padding: 10px 24px;
+    background-color: #fff;
+    color: #555;
+    font-weight: 500;
+    border: 2px solid transparent;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.tab:hover {
+    border-color: #c5a880;
+    color: #c5a880;
+}
+
+.tab.active {
+    background-color: #c5a880;
+    color: #fff;
+    border-color: #c5a880;
+}
+
+/* ========== Stats Cards ========== */
+.stats-section {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+}
+
+.stat-card {
+    background: #fff;
+    padding: 1.5rem;
+    border-radius: 16px;
+    border-left: 6px solid #c5a880;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.04);
+    transition: transform 0.3s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-6px);
+}
+
+.stat-card h4 {
+    font-size: 1rem;
+    color: #777;
+    margin-bottom: 0.5rem;
+}
+
+.count {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #2c2c2c;
+}
+
+.growth {
+    font-size: 0.9rem;
+    color: #e74c3c;
+}
+
+.growth.green {
+    color: #27ae60;
+}
+
+/* ========== Quick Actions ========== */
+.quick-actions h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    font-weight: 600;
+    color: #3a2c27;
+    font-family: 'Playfair Display', serif;
+}
+
+.actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.action-btn {
+    background: #fff;
+    border: 1px solid #ddd;
+    padding: 12px 20px;
+    border-radius: 12px;
+    font-weight: 500;
+    color: #555;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+}
+
+.action-btn:hover {
+    background: #f8f5f1;
+    border-color: #c5a880;
+    color: #c5a880;
+}
+
+/* ========== Tables ========== */
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.04);
+}
+
+.data-table thead {
+    background-color: #c5a880;
+    color: #fff;
+}
+
+.data-table th,
+.data-table td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid #f0eee9;
+    font-size: 0.95rem;
+}
+
+.data-table img {
+    border-radius: 8px;
+}
+
+/* ========== Buttons in Table ========== */
+.edit-btn,
+.delete-btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.edit-btn {
+    background-color: #3498db;
+    color: #fff;
+    margin-right: 50px;
+}
+
+.edit-btn:hover {
+    background-color: #2c81ba;
+}
+
+.delete-btn {
+    background-color: #e74c3c;
+    color: #fff;
+}
+
+.delete-btn:hover {
+    background-color: #c0392b;
+}
+
+/* ========== Badges ========== */
+.badge {
+    padding: 6px 14px;
+    border-radius: 50px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: #fff;
+}
+
+.badge.completed {
+    background-color: #27ae60;
+}
+
+.badge.pending {
+    background-color: #f39c12;
+}
+
+.badge.cancelled {
+    background-color: #e74c3c;
+}
+
+/* ========== Section Headers ========== */
+.tab-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.tab-header h2 {
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: #3a2c27;
+    font-family: 'Playfair Display', serif;
+}

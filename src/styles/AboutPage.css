@@ -1,0 +1,194 @@
+/* ========== Base Styles ========== */
+.about-page {
+    font-family: 'Playfair Display', serif;
+    background-color: #fdfaf6;
+    color: #2e2e2e;
+    line-height: 1.6;
+    padding: 1.5rem 1rem;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+/* ========== Hero Section ========== */
+.hero-section {
+    text-align: center;
+    padding: 3rem 1rem 2rem;
+    background: linear-gradient(135deg, #fffaf5, #f3e9dc);
+    border-radius: 16px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.brand-title {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: #b89c74;
+}
+
+.tagline {
+    font-size: 1.05rem;
+    color: #5c5c5c;
+}
+
+/* ========== Section Headings ========== */
+.about-page h2,
+.about-page h3 {
+    font-family: 'Poppins', sans-serif;
+    color: #b89c74;
+    font-weight: 600;
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.about-page p {
+    margin-bottom: 1rem;
+    font-size: 1rem;
+    color: #3b3b3b;
+}
+
+/* ========== Story, Mission, Quality, Why Choose ========== */
+.story-section,
+.mission-vision,
+.quality-section,
+.why-choose,
+.cta-section {
+    margin-top: 2.5rem;
+}
+
+/* ========== Mission-Vision (Two Columns) ========== */
+.two-col {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.two-col .col {
+    background: #fff;
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+/* ========== Why Choose (List) ========== */
+.features-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.features-list li {
+    font-size: 1rem;
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid #eee;
+    color: #444;
+    display: flex;
+    align-items: center;
+}
+
+.features-list li:last-child {
+    border-bottom: none;
+}
+
+/* ========== Call to Action Section ========== */
+.cta-section {
+    text-align: center;
+    padding: 2rem 1rem;
+    background: #fff7ec;
+    border-radius: 16px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+}
+
+.btn-explore {
+    display: inline-block;
+    margin-top: 1rem;
+    background-color: #b89c74;
+    color: white;
+    padding: 0.8rem 1.5rem;
+    border-radius: 30px;
+    font-size: 1rem;
+    text-decoration: none;
+    font-weight: 500;
+    transition: background 0.3s ease;
+}
+
+.btn-explore:hover {
+    background-color: #a88b67;
+}
+
+/* ========== Tablet (min-width: 768px) ========== */
+@media (min-width: 768px) {
+    .brand-title {
+        font-size: 2.5rem;
+    }
+
+    .tagline {
+        font-size: 1.2rem;
+    }
+
+    .two-col {
+        flex-direction: row;
+    }
+
+    .two-col .col {
+        flex: 1;
+    }
+
+    .features-list li {
+        font-size: 1.05rem;
+    }
+
+    .btn-explore {
+        font-size: 1.1rem;
+    }
+}
+
+/* ========== Laptop (min-width: 1024px) ========== */
+@media (min-width: 1024px) {
+    .hero-section {
+        padding: 4rem 2rem;
+    }
+
+    .brand-title {
+        font-size: 3rem;
+    }
+
+    .tagline {
+        font-size: 1.3rem;
+    }
+
+    .about-page h2,
+    .about-page h3 {
+        font-size: 1.8rem;
+    }
+
+    .about-page p {
+        font-size: 1.05rem;
+    }
+
+    .btn-explore {
+        padding: 1rem 2rem;
+    }
+}
+
+/* ========== Desktop XL (min-width: 1440px) ========== */
+@media (min-width: 1440px) {
+    .brand-title {
+        font-size: 3.5rem;
+    }
+
+    .tagline {
+        font-size: 1.4rem;
+    }
+
+    .about-page p {
+        font-size: 1.1rem;
+    }
+
+    .features-list li {
+        font-size: 1.15rem;
+    }
+}

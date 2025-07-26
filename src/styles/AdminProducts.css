@@ -1,0 +1,111 @@
+/* ========== Container ========== */
+.admin-products-container {
+    padding: 2rem 1rem;
+    font-family: 'Poppins', sans-serif;
+    background-color: #f9f9f9;
+}
+
+.admin-products-container h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    color: #333;
+    text-align: center;
+}
+
+/* ========== Grid Layout ========== */
+.admin-products-grid {
+    display: grid;
+    gap: 1.5rem;
+    grid-template-columns: 1fr;
+}
+
+/* ========== Product Card ========== */
+.admin-product-card {
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    padding: 1.2rem;
+    text-align: center;
+    transition: transform 0.3s ease;
+}
+
+.admin-product-card:hover {
+    transform: translateY(-5px);
+}
+
+.admin-product-card img.product-img {
+    width: 100%;
+    max-width: 180px;
+    height: auto;
+    margin-bottom: 1rem;
+    border-radius: 10px;
+}
+
+/* ========== Text Styling ========== */
+.admin-product-card h4 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: #222;
+}
+
+.admin-product-card p {
+    margin: 0.2rem 0;
+    font-size: 0.95rem;
+    color: #555;
+}
+
+/* ========== Buttons ========== */
+.admin-actions {
+    margin-top: 1rem;
+    display: flex;
+    justify-content: center;
+    gap: 0.8rem;
+    flex-wrap: wrap;
+}
+
+.edit-btn,
+.delete-btn {
+    padding: 0.5rem 1.2rem;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.edit-btn {
+    background-color: #498ff8;
+    color: #fff;
+}
+
+.edit-btn:hover {
+    background-color: #3275d1;
+}
+
+.delete-btn {
+    background-color: #ff4d4f;
+    color: #fff;
+}
+
+.delete-btn:hover {
+    background-color: #d9363e;
+}
+
+/* ========== Responsive ========== */
+@media (min-width: 576px) {
+    .admin-products-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (min-width: 992px) {
+    .admin-products-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .admin-products-container h2 {
+        font-size: 1.8rem;
+    }
+}

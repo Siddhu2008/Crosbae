@@ -1,0 +1,71 @@
+.trending-section {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+}
+
+.trending-card-wrapper {
+    padding: 0.5rem;
+}
+
+.trending-card {
+    position: relative;
+    overflow: hidden;
+    border-radius: 12px;
+    transition: transform 0.3s ease;
+}
+
+.trending-card img {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 12px;
+    transition: transform 0.5s ease;
+}
+
+.trending-card:hover img {
+    transform: scale(1.1);
+}
+
+.overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    color: white;
+    opacity: 0;
+    padding: 1rem;
+    text-align: center;
+    transition: opacity 0.4s ease, transform 0.4s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.trending-card:hover .overlay {
+    opacity: 1;
+}
+
+.overlay .title {
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.overlay .desc {
+    font-size: 0.875rem;
+    margin-bottom: 0.5rem;
+}
+
+/* Responsive scaling for overlay */
+@media (min-width: 768px) {
+    .overlay .title {
+        font-size: 1.2rem;
+    }
+
+    .overlay .desc {
+        font-size: 1rem;
+    }
+
+    .overlay button {
+        font-size: 0.9rem;
+    }
+}

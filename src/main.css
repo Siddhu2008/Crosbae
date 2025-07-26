@@ -1,0 +1,26 @@
+    :root {
+        --primary-color: #4A2C87;
+        --secondary-color: #6BBF56;
+        --accent-color: #FF9800;
+        --text-color: #333;
+        --light-bg: #f8f8f8;
+        --dark-bg: #222;
+    }
+
+    body {
+        font-family: 'Poppins', sans-serif;
+        background-color: #fff;
+        overflow-x: hidden;
+    }
+   .hide-scrollbar {
+       scrollbar-width: none;
+       /* Firefox */
+       -ms-overflow-style: none;
+       /* Internet Explorer 10+ */
+   }
+
+   .hide-scrollbar::-webkit-scrollbar {
+       display: none;
+       /* Chrome, Safari, Opera */
+   }
+   

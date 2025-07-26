@@ -1,0 +1,109 @@
+/* ========== Base (Mobile First) ========== */
+.container {
+    padding: 1.5rem 1rem;
+}
+
+.section-title {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 0.5rem;
+}
+
+h5 {
+    font-weight: 300;
+    color: #777;
+    margin-bottom: 2rem;
+}
+
+.feature-box {
+    background-color: #fdfaf6;
+    padding: 1rem;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    height: 100%;
+}
+
+.feature-box:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+}
+
+.feature-box img {
+    width: 50px;
+    height: auto;
+    margin-bottom: 1rem;
+}
+
+.feature-box h4 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #222;
+    margin-bottom: 0.5rem;
+}
+
+.feature-box p {
+    font-size: 0.875rem;
+    color: #555;
+    margin: 0;
+}
+
+
+/* ========== Tablet (min-width: 576px) ========== */
+@media (min-width: 576px) {
+    .feature-box h4 {
+        font-size: 1.1rem;
+    }
+
+    .feature-box p {
+        font-size: 0.9rem;
+    }
+
+    .feature-box img {
+        width: 60px;
+    }
+}
+
+/* ========== Laptop (min-width: 768px) ========== */
+@media (min-width: 768px) {
+    .section-title {
+        font-size: 2rem;
+    }
+
+    .feature-box {
+        padding: 1.25rem;
+    }
+
+    .feature-box h4 {
+        font-size: 1.2rem;
+    }
+
+    .feature-box p {
+        font-size: 1rem;
+    }
+}
+
+/* ========== Desktop (min-width: 992px) ========== */
+@media (min-width: 992px) {
+    .container {
+        max-width: 1140px;
+        margin: 0 auto;
+    }
+
+    .feature-box {
+        padding: 1.5rem;
+    }
+
+    .feature-box img {
+        width: 70px;
+    }
+
+    .feature-box h4 {
+        font-size: 1.3rem;
+    }
+
+    .feature-box p {
+        font-size: 1.05rem;
+    }
+}

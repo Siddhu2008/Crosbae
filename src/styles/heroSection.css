@@ -1,0 +1,237 @@
+/* === MOBILE-FIRST BASE STYLES === */
+
+.hero-carousel {
+    position: relative;
+    width: 100%;
+    height: 45vh;
+    max-width: 100%;
+    overflow: hidden;
+}
+.hero-text-box{
+    background-color: transparent !important;
+}
+.hero-slide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    opacity: 0;
+    transition: opacity 0.4s ease-in-out;
+    z-index: 1;
+}
+
+.hero-slide.active {
+    opacity: 1;
+    z-index: 2;
+}
+
+.hero-slide::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4);
+    z-index: -1;
+}
+
+.hero-slide .container {
+    position: relative;
+    z-index: 3;
+}
+
+.hero-slide h1 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+    line-height: 1.3;
+}
+
+.hero-slide p {
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.hero-slide .btn {
+    padding: 0.6rem 1.2rem;
+    font-size: 0.9rem;
+    margin: 0.25rem;
+}
+
+/* === NAVIGATION BUTTONS === */
+.carousel-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    padding: 0.75rem;
+    cursor: pointer;
+    font-size: 1.5rem;
+    z-index: 10;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.carousel-btn:hover {
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+.carousel-btn.left {
+    left: 0.75rem;
+}
+
+.carousel-btn.right {
+    right: 0.75rem;
+}
+
+/* === DOT INDICATORS === */
+.carousel-dots {
+    position: absolute;
+    bottom: 1rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 0.5rem;
+    z-index: 10;
+}
+
+.dot {
+    width: 10px;
+    height: 10px;
+    background-color: rgba(255, 255, 255, 0.5);
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.dot.active {
+    background-color: white;
+    transform: scale(1.3);
+}
+/* ========== Button ========== */
+.btn-gradient {
+    background: linear-gradient(135deg, #c5a880, #e7d3a1);
+    color: #fff;
+    font-weight: 500;
+    border: none;
+    border-radius: 30px;
+    transition: background 0.3s ease;
+}
+
+.btn-gradient:hover {
+    background: linear-gradient(135deg, #b3925a, #d8c18f);
+    color: #fff;
+}
+/* === SECTION TITLE === */
+.section-title {
+    color: var(--primary-color, #333);
+    text-align: center;
+    font-size: 2rem;
+    font-weight: 600;
+}
+
+/* === TABLET (min-width: 768px) === */
+@media (min-width: 768px) {
+    .hero-carousel {
+        height: 55vh;
+    }
+
+    .hero-slide h1 {
+        font-size: 2.25rem;
+    }
+
+    .hero-slide p {
+        font-size: 1.125rem;
+    }
+
+    .hero-slide .btn {
+        font-size: 1rem;
+        padding: 0.7rem 1.5rem;
+    }
+
+    .carousel-btn {
+        font-size: 2rem;
+        padding: 1rem;
+    }
+
+    .section-title {
+        font-size: 2.25rem;
+    }
+}
+
+/* === LAPTOP (min-width: 1024px) === */
+@media (min-width: 1024px) {
+    .hero-carousel {
+        height: 60vh;
+    }
+
+    .hero-slide h1 {
+        font-size: 2.75rem;
+    }
+
+    .hero-slide p {
+        font-size: 1.25rem;
+    }
+
+    .hero-slide .btn {
+        font-size: 1.05rem;
+        padding: 0.8rem 1.75rem;
+    }
+
+    .carousel-btn {
+        font-size: 2.25rem;
+    }
+
+    .section-title {
+        font-size: 2.5rem;
+    }
+}
+
+/* === DESKTOP (min-width: 1280px) === */
+@media (min-width: 1280px) {
+    .hero-carousel {
+        height: 65vh;
+    }
+
+    .hero-slide h1 {
+        font-size: 3.25rem;
+    }
+
+    .hero-slide p {
+        font-size: 1.5rem;
+    }
+
+    .hero-slide .btn {
+        font-size: 1.1rem;
+        padding: 1rem 2rem;
+    }
+
+    .carousel-btn {
+        font-size: 2.5rem;
+    }
+
+    .section-title {
+        font-size: 2.75rem;
+    }
+}
+
+/* Background images for each slide (using placeholder for demonstration) */
+.hero-slide-1 {
+    background-image: url('https://www.tanishq.co.in/dw/image/v2/BKCK_PRD/on/demandware.static/-/Library-Sites-TanishqSharedLibrary/default/dw5a5ad31d/rivaahpage/rivaah-south-geo-d1.jpg');
+}
+
+.hero-slide-2 {
+    background-image: url('https://www.tanishq.co.in/dw/image/v2/BKCK_PRD/on/demandware.static/-/Library-Sites-TanishqSharedLibrary/default/dw63015926/homepage/HeroBanner/rir-desktop-new.jpg');
+}
