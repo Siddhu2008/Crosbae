@@ -1,5 +1,5 @@
 import React from "react";
-import "../styles/TrandingItems.css"; // 👈 create this CSS file
+import "../styles/trandingItems.css"; // 👈 create this CSS file
 
 const items = [
   {
