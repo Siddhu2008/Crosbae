@@ -119,6 +119,13 @@
 
     .btn {
         font-size: 0.9rem;
+        padding: 0.4rem 1rem;
+    }
+    .sort-box{
+        margin-bottom: 25px;
+    }
+    .lable-sort{
+        margin-left: 40px;
     }
 }
 

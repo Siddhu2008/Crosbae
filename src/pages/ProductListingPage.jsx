@@ -107,8 +107,8 @@ export default function ProductListingPage() {
         >
           <i className="bi bi-funnel-fill"></i> Filters
         </button>
-        <div className="d-flex align-items-center ms-auto">
-          <label className="me-2 fw-semibold">Sort By:</label>
+        <div className="sort-box ms-auto">
+          <label className="lable-sort fw-semibold">Sort By:</label>
           <select
             className="form-select w-auto shadow-sm"
             value={sortOption}
@@ -287,9 +287,6 @@ export default function ProductListingPage() {
                   <div className="mt-2 d-flex justify-center gap-5">
                     <button className="btn btn-sm btn-outline-primary">
                       Add to Cart
-                    </button>
-                    <button className="btn btn-sm btn-outline-danger">
-                      Wishlist
                     </button>
                   </div>
                 </div>
