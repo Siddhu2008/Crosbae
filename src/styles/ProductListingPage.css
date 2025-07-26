@@ -1,13 +1,4 @@
 
-/* Reset some base styles */
-.container {
-    max-width: 1200px;
-    margin: auto;
-    padding: 1rem;
-    font-family: 'Poppins', sans-serif;
-    background-color: #f9f5f0;
-}
-
 /* Filters Sidebar */
 .filter-drawer {
     transition: transform 0.3s ease-in-out;

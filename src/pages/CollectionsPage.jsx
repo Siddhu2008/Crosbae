@@ -9,7 +9,7 @@ const collections = [
   },
   {
     title: "Necklaces",
-    img: "https://www.tanishq.co.in/dw/image/v2/BKCK_PRD/on/demandware.static/-/Library-Sites-TanishqSharedLibrary/default/dweefc1d68/homepage/shopByCategory/Necklace-cat.jpg",
+    img: "https://www.tanishq.co.in/dw/image/v2/BKCK_PRD/on/demandware.static/-/Library-Sites-TanishqSharedLibrary/default/dweefc1d68/homepage/shopByCategory/rings-cat.jpg",
   },
   {
     title: "Earrings",
@@ -17,7 +17,7 @@ const collections = [
   },
   {
     title: "Bangles",
-    img: "https://www.tanishq.co.in/dw/image/v2/BKCK_PRD/on/demandware.static/-/Library-Sites-TanishqSharedLibrary/default/dwf90107fc/homepage/shopByCategory/Bangle-cat.jpg",
+    img: "https://www.tanishq.co.in/dw/image/v2/BKCK_PRD/on/demandware.static/-/Library-Sites-TanishqSharedLibrary/default/dwf90107fc/homepage/shopByCategory/earrings-cat.jpg",
   },
 ];
 

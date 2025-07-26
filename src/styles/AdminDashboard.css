@@ -1,6 +1,6 @@
 /* ========== General Layout ========== */
 .admin-dashboard {
-    padding: 2rem;
+    padding: 1rem;
     font-family: 'Poppins', sans-serif;
     background: linear-gradient(135deg, #fdfaf6, #f4f1ec);
     color: #2c2c2c;
@@ -10,34 +10,36 @@
 /* ========== Header ========== */
 .header {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 2rem;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
 }
 
 .header h1 {
-    font-size: 2.8rem;
+    font-size: 2rem;
     font-weight: 700;
     color: #3a2c27;
     font-family: 'Playfair Display', serif;
 }
 
 .header p {
-    font-size: 1rem;
+    font-size: 0.95rem;
     color: #888;
+    text-align: center;
 }
 
 /* ========== Add Product Button ========== */
 .add-product-btn {
     background: linear-gradient(135deg, #c5a880, #e7d3a1);
     color: #fff;
-    padding: 10px 24px;
+    padding: 10px 20px;
     font-weight: 600;
     border: none;
     border-radius: 30px;
     font-size: 1rem;
     transition: all 0.3s ease;
     box-shadow: 0 4px 12px rgba(197, 168, 128, 0.3);
+    width: 100%;
 }
 
 .add-product-btn:hover {
@@ -48,13 +50,14 @@
 /* ========== Tabs ========== */
 .tabs {
     display: flex;
-    gap: 1rem;
-    margin-bottom: 2rem;
     flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
 }
 
 .tab {
-    padding: 10px 24px;
+    flex: 1 1 100%;
+    padding: 10px;
     background-color: #fff;
     color: #555;
     font-weight: 500;
@@ -62,6 +65,7 @@
     border-radius: 30px;
     cursor: pointer;
     transition: all 0.3s ease;
+    text-align: center;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
 }
 
@@ -79,14 +83,14 @@
 /* ========== Stats Cards ========== */
 .stats-section {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-    gap: 1.5rem;
-    margin-bottom: 3rem;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    margin-bottom: 2rem;
 }
 
 .stat-card {
     background: #fff;
-    padding: 1.5rem;
+    padding: 1rem;
     border-radius: 16px;
     border-left: 6px solid #c5a880;
     box-shadow: 0 4px 14px rgba(0, 0, 0, 0.04);
@@ -94,23 +98,23 @@
 }
 
 .stat-card:hover {
-    transform: translateY(-6px);
+    transform: translateY(-4px);
 }
 
 .stat-card h4 {
-    font-size: 1rem;
+    font-size: 0.95rem;
     color: #777;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.4rem;
 }
 
 .count {
-    font-size: 2rem;
+    font-size: 1.5rem;
     font-weight: bold;
     color: #2c2c2c;
 }
 
 .growth {
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     color: #e74c3c;
 }
 
@@ -120,7 +124,7 @@
 
 /* ========== Quick Actions ========== */
 .quick-actions h2 {
-    font-size: 1.5rem;
+    font-size: 1.4rem;
     margin-bottom: 1rem;
     font-weight: 600;
     color: #3a2c27;
@@ -129,14 +133,14 @@
 
 .actions {
     display: flex;
-    flex-wrap: wrap;
-    gap: 1rem;
+    flex-direction: column;
+    gap: 0.8rem;
 }
 
 .action-btn {
     background: #fff;
     border: 1px solid #ddd;
-    padding: 12px 20px;
+    padding: 10px 16px;
     border-radius: 12px;
     font-weight: 500;
     color: #555;
@@ -157,7 +161,8 @@
     border-collapse: collapse;
     background-color: #fff;
     border-radius: 12px;
-    overflow: hidden;
+    overflow-x: auto;
+    display: block;
     box-shadow: 0 6px 18px rgba(0, 0, 0, 0.04);
 }
 
@@ -168,23 +173,25 @@
 
 .data-table th,
 .data-table td {
-    padding: 1rem;
+    padding: 0.8rem;
     text-align: left;
     border-bottom: 1px solid #f0eee9;
-    font-size: 0.95rem;
+    font-size: 0.85rem;
+    white-space: nowrap;
 }
 
 .data-table img {
-    border-radius: 8px;
+    border-radius: 6px;
+    max-width: 60px;
 }
 
 /* ========== Buttons in Table ========== */
 .edit-btn,
 .delete-btn {
-    padding: 10px 20px;
+    padding: 8px 12px;
     border: none;
-    border-radius: 8px;
-    font-size: 0.9rem;
+    border-radius: 6px;
+    font-size: 0.85rem;
     font-weight: 500;
     cursor: pointer;
     transition: all 0.3s ease;
@@ -193,7 +200,7 @@
 .edit-btn {
     background-color: #3498db;
     color: #fff;
-    margin-right: 50px;
+    margin-right: 1rem;
 }
 
 .edit-btn:hover {
@@ -211,9 +218,9 @@
 
 /* ========== Badges ========== */
 .badge {
-    padding: 6px 14px;
+    padding: 5px 12px;
     border-radius: 50px;
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     font-weight: 500;
     color: #fff;
 }
@@ -233,14 +240,49 @@
 /* ========== Section Headers ========== */
 .tab-header {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1.5rem;
+    flex-direction: column;
+    gap: 0.8rem;
+    margin-bottom: 1rem;
 }
 
 .tab-header h2 {
-    font-size: 1.8rem;
+    font-size: 1.6rem;
     font-weight: 600;
     color: #3a2c27;
     font-family: 'Playfair Display', serif;
+}
+
+/* ========== Media Queries (Tablet & Desktop) ========== */
+@media (min-width: 600px) {
+    .tab {
+        flex: unset;
+        padding: 10px 24px;
+    }
+
+    .actions {
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+
+    .add-product-btn {
+        width: auto;
+    }
+}
+
+@media (min-width: 768px) {
+    .header {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .stats-section {
+        grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    }
+
+    .tab-header {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+    }
 }
