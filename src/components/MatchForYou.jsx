@@ -39,7 +39,7 @@ const categories = [
 export default function MatchForYou() {
   return (
     <div>
-      <section className="container PerfectMatch">
+      <section className="container PerfectMatch my-5">
         <h2 className="section-title text-center" data-aos="fade-up">
           Find Your Perfect Match
         </h2>

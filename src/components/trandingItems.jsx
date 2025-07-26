@@ -30,7 +30,7 @@ const items = [
 
 export default function TrandingItems() {
   return (
-    <section className="container trending-section">
+    <section className="container trending-section my-5">
       <h2 className="section-title" data-aos="fade-up">
         Trending Now
       </h2>
