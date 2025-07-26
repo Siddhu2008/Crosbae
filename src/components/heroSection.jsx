@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import "../styles/HeroSection.css"
+import "../styles/heroSection.css"
 export default function HeroSection() {
   const slidesRef = useRef([]);
   const dotsRef = useRef([]);
