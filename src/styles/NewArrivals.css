@@ -158,8 +158,8 @@
 }
 @media (max-width:1500px) {
     .mute-btn {
-        bottom: 130px;
-        right: 100px;
+        bottom: 200px;
+        right: 150px;
     }
 }
 @media (max-width:1300px) {
