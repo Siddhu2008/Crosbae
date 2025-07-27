@@ -9,7 +9,7 @@ const Navbar = () => {
   const toggleMenu = () => setIsOpen(!isOpen);
 
   return (
-    <nav className="navbar sticky-top">
+    <nav className="navbar">
       <div className="navbar-container">
         {/* Logo */}
 
