@@ -30,16 +30,16 @@ export default function Footer() {
             <h6 className="fw-bold">Quick Links</h6>
             <ul className="list-unstyled">
               <li>
-                <a href="#">Shop All</a>
+                <a href="/shop">Shop All</a>
               </li>
               <li>
-                <a href="#">Collections</a>
+                <a href="/collections">Collections</a>
               </li>
               <li>
-                <a href="#">About Us</a>
+                <a href="/about">About Us</a>
               </li>
               <li>
-                <a href="#">Contact</a>
+                <a href="/contact">Contact</a>
               </li>
               <li>
                 <a href="#">Jewelry Care</a>
@@ -52,19 +52,19 @@ export default function Footer() {
             <h6 className="fw-bold">Customer Service</h6>
             <ul className="list-unstyled">
               <li>
-                <a href="#">Shipping Info</a>
+                <a href="/contact">Shipping Info</a>
               </li>
               <li>
-                <a href="#">Returns & Exchange</a>
+                <a href="/contact">Returns & Exchange</a>
               </li>
               <li>
-                <a href="#">Size Guide</a>
+                <a href="/contact">Size Guide</a>
               </li>
               <li>
-                <a href="#">FAQ</a>
+                <a href="/contact">FAQ</a>
               </li>
               <li>
-                <a href="#">Support</a>
+                <a href="/contact">Support</a>
               </li>
             </ul>
           </div>

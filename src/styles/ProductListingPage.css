@@ -69,19 +69,23 @@
 }
 
 /* Buttons */
-.btn-outline-primary,
-.btn-outline-danger {
+.card-button{
+    bottom: 0;
+}
+.custom-cart-btn{
     border-radius: 12px;
+    border: 1px solid rgb(42, 97, 250);
+    color: rgb(54, 89, 248);
     font-weight: 600;
     padding: 0.4rem 1rem;
 }
 
-.btn-outline-primary:hover,
-.btn-outline-danger:hover {
+.custom-cart-btn:hover {
     background-color: #bfa17f;
     color: #fff;
     border-color: #bfa17f;
 }
+
 
 /* Pagination */
 .pagination .page-item.active .page-link {

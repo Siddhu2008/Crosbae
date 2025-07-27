@@ -280,12 +280,14 @@ export default function ProductListingPage() {
                   className="card-img-top"
                   style={{ objectFit: "cover", height: "250px" }}
                 />
-                <div className="card-body">
-                  <h6 className="fw-bold mb-1">{p.productName}</h6>
-                  <p className="text-muted small mb-1">{p.description}</p>
-                  <p className="fw-semibold text-dark mb-1">₹ {p.price}</p>
-                  <div className="mt-2 d-flex justify-center gap-5">
-                    <button className="btn btn-sm btn-outline-primary">
+                <div className="card-body d-flex flex-column">
+                  <div>
+                    <h6 className="fw-bold mb-1">{p.productName}</h6>
+                    <p className="text-muted small mb-1">{p.description}</p>
+                    <p className="fw-semibold text-dark mb-1 ">₹ {p.price}</p>
+                  </div>
+                  <div className="mt-auto">
+                    <button className="btn custom-cart-btn w-100 ">
                       Add to Cart
                     </button>
                   </div>
