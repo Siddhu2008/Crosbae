@@ -1,4 +1,8 @@
 /* Mobile-first base styles */
+.top-category{
+    padding-top: 90px;
+}
+
 .category-wrapper {
     overflow: hidden;
     padding: 15px;

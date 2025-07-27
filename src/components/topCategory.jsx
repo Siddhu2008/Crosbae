@@ -162,7 +162,7 @@ export default function TopCategory() {
   }, []);
 
   return (
-    <div>
+    <div className="top-category">
       <div
         className="category-wrapper hide-scrollbar"
         ref={scrollContainerRef}

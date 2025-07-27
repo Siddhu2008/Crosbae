@@ -12,11 +12,11 @@ const Navbar = () => {
     <nav className="navbar sticky-top">
       <div className="navbar-container">
         {/* Logo */}
-       
-          <Link to="/" className="logo" data-aos="fade-up">
-            <img src={logo} alt="Cros Bae Logo" />
-          </Link>
-        
+
+        <Link to="/" className="logo" data-aos="fade-up">
+          <img src={logo} alt="Cros Bae Logo" />
+        </Link>
+
         {/* Desktop Nav Links */}
         <div className="nav-links">
           <Link to="/shop">Shop</Link>
