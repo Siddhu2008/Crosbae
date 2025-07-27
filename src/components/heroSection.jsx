@@ -94,12 +94,12 @@ export default function HeroSection() {
                   {index === 0 ? "Shop Now" : "View Collections"}
                 </a>
                 <a
-                  href="#"
+                  href="/about"
                   className="btn btn-outline-light btn-lg mt-3 ms-3"
                   data-aos="fade-up"
                   data-aos-delay="300"
                 >
-                  {index === 0 ? "Learn More" : "Contact Us"}
+                  {index === 0 ? "Learn More" : "Learn"}
                 </a>
               </div>
             </div>

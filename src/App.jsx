@@ -29,20 +29,23 @@ const App = () => {
 
   return (
     <Router>
-      <Navbar />
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/shop" element={<ProductListingPage />} />
-        <Route path="/collections" element={<CollectionsPage />} />
-        <Route path="/about" element={<AboutPage />} />
-        <Route path="/contact" element={<ContactPage />} />
-        <Route path="/admin" element={<AdminDashboard />} />
-        <Route path="/admin/add-product" element={<AddProduct />} />
-        <Route path="/admin/products" element={<AdminProducts />} />
-      </Routes>
-      <Footer />
+      <div className="app-wrapper">
+        <Navbar />
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/shop" element={<ProductListingPage />} />
+          <Route path="/collections" element={<CollectionsPage />} />
+          <Route path="/about" element={<AboutPage />} />
+          <Route path="/contact" element={<ContactPage />} />
+          <Route path="/admin" element={<AdminDashboard />} />
+          <Route path="/admin/add-product" element={<AddProduct />} />
+          <Route path="/admin/products" element={<AdminProducts />} />
+        </Routes>
+        <Footer />
+      </div>
     </Router>
   );
+
 };
 
 export default App;

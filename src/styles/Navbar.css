@@ -35,10 +35,6 @@
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.logo img:hover {
-    transform: scale(1.25);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-}
 
 /* ========== Navigation Links ========== */
 .nav-links {
