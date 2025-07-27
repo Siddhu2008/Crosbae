@@ -99,7 +99,7 @@ export default function HeroSection() {
                   data-aos="fade-up"
                   data-aos-delay="300"
                 >
-                  {index === 0 ? "Learn More" : "Learn"}
+                  {index === 0 ? "Learn More" : "Learn More"}
                 </a>
               </div>
             </div>
