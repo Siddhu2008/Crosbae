@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import AOS from "aos";
 import "aos/dist/aos.css";
+import "../styles/CollectionsPage.css"
 
 const collections = [
   {
@@ -27,7 +28,7 @@ export default function CollectionsPage() {
   }, []);
 
   return (
-    <div className="container py-5">
+    <div className="collection-container">
       <h2 className="text-center mb-4" data-aos="fade-down">
         Our Collections
       </h2>

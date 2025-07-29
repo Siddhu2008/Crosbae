@@ -156,7 +156,7 @@ export default function AdminDashboard() {
   };
 
   return (
-    <div className="admin-dashboard">
+    <div className="admin-dashboard text-center">
       <div className="header">
         <div>
           <h1>Admin Dashboard</h1>
