@@ -98,7 +98,7 @@ export default function ProductListingPage() {
     setFilters((prev) => ({ ...prev, search: e.target.value }));
 
   return (
-    <div className="container py-4 position-relative">
+    <div className="Product-container position-relative">
       {/* Filter Toggle */}
       <div className="d-flex justify-content-between align-items-center mb-3">
         <button
