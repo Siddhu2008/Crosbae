@@ -1,6 +1,6 @@
 /* Mobile-first base styles */
 .top-category{
-    padding-top: 90px;
+    padding-top: 100px;
 }
 
 .category-wrapper {
@@ -107,6 +107,9 @@
 
 /* Laptop - min-width: 1024px */
 @media (min-width: 1024px) {
+    .top-category{
+    padding-top: 90px;
+}
     .scroll-track {
         gap: 2.5rem;
         padding: 0 2.5rem;
@@ -128,6 +131,9 @@
 
 /* Desktop - min-width: 1280px */
 @media (min-width: 1280px) {
+    .top-category{
+    padding-top: 90px;
+}
     .scroll-track {
         gap: 3rem;
         padding: 0 3rem;
