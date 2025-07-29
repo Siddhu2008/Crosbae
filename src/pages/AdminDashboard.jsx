@@ -126,27 +126,29 @@ export default function AdminDashboard() {
         return (
           <div className="customers-tab">
             <h2>All Customers</h2>
-            <table className="data-table">
-              <thead>
-                <tr>
-                  <th>Name</th>
-                  <th>Email</th>
-                  <th>Joined</th>
-                  <th>Total Orders</th>
-                  <th>Spent</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>Anjali Mehta</td>
-                  <td>anjali@gmail.com</td>
-                  <td>15 Apr 2025</td>
-                  <td>6</td>
-                  <td>₹48,000</td>
-                </tr>
-                {/* More rows */}
-              </tbody>
-            </table>
+            <div class="table-wrapper">
+              <table className="data-table">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Joined</th>
+                    <th>Total Orders</th>
+                    <th>Spent</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Anjali Mehta</td>
+                    <td>anjali@gmail.com</td>
+                    <td>15 Apr 2025</td>
+                    <td>6</td>
+                    <td>₹48,000</td>
+                  </tr>
+                  {/* More rows */}
+                </tbody>
+              </table>
+            </div>
           </div>
         );
 

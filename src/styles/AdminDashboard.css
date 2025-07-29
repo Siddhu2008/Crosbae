@@ -271,6 +271,9 @@
 }
 
 @media (min-width: 768px) {
+    .data-table {
+            display:inline-table;
+            }
     .header {
         flex-direction: row;
         justify-content: space-between;
