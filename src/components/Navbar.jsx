@@ -57,9 +57,10 @@ const Navbar = () => {
                 </Link>
               </li>
               <li>
-                <a class="dropdown-item" href="/register">
+                <Link to="/login" aria-label="login" class="dropdown-item">
                   Register
-                </a>
+                </Link>
+                
               </li>
             </ul>
           </div>
