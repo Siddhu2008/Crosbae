@@ -51,12 +51,12 @@ const Navbar = () => {
             </button>
             <ul class="dropdown-menu">
               <li>
-                <a
-                  class="dropdown-item"
-                  href="https://crosbae-mu.vercel.app/login"
-                >
-                  Login
-                </a>
+                {" "}
+                <Link to="/login" aria-label="login">
+                  <a class="dropdown-item" href="/login">
+                    Login
+                  </a>
+                </Link>
               </li>
               <li>
                 <a class="dropdown-item" href="/register">
