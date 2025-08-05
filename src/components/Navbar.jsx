@@ -52,10 +52,8 @@ const Navbar = () => {
             <ul class="dropdown-menu">
               <li>
                 {" "}
-                <Link to="/login" aria-label="login">
-                  <a class="dropdown-item" href="/login">
-                    Login
-                  </a>
+                <Link to="/login" aria-label="login" class="dropdown-item">
+                  Login
                 </Link>
               </li>
               <li>
