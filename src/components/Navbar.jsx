@@ -1,18 +1,24 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import logo from "../assets/logo.png";
-import "../styles/Navbar.css"
+import "../styles/Navbar.css";
+
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [cartCount] = useState(3);
+  const [isLoggedIn, setIsLoggedIn] = useState(false); // login and logout
 
   const toggleMenu = () => setIsOpen(!isOpen);
+  const navigate = useNavigate();
+
+  const handleProfileClick = () => {
+    navigate("/profile");
+  };
 
   return (
     <nav className="navbar">
       <div className="navbar-container">
         {/* Logo */}
-
         <Link to="/" className="logo" data-aos="fade-up">
           <img src={logo} alt="Cros Bae Logo" />
         </Link>
@@ -37,36 +43,42 @@ const Navbar = () => {
           <Link to="/wishlist" aria-label="Wishlist">
             <i className="far fa-heart"></i>
           </Link>
-          {/* <Link to="/login" aria-label="Login">
-            <i className="far fa-user"></i>
-          </Link> */}
-          <div class="dropdown">
+
+          {/* Login/Register or Profile based on login */}
+          {!isLoggedIn ? (
+            <div className="dropdown">
+              <button
+                className="border-0 bg-transparent"
+                type="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                <i className="far fa-user"></i>
+              </button>
+              <ul className="dropdown-menu">
+                <li>
+                  <Link to="/login" className="dropdown-item">
+                    Login
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/register" className="dropdown-item">
+                    Register
+                  </Link>
+                </li>
+              </ul>
+            </div>
+          ) : (
             <button
-              class="border-0 bg-transparent"
-              type="button"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
+              className="border-0 bg-transparent"
+              onClick={handleProfileClick}
+              aria-label="Profile"
             >
               <i className="far fa-user"></i>
             </button>
-            <ul class="dropdown-menu">
-              <li>
-                {" "}
-                <Link to="/login" aria-label="login" class="dropdown-item">
-                  Login
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/register"
-                  aria-label="register"
-                  class="dropdown-item"
-                >
-                  Register
-                </Link>
-              </li>
-            </ul>
-          </div>
+          )}
+
+          {/* Cart Icon */}
           <Link to="/cart" className="cart-icon" aria-label="Cart">
             <i className="fas fa-shopping-bag"></i>
             {cartCount > 0 && <span className="cart-badge">{cartCount}</span>}
@@ -112,6 +124,7 @@ const Navbar = () => {
           </Link>
         </div>
       )}
+      
     </nav>
   );
 };
