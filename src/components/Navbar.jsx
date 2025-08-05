@@ -57,10 +57,13 @@ const Navbar = () => {
                 </Link>
               </li>
               <li>
-                <Link to="/login" aria-label="login" class="dropdown-item">
+                <Link
+                  to="/register"
+                  aria-label="register"
+                  class="dropdown-item"
+                >
                   Register
                 </Link>
-                
               </li>
             </ul>
           </div>
