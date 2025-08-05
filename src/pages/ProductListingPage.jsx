@@ -124,11 +124,12 @@ export default function ProductListingPage() {
 
       {/* Sidebar Filter */}
       <div
-        className={`filter-drawer bg-white p-4 shadow-lg position-fixed top-0 h-100 ${
+        className={`filter-drawer bg-white  shadow-lg position-fixed top-0 h-100 ${
           showFilter ? "start-0" : "start-100"
         }`}
         style={{
           width: "280px",
+          padding:"120px 20px",
           zIndex: 1050,
           overflowY: "auto",
           display: "flex",

@@ -11,7 +11,8 @@ import AdminDashboard from "./pages/AdminDashboard";
 import AddProduct from "./components/AddProduct";
 import AdminProducts from "./components/AdminProducts";
 import Footer from "./components/Footer";
-
+import LoginPage from "./pages/LoginPage";
+import RegisterPage from "./pages/RegisterPage";
 import "./main.css"; // Global styles
 import AOS from "aos";
 import "aos/dist/aos.css";
@@ -40,6 +41,9 @@ const App = () => {
           <Route path="/admin" element={<AdminDashboard />} />
           <Route path="/admin/add-product" element={<AddProduct />} />
           <Route path="/admin/products" element={<AdminProducts />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
+
         </Routes>
         <Footer />
       </div>

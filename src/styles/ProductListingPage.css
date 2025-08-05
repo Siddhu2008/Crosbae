@@ -118,7 +118,7 @@
 /* Mobile-first layout */
 @media (max-width: 768px) {
     .filter-drawer {
-        width: 100% !important;
+        width: 50% !important;
         border-radius: 0;
     }
 
