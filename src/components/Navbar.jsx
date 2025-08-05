@@ -41,14 +41,30 @@ const Navbar = () => {
             <i className="far fa-user"></i>
           </Link> */}
           <div class="dropdown">
-  <button class="border-0 bg-transparent" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-   <i className="far fa-user"></i>
-  </button>
-  <ul class="dropdown-menu">
-    <li><a class="dropdown-item" href="/login">Login</a></li>
-    <li><a class="dropdown-item" href="/register">Register</a></li>
-  </ul>
-</div>
+            <button
+              class="border-0 bg-transparent"
+              type="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              <i className="far fa-user"></i>
+            </button>
+            <ul class="dropdown-menu">
+              <li>
+                <a
+                  class="dropdown-item"
+                  href="https://crosbae-mu.vercel.app/login"
+                >
+                  Login
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="/register">
+                  Register
+                </a>
+              </li>
+            </ul>
+          </div>
           <Link to="/cart" className="cart-icon" aria-label="Cart">
             <i className="fas fa-shopping-bag"></i>
             {cartCount > 0 && <span className="cart-badge">{cartCount}</span>}

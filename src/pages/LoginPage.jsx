@@ -14,7 +14,7 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="container-fluid min-vh-100 d-flex justify-content-center align-items-center bg-light px-3 pt-md-0"  style={{ paddingTop: "8rem" }} >
+    <div className="container-fluid min-vh-100 d-flex justify-content-center align-items-center bg-light px-3 "  style={{ paddingTop: "8rem", paddingBottom:'3rem'}} >
       <div className="card shadow p-4" style={{ maxWidth: 400, width: "100%" }}>
         <h3 className="mb-4 text-center">Sign in</h3>
 

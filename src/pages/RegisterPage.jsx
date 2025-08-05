@@ -27,7 +27,7 @@ const RegisterPage = () => {
   return (
     <div
       className="container-fluid min-vh-100 d-flex justify-content-center align-items-center bg-light px-5 "
-      style={{ paddingTop: "8rem" }} // Mobile offset
+      style={{ paddingTop: "8rem", paddingBottom: "3rem" }} // Mobile offset
     >
       <div className="card shadow p-4" style={{ maxWidth: 450, width: "100%" }}>
         <h3 className="mb-4 text-center">Sign up</h3>
@@ -70,7 +70,9 @@ const RegisterPage = () => {
         {/* Registration Form */}
         <form onSubmit={handleSubmit}>
           <div className="mb-3">
-            <label htmlFor="name" className="form-label">Full Name</label>
+            <label htmlFor="name" className="form-label">
+              Full Name
+            </label>
             <input
               type="text"
               className="form-control"
@@ -84,7 +86,9 @@ const RegisterPage = () => {
           </div>
 
           <div className="mb-3">
-            <label htmlFor="age" className="form-label">Age</label>
+            <label htmlFor="age" className="form-label">
+              Age
+            </label>
             <input
               type="number"
               className="form-control"
@@ -98,7 +102,9 @@ const RegisterPage = () => {
           </div>
 
           <div className="mb-3">
-            <label htmlFor="email" className="form-label">Email address</label>
+            <label htmlFor="email" className="form-label">
+              Email address
+            </label>
             <input
               type="email"
               className="form-control"
@@ -112,7 +118,9 @@ const RegisterPage = () => {
           </div>
 
           <div className="mb-3">
-            <label htmlFor="password" className="form-label">Password</label>
+            <label htmlFor="password" className="form-label">
+              Password
+            </label>
             <input
               type="password"
               className="form-control"
@@ -125,13 +133,16 @@ const RegisterPage = () => {
             />
           </div>
 
-          <button type="submit" className="btn btn-primary w-100 my-2">
+          <button type="submit" className="btn  w-100 mb-3" style={{  background: "#f19e04ff" }}>
             Sign up
           </button>
         </form>
 
         <div className="text-center mt-2">
-          <a href="/login" style={{ fontSize: 14, color: "#0d6efd", textDecoration: "none" }}>
+          <a
+            href="/login"
+            style={{ fontSize: 14, color: "#0d6efd", textDecoration: "none" }}
+          >
             Already have an account? Sign in
           </a>
         </div>
