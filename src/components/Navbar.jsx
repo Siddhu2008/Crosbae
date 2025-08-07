@@ -7,6 +7,7 @@ const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [cartCount] = useState(3);
   const [isLoggedIn, setIsLoggedIn] = useState(false); // login and logout
+const [showDropdown, setShowDropdown] = useState(false);
 
   const toggleMenu = () => setIsOpen(!isOpen);
   const navigate = useNavigate();
@@ -45,38 +46,32 @@ const Navbar = () => {
           </Link>
 
           {/* Login/Register or Profile based on login */}
-          {!isLoggedIn ? (
-            <div className="dropdown">
-              <button
-                className="border-0 bg-transparent"
-                type="button"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-              >
-                <i className="far fa-user"></i>
-              </button>
-              <ul className="dropdown-menu">
-                <li>
-                  <Link to="/login" className="dropdown-item">
-                    Login
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/register" className="dropdown-item">
-                    Register
-                  </Link>
-                </li>
-              </ul>
-            </div>
-          ) : (
-            <button
-              className="border-0 bg-transparent"
-              onClick={handleProfileClick}
-              aria-label="Profile"
-            >
-              <i className="far fa-user"></i>
-            </button>
-          )}
+          <div className="dropdown" onMouseLeave={() => setShowDropdown(false)}>
+  <button
+    className="border-0 bg-transparent"
+    onClick={() => setShowDropdown(!showDropdown)}
+    aria-haspopup="true"
+    aria-expanded={showDropdown}
+    aria-label="User Menu"
+  >
+    <i className="far fa-user"></i>
+  </button>
+  {showDropdown && (
+    <ul className="dropdown-menu show">
+      <li>
+        <Link to="/login" className="dropdown-item" onClick={() => setShowDropdown(false)}>
+          Login
+        </Link>
+      </li>
+      <li>
+        <Link to="/register" className="dropdown-item" onClick={() => setShowDropdown(false)}>
+          Register
+        </Link>
+      </li>
+    </ul>
+  )}
+</div>
+
 
           {/* Cart Icon */}
           <Link to="/cart" className="cart-icon" aria-label="Cart">
