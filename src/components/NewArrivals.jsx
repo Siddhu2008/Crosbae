@@ -1,4 +1,6 @@
 import React, { useRef, useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+
 import tvImage from "../assets/tv.png";
 
 import "../styles/NewArrivals.css"
@@ -31,13 +33,17 @@ export default function NewArrivals() {
           <div className="arrivals-left" data-aos="fade-up">
             <h2>
               New Arrivals{" "}
+            <Link to='/shop'>
               <button className="new-items-badge">500+ New Items</button>
+              </Link>
             </h2>
             <h5>
               New Arrivals Dropping Daily, Monday through Friday. Explore the
               Latest Launches Now!
             </h5>
-            <button className="btn-gradient-new">View all New Items</button>
+            <Link to='/shop'>
+              <button className="btn-gradient-new">View all New Items</button>
+            </Link>
           </div>
 
           {/* Right Video/TV */}

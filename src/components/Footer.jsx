@@ -1,4 +1,6 @@
 import React from "react";
+import { Link } from "react-router-dom";
+
 import "../styles/Footer.css"
 
 export default function Footer() {
@@ -30,19 +32,29 @@ export default function Footer() {
             <h6 className="fw-bold">Quick Links</h6>
             <ul className="list-unstyled">
               <li>
-                <a href="/shop">Shop All</a>
+                <Link to="/shop">
+                  <span href="/shop">Shop All</span>
+                </Link>
               </li>
               <li>
-                <a href="/collections">Collections</a>
+                <Link to="/collections">
+                  <span>Collections</span>
+                </Link>
               </li>
               <li>
-                <a href="/about">About Us</a>
+                <Link to="/about">
+                  <span>About Us</span>
+                </Link>
               </li>
               <li>
-                <a href="/contact">Contact</a>
+                <Link to="/contact">
+                  <span>Contact</span>
+                </Link>
               </li>
               <li>
-                <a href="#">Jewelry Care</a>
+                <Link to="/">
+                  <span>Jewelry Care</span>
+                </Link>
               </li>
             </ul>
           </div>

@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from "react";
-import { useNavigate } from "react-router-dom"; // 👈 import navigate
+import { useNavigate} from "react-router-dom"; // 👈 import navigate
 import "../styles/topCategory.css"
 
 export default function TopCategory() {
@@ -39,7 +39,7 @@ export default function TopCategory() {
   ];
 
   const handleCategoryClick = (name) => {
-    navigate(`/products?category=${encodeURIComponent(name)}`);
+    navigate(`/shop`);
   };
 
   const startAutoScroll = () => {

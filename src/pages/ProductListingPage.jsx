@@ -1,4 +1,6 @@
 import React, { useState, useMemo, useEffect } from "react";
+import { Link } from "react-router-dom";
+
 import products from "../data/products"; // your product data
 import "../styles/ProductListingPage.css"
 export default function ProductListingPage() {

@@ -1,4 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
+import { Link } from "react-router-dom";
+
 import "../styles/heroSection.css"
 export default function HeroSection() {
   const slidesRef = useRef([]);
@@ -85,22 +87,23 @@ export default function HeroSection() {
                     ? "Explore our exquisite collection of fine jewelry."
                     : "Experience the artistry in every piece."}
                 </p>
-                <a
-                  href="/shop"
-                  className="btn btn-gradient btn-lg mt-3"
-                  data-aos="fade-up"
-                  data-aos-delay="200"
-                >
-                  {index === 0 ? "Shop Now" : "View Collections"}
-                </a>
-                <a
-                  href="/about"
+                <Link to="/shop">
+                  <span
+                    className="btn btn-gradient btn-lg mt-3"
+                    data-aos="fade-up"
+                    data-aos-delay="100"
+                  >
+                    {index === 0 ? "Shop Now" : "View Collections"}
+                  </span>
+                </Link>
+                <Link to='/about'>
+                <span
                   className="btn btn-outline-light btn-lg mt-3 ms-3"
                   data-aos="fade-up"
-                  data-aos-delay="300"
+                  data-aos-delay="100"
                 >
                   {index === 0 ? "Learn More" : "Learn More"}
-                </a>
+                </span></Link>
               </div>
             </div>
           </div>

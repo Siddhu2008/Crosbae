@@ -1,4 +1,6 @@
 import React from "react";
+import { Link } from "react-router-dom";
+
 import "../styles/AboutPage.css"
 export default function AboutPage() {
   return (
@@ -84,9 +86,10 @@ export default function AboutPage() {
             exceptional service. Discover our collections and make every moment
             sparkle.
           </p>
-          <a href="/collections" className="btn-explore">
+          <Link to='/collections' >
+          <span href="/collections" className="btn-explore">
             Explore Our Collection
-          </a>
+          </span></Link>
         </div>
       </section>
     </div>

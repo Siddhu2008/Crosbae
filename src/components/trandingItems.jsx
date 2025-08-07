@@ -1,5 +1,8 @@
 import React from "react";
+import { Link } from "react-router-dom";
+
 import "../styles/trandingItems.css"; // 👈 create this CSS file
+import { Button } from "bootstrap";
 
 const items = [
   {
@@ -55,9 +58,12 @@ export default function TrandingItems() {
               <div className="overlay">
                 <h6 className="title">{item.title}</h6>
                 <p className="desc">{item.desc}</p>
-                <button className="btn btn-outline-light btn-sm">
-                  View All
-                </button>
+                <Link to="/shop">
+                  <span className="btn btn-outline-light btn-sm" style={{
+                    padding : "5px 70px" }}>
+                    View All
+                  </span>
+                </Link>
               </div>
             </div>
           </div>
