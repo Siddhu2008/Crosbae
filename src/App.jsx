@@ -16,7 +16,13 @@ import RegisterPage from "./pages/RegisterPage";
 import "./main.css"; // Global styles
 import AOS from "aos";
 import "aos/dist/aos.css";
-
+import WishlistPage from "./components/WishlistPage";
+import CartPage from "./pages/CartPage";
+import TestimonialsPage from "./pages/TestimonialsPage";
+import FAQ from "./pages/FAQ";
+import EditProduct from "./components/EditProduct";
+import DeleteProduct from "./components/DeleteProduct";
+import CheckoutPage from "./components/CheckoutPage";
 const App = () => {
   useEffect(() => {
     AOS.init({
@@ -43,7 +49,13 @@ const App = () => {
           <Route path="/admin/products" element={<AdminProducts />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
-
+          <Route path="/wishlist" element={<WishlistPage />} />
+          <Route path="/cart" element={<CartPage />} />
+          <Route path="/testimonials" element={<TestimonialsPage />} />
+          <Route path="/faq" element={<FAQ />} />
+          <Route path="/admin/EditProduct" element={<EditProduct />} />
+          <Route path="/admin/DeleteProduct" element={<DeleteProduct />} />
+          <Route path="/checkout" element={<CheckoutPage />} />
         </Routes>
         <Footer />
       </div>

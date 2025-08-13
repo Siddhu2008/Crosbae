@@ -13,7 +13,7 @@ export default function AdminDashboard() {
       case "Overview":
         return (
           <>
-            <div className="stats-section">
+            <div className="stats-section" >
               <div className="stat-card">
                 <h4>Total Products</h4>
                 <p className="count">156</p>
@@ -53,9 +53,10 @@ export default function AdminDashboard() {
             <div className="tab-header">
               <h2>All Products</h2>
               <Link to="/admin/add-product">
-                <button className="add-product-btn">+ Add Product</button>
+                <button className="add-product-btn my-4">+ Add Product</button>
               </Link>
             </div>
+              <div className="table-responsive">
             <table className="data-table">
               <thead>
                 <tr>
@@ -82,13 +83,18 @@ export default function AdminDashboard() {
                   <td>₹25,000</td>
                   <td>15</td>
                   <td>
-                    <button className="edit-btn">Edit</button>
-                    <button className="delete-btn">Delete</button>
+                    <Link to="/admin/EditProduct">
+                      <button className="edit-btn">Edit</button>
+                    </Link>
+                    <Link to="/admin/DeleteProduct">
+                      <button className="delete-btn">Delete</button>
+                    </Link>
                   </td>
                 </tr>
                 {/* Repeat for more products */}
               </tbody>
             </table>
+            </div>
           </div>
         );
 
@@ -96,6 +102,7 @@ export default function AdminDashboard() {
         return (
           <div className="orders-tab">
             <h2>Recent Orders</h2>
+            <div className="table-responsive">
             <table className="data-table">
               <thead>
                 <tr>
@@ -119,6 +126,7 @@ export default function AdminDashboard() {
                 {/* More rows */}
               </tbody>
             </table>
+            </div>
           </div>
         );
 
@@ -127,6 +135,7 @@ export default function AdminDashboard() {
           <div className="customers-tab">
             <h2>All Customers</h2>
             <div class="table-wrapper">
+              <div className="table-responsive">
               <table className="data-table">
                 <thead>
                   <tr>
@@ -148,6 +157,7 @@ export default function AdminDashboard() {
                   {/* More rows */}
                 </tbody>
               </table>
+              </div>
             </div>
           </div>
         );
@@ -158,18 +168,16 @@ export default function AdminDashboard() {
   };
 
   return (
-    <div className="admin-dashboard text-center">
+    <div className="admin-dashboard text-center" style={{paddingTop:"120px",paddingBottom:"100px"}}>
       <div className="header">
         <div>
           <h1>Admin Dashboard</h1>
           <p>Manage your jewelry store efficiently</p>
         </div>
-        <Link to="/admin/add-product">
-          <button className="add-product-btn">+ Add Product</button>
-        </Link>
+        
       </div>
 
-      <div className="tabs">
+      <div className="tabs my-3">
         {tabs.map((tab) => (
           <button
             key={tab}

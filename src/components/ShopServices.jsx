@@ -4,7 +4,7 @@ import "../styles/ShopServices.css";
 export default function ShopServices() {
   return (
     <div>
-      <section className="container">
+      <section >
         <h2 className="section-title text-center" data-aos="fade-up">
           Jewelry with a Promise
         </h2>

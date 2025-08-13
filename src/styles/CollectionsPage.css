@@ -1,5 +1,153 @@
-.collection-container{
-    max-width: 1200px;
-        margin: 0 auto;
-        padding: 120px 1rem
+.collection-container {
+  padding: 3rem 2rem;
+  background: linear-gradient(135deg, #2e1a47, #4a2c7a);
+  min-height: 80vh;
+  color: #f9d342; /* royal gold */
+  font-family: 'Playfair Display', serif;
+}
+
+h2 {
+  font-weight: 700;
+  font-size: 2.8rem;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  text-shadow: 0 0 10px #f9d342;
+}
+
+.royal-card {
+  background: #3a2361;
+  border-radius: 12px;
+  overflow: hidden;
+  position: relative;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  color: #f9d342;
+  font-weight: 600;
+  box-shadow: 0 6px 20px rgba(249, 211, 66, 0.5);
+}
+
+.royal-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 12px 40px rgba(249, 211, 66, 0.8);
+}
+
+.img-wrapper {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  border-bottom: 2px solid #f9d342;
+  border-radius: 12px 12px 0 0;
+}
+
+.card-img-top {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.royal-card:hover .card-img-top {
+  transform: scale(1.1);
+}
+
+/* Overlay button appears on hover */
+.overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(227, 227, 227, 0.15);
+  color: #3a2361;
+  padding: 10px 0;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  font-size: 1rem;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  cursor: pointer;
+  user-select: none;
+}
+
+.royal-card:hover .overlay {
+  opacity: 1;
+}
+
+.card-body {
+  padding: 1rem;
+}
+
+.card-title {
+  font-size: 1.3rem;
+  margin-bottom: 0;
+  text-transform: uppercase;
+  text-shadow: 0 0 5px #feeda8;
+}
+
+/* Button inside overlay */
+.btn-expo {
+  display: inline-block;
+    background: rgba(227, 227, 227, 0.25);
+    color: #2b2a4d;
+    font-weight: 700;
+    text-transform: uppercase;
+    padding: 14px 32px;
+    border-radius: 30px;
+    text-decoration: none;
+    border: none;
+  font-family: 'Playfair Display', serif;
+  font-weight: 700;
+  color: #6322ef;
+  cursor: pointer;
+  letter-spacing: 1.2px;
+}
+
+.btn-expo:hover {
+  color: #f3bc0b;
+  text-decoration: underline;
+}
+.royal-card {
+  background: linear-gradient(145deg, #1b1437, #2f204d);
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow:
+    0 0 10px rgba(249, 211, 66, 0.8),
+    0 10px 30px rgba(0, 0, 0, 0.7);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+  width: 300px;
+  margin: 1rem;
+  color: #f9d342;
+  font-family: 'Playfair Display', serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.royal-card:hover {
+  transform: translateY(-10px);
+  box-shadow:
+    0 0 20px rgba(249, 211, 66, 1),
+    0 20px 40px rgba(0, 0, 0, 0.9);
+}
+
+.royal-card img {
+  width: 100%;
+  height: 250px;
+  object-fit: cover;
+  border-bottom: 3px solid #f9d342;
+  border-radius: 20px 20px 0 0;
+  transition: transform 0.5s ease;
+}
+
+.royal-card:hover img {
+  transform: scale(1.05);
+}
+
+.royal-card-title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  text-shadow: 0 0 8px #f9d342;
+  margin: 1rem 0 2rem;
+  letter-spacing: 3px;
+  user-select: none;
 }

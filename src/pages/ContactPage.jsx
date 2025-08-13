@@ -3,7 +3,7 @@ import "../styles/ContactPage.css"
 
 export default function ContactPage() {
   return (
-    <section className="contact-page">
+    <section className="contact-page" style={{paddingTop:"120px",paddingBottom:"100px"}}>
       <div className="contact-hero">
         <h1>We're Here to Help</h1>
         <p>

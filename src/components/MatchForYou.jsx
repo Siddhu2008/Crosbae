@@ -27,8 +27,16 @@ const categories = [
     img: "https://www.tanishq.co.in/dw/image/v2/BKCK_PRD/on/demandware.static/-/Library-Sites-TanishqSharedLibrary/default/dwd0550e4c/homepage/shopByCategory/chains-cat.jpg",
   },
   {
+    title: "Finger Rings",
+    img: "https://www.tanishq.co.in/dw/image/v2/BKCK_PRD/on/demandware.static/-/Library-Sites-TanishqSharedLibrary/default/dw47da8133/homepage/shopByCategory/rings-cat.jpg",
+  },
+  {
+    title: "Pendants",
+    img: "https://www.tanishq.co.in/dw/image/v2/BKCK_PRD/on/demandware.static/-/Library-Sites-TanishqSharedLibrary/default/dw63553376/homepage/shopByCategory/pendants-cat.jpg",
+  },
+  {
     title: "Gold Jewelry",
-    img: "https://www.tanishq.co.in/dw/image/v2/BKCK_PRD/on/demandware.static/-/Library-Sites-TanishqSharedLibrary/default/dw811a2edc/homepage/shopByCategory/all-jew-cat.jpg",
+    img: "https://www.tanishq.co.in/dw/image/v2/BKCK_PRD/on/demandware.static/-/Library-Sites-TanishqSharedLibrary/default/dw811a2edc/homepage/shopByCategory/chains-cat.jpg",
   },
   {
     title: "View All",
@@ -39,30 +47,31 @@ const categories = [
 export default function MatchForYou() {
   return (
     <div>
-      <section className="container PerfectMatch my-5">
+      <section className=" PerfectMatch my-5">
         <h2 className="section-title text-center" data-aos="fade-up">
           Find Your Perfect Match
         </h2>
         <h5 className="text-center fw-light">Shop by Categories</h5>
-        <div className="row row-cols-2 row-col-lg-4 row-col-sm-2 mt-4">
-          {categories.map((category, index) => (
-            <div
-              className="col-lg-3 col-sm-6 col-xs-6 mb-4"
-              data-aos="fade-up"
-              data-aos-delay={100 * (index + 1)}
-              key={index}
-            >
-              <div className="product-card text-center">
-                <img
-                  src={category.img}
-                  alt={category.title}
-                  className="img-fluid rounded mb-3"
-                />
-                <h4>{category.title}</h4>
-              </div>
-            </div>
-          ))}
-        </div>
+        <div className="row mt-4">
+  {categories.map((category, index) => (
+    <div
+      className="col"
+      data-aos="fade-up"
+      data-aos-delay={100 * (index + 1)}
+      key={index}
+    >
+      <div className="product-card text-center">
+        <img
+          src={category.img}
+          alt={category.title}
+          className="img-fluid rounded mb-3"
+        />
+        <h4>{category.title}</h4>
+      </div>
+    </div>
+  ))}
+</div>
+
       </section>
     </div>
   );

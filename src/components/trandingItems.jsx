@@ -1,8 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-
-import "../styles/trandingItems.css"; // 👈 create this CSS file
-import { Button } from "bootstrap";
+import "../styles/trandingItems.css"; // 👈 Make sure this file exists
 
 const items = [
   {
@@ -33,7 +31,7 @@ const items = [
 
 export default function TrandingItems() {
   return (
-    <section className="container trending-section my-5">
+    <section className="trending-section my-5">
       <h2 className="section-title" data-aos="fade-up">
         Trending Now
       </h2>
@@ -41,30 +39,21 @@ export default function TrandingItems() {
         Jewellery pieces everyone’s eyeing right now
       </h5>
 
-      <div className="row row-cols-2 row-cols-md-4 mt-4">
+      <div className="cards-grid">
         {items.map((item, index) => (
           <div
             key={index}
-            className="col trending-card-wrapper"
+            className="trending-card"
             data-aos="fade-up"
             data-aos-delay={100 + index * 50}
           >
-            <div className="trending-card">
-              <img
-                src={item.img}
-                alt={item.alt}
-                className="img-fluid rounded"
-              />
-              <div className="overlay">
-                <h6 className="title">{item.title}</h6>
-                <p className="desc">{item.desc}</p>
-                <Link to="/shop">
-                  <span className="btn btn-outline-light btn-sm" style={{
-                    padding : "5px 70px" }}>
-                    View All
-                  </span>
-                </Link>
-              </div>
+            <img src={item.img} alt={item.alt} />
+            <div className="overlay">
+              <h6 className="title">{item.title}</h6>
+              <p className="desc">{item.desc}</p>
+              <Link to="/shop" className="btn">
+                View All
+              </Link>
             </div>
           </div>
         ))}

@@ -1,194 +1,203 @@
-/* ========== Base Styles ========== */
-.about-page {
-    font-family: 'Playfair Display', serif;
-    background-color: #fdfaf6;
-    color: #2e2e2e;
-    line-height: 1.6;
-    padding: 120px 1rem;
-}
-
+/* Container for layout */
 .container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 1rem;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0 20px;
 }
 
-/* ========== Hero Section ========== */
-.hero-section {
-    text-align: center;
-    padding: 3rem 1rem 2rem;
-    background: linear-gradient(135deg, #fffaf5, #f3e9dc);
-    border-radius: 16px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+/* General page styles */
+.about-page.royal-theme {
+  font-family: "Georgia", serif;
+  color: #2b2a4d;
+  /* deep navy */
+  background: #fffaf3;
+  /* warm ivory for premium feel */
+  min-height: 100vh;
+  padding-bottom: 60px;
 }
 
-.brand-title {
-    font-size: 2rem;
-    font-weight: 700;
-    margin-bottom: 0.5rem;
-    color: #b89c74;
+/* Section spacing */
+section {
+  padding: 60px 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
 }
 
-.tagline {
-    font-size: 1.05rem;
-    color: #5c5c5c;
+/* Hero Section */
+.hero-section .brand-title {
+  font-size: 3.5rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: #c6a34f;
+  /* luxury gold */
+  text-shadow: 1px 1px 4px rgba(198, 163, 79, 0.5);
 }
 
-/* ========== Section Headings ========== */
-.about-page h2,
-.about-page h3 {
-    font-family: 'Poppins', sans-serif;
-    color: #b89c74;
-    font-weight: 600;
-    font-size: 1.5rem;
-    margin-bottom: 1rem;
+.hero-section .tagline {
+  font-size: 1.4rem;
+  font-style: italic;
+  text-align: center;
+  max-width: 600px;
+  margin: 0 auto;
+  color: #5a5a5a;
 }
 
-.about-page p {
-    margin-bottom: 1rem;
-    font-size: 1rem;
-    color: #3b3b3b;
+/* Story Section */
+.story-section h2 {
+  font-size: 2.4rem;
+  color: #c6a34f;
+  margin-bottom: 1rem;
+  border-bottom: 2px solid #c6a34f;
+  padding-bottom: 0.5rem;
 }
 
-/* ========== Story, Mission, Quality, Why Choose ========== */
-.story-section,
-.mission-vision,
-.quality-section,
-.why-choose,
-.cta-section {
-    margin-top: 2.5rem;
+.story-section p {
+  font-size: 1.1rem;
+  line-height: 1.7;
+  margin-bottom: 1rem;
+  color: #3b3b3b;
 }
 
-/* ========== Mission-Vision (Two Columns) ========== */
-.two-col {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
+/* Mission Vision */
+.mission-vision .two-col {
+  display: flex;
+  gap: 40px;
+  flex-wrap: wrap;
+  justify-content: space-between;
 }
 
-.two-col .col {
-    background: #fff;
-    padding: 1.5rem;
-    border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+.mission-vision .col {
+  flex: 1 1 45%;
+  background: #f1d294;
+  /* soft golden cream */
+  padding: 20px 30px;
+  border-radius: 8px;
+  box-shadow: 0 0 12px rgba(198, 163, 79, 0.2);
 }
 
-/* ========== Why Choose (List) ========== */
+.mission-vision h3 {
+  font-size: 1.8rem;
+  color: #c6a34f;
+  margin-bottom: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.mission-vision p {
+  font-size: 1.1rem;
+  color: #444;
+  line-height: 1.6;
+}
+
+/* Quality Section */
+.quality-section h2 {
+  font-size: 2.4rem;
+  color: #c6a34f;
+  margin-bottom: 1rem;
+  border-bottom: 2px solid #c6a34f;
+  padding-bottom: 0.5rem;
+}
+
+.quality-section p {
+  font-size: 1.1rem;
+  line-height: 1.7;
+  color: #3b3b3b;
+}
+
+/* Why Choose Section */
+.why-choose h2 {
+  font-size: 2.4rem;
+  color: #c6a34f;
+  margin-bottom: 1rem;
+  border-bottom: 2px solid #c6a34f;
+  padding-bottom: 0.5rem;
+  text-align: center;
+}
+
 .features-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
+  list-style: none;
+  padding-left: 0;
+  font-size: 1.2rem;
+  color: #3b3b3b;
+  max-width: 600px;
+  text-align: left;
+  margin: 0 auto;
 }
 
 .features-list li {
-    font-size: 1rem;
-    padding: 0.75rem 1rem;
-    border-bottom: 1px solid #eee;
-    color: #444;
-    display: flex;
-    align-items: center;
+  margin: 12px 0;
+  padding-left: 30px;
+  position: relative;
+  font-weight: 500;
+  cursor: default;
 }
 
-.features-list li:last-child {
-    border-bottom: none;
+.features-list li::before {
+  
+  position: absolute;
+  left: 0;
+  top: 0;
+  font-size: 1.3rem;
+  color: #c6a34f;
 }
 
-/* ========== Call to Action Section ========== */
+/* CTA Section */
 .cta-section {
-    text-align: center;
-    padding: 2rem 1rem;
-    background: #fff7ec;
-    border-radius: 16px;
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+  text-align: center;
+  padding-top: 80px;
+  padding-bottom: 80px;
+  background: #f1d294;
+  border-radius: 12px;
+  box-shadow: 0 0 20px rgba(198, 163, 79, 0.15);
+  max-width: 700px;
+  margin: 0 auto;
 }
 
+.cta-section h2 {
+  font-size: 2.6rem;
+  color: #2b2a4d;
+  margin-bottom: 16px;
+  font-weight: 700;
+}
+
+.cta-section p {
+  font-size: 1.2rem;
+  color: #3b3b3b;
+  margin-bottom: 32px;
+  font-style: italic;
+}
+
+/* Button style */
 .btn-explore {
-    display: inline-block;
-    margin-top: 1rem;
-    background-color: #b89c74;
-    color: white;
-    padding: 0.8rem 1.5rem;
-    border-radius: 30px;
-    font-size: 1rem;
-    text-decoration: none;
-    font-weight: 500;
-    transition: background 0.3s ease;
+  display: inline-block;
+  background: linear-gradient(45deg, #c6a34f, #d4af37);
+  color: white;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 14px 32px;
+  border-radius: 30px;
+  text-decoration: none;
+  box-shadow: 0 5px 15px rgba(198, 163, 79, 0.4);
+  transition: all 0.3s ease;
+  letter-spacing: 0.1em;
 }
 
 .btn-explore:hover {
-    background-color: #a88b67;
+  background: linear-gradient(45deg, #d4af37, #c6a34f);
+  box-shadow: 0 8px 20px rgba(198, 163, 79, 0.6);
+  transform: translateY(-3px);
 }
 
-/* ========== Tablet (min-width: 768px) ========== */
-@media (min-width: 768px) {
-    .brand-title {
-        font-size: 2.5rem;
-    }
+/* Responsive */
+@media (max-width: 768px) {
+  .mission-vision .two-col {
+    flex-direction: column;
+  }
 
-    .tagline {
-        font-size: 1.2rem;
-    }
-
-    .two-col {
-        flex-direction: row;
-    }
-
-    .two-col .col {
-        flex: 1;
-    }
-
-    .features-list li {
-        font-size: 1.05rem;
-    }
-
-    .btn-explore {
-        font-size: 1.1rem;
-    }
-}
-
-/* ========== Laptop (min-width: 1024px) ========== */
-@media (min-width: 1024px) {
-    .hero-section {
-        padding: 4rem 2rem;
-    }
-
-    .brand-title {
-        font-size: 3rem;
-    }
-
-    .tagline {
-        font-size: 1.3rem;
-    }
-
-    .about-page h2,
-    .about-page h3 {
-        font-size: 1.8rem;
-    }
-
-    .about-page p {
-        font-size: 1.05rem;
-    }
-
-    .btn-explore {
-        padding: 1rem 2rem;
-    }
-}
-
-/* ========== Desktop XL (min-width: 1440px) ========== */
-@media (min-width: 1440px) {
-    .brand-title {
-        font-size: 3.5rem;
-    }
-
-    .tagline {
-        font-size: 1.4rem;
-    }
-
-    .about-page p {
-        font-size: 1.1rem;
-    }
-
-    .features-list li {
-        font-size: 1.15rem;
-    }
+  .mission-vision .col {
+    flex: 1 1 100%;
+    margin-bottom: 20px;
+  }
 }

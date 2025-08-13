@@ -69,8 +69,8 @@
 }
 
 .like-btn.liked {
-    background-color: #bfa17f;
-    color: white;
+    background-color: #fbfafa;
+    color: rgb(249, 10, 10);
     border-color: transparent;
 }
 

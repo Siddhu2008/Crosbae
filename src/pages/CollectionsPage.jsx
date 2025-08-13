@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import AOS from "aos";
 import "aos/dist/aos.css";
-import "../styles/CollectionsPage.css"
+import "../styles/CollectionsPage.css";
 
 const collections = [
   {
@@ -28,8 +28,8 @@ export default function CollectionsPage() {
   }, []);
 
   return (
-    <div className="collection-container">
-      <h2 className="text-center mb-4" data-aos="fade-down">
+    <div className="collection-container" style={{paddingTop:"120px",}}>
+      <h2 className="text-center mb-5" data-aos="fade-down">
         Our Collections
       </h2>
 
@@ -39,16 +39,17 @@ export default function CollectionsPage() {
             className="col"
             key={index}
             data-aos="zoom-in"
-            data-aos-delay={index * 100}
+            data-aos-delay={index * 150}
           >
-            <div className="card border-0 shadow-sm h-100">
-              <img
-                src={item.img}
-                className="card-img-top rounded"
-                alt={item.title}
-              />
-              <div className="card-body text-center">
-                <h6 className="card-title mb-0">{item.title}</h6>
+            <div className="card royal-card h-100 text-center shadow-lg">
+              <div className="img-wrapper">
+                <img src={item.img} alt={item.title} className="card-img-top" />
+                <div className="overlay">
+                  <button className="btn-expo">Explore {item.title}</button>
+                </div>
+              </div>
+              <div className="card-body">
+                <h5 className="card-title">{item.title}</h5>
               </div>
             </div>
           </div>
@@ -57,3 +58,4 @@ export default function CollectionsPage() {
     </div>
   );
 }
+  

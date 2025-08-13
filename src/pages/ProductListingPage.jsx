@@ -19,13 +19,21 @@ export default function ProductListingPage() {
 
   const toggleFilterSidebar = () => setShowFilter(!showFilter);
 
-  const toggleLike = (productId) => {
-    setLikedProducts((prev) =>
-      prev.includes(productId)
-        ? prev.filter((id) => id !== productId)
-        : [...prev, productId]
-    );
-  };
+  useEffect(() => {
+  const storedLikes = JSON.parse(localStorage.getItem("likedProducts")) || [];
+  setLikedProducts(storedLikes);
+}, []);
+
+const toggleLike = (productId) => {
+  setLikedProducts((prev) => {
+    const updated = prev.includes(productId)
+      ? prev.filter((id) => id !== productId)
+      : [...prev, productId];
+
+    localStorage.setItem("likedProducts", JSON.stringify(updated));
+    return updated;
+  });
+};
 
   const getTagStyle = (tag) => {
     switch (tag) {
@@ -98,6 +106,25 @@ export default function ProductListingPage() {
 
   const handleSearchChange = (e) =>
     setFilters((prev) => ({ ...prev, search: e.target.value }));
+
+
+const addToCart = (product) => {
+  const existingCart = JSON.parse(localStorage.getItem("cartItems")) || [];
+  const exists = existingCart.find((item) => item.id === product.id);
+
+  let updatedCart;
+  if (exists) {
+    updatedCart = existingCart.map((item) =>
+      item.id === product.id
+        ? { ...item, quantity: item.quantity + 1 }
+        : item
+    );
+  } else {
+    updatedCart = [...existingCart, { ...product, quantity: 1 }];
+  }
+
+  localStorage.setItem("cartItems", JSON.stringify(updatedCart));
+};
 
   return (
     <div className="Product-container position-relative">
@@ -290,7 +317,8 @@ export default function ProductListingPage() {
                     <p className="fw-semibold text-dark mb-1 ">₹ {p.price}</p>
                   </div>
                   <div className="mt-auto">
-                    <button className="btn custom-cart-btn w-100 ">
+                    <button className="btn custom-cart-btn w-100 " onClick={() => addToCart(p)}
+>
                       Add to Cart
                     </button>
                   </div>

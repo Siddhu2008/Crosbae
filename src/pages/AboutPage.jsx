@@ -1,10 +1,11 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-import "../styles/AboutPage.css"
+import "../styles/AboutPage.css";
+
 export default function AboutPage() {
   return (
-    <div className="about-page">
+    <div className="about-page royal-theme" style={{paddingTop:"120px",paddingBottom:"100px"}}>
       <section className="hero-section">
         <div className="container">
           <h1 className="brand-title">About Crosbae</h1>
@@ -86,10 +87,9 @@ export default function AboutPage() {
             exceptional service. Discover our collections and make every moment
             sparkle.
           </p>
-          <Link to='/collections' >
-          <span href="/collections" className="btn-explore">
+          <Link to="/collections" className="btn-explore">
             Explore Our Collection
-          </span></Link>
+          </Link>
         </div>
       </section>
     </div>

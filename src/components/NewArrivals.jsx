@@ -27,8 +27,8 @@ export default function NewArrivals() {
 
   return (
     <div>
-      <div className="header-section">
-        <div className="new-arrivals-grid">
+      <div className="header-section ">
+        <div className="new-arrivals-grid ">
           {/* Left Content */}
           <div className="arrivals-left" data-aos="fade-up">
             <h2>
