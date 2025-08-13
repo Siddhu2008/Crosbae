@@ -6,7 +6,8 @@ import "../styles/Navbar.css";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [cartCount] = useState(3);
+  const [cartCount, setCartCount] = useState(3);
+
   const [isLoggedIn, setIsLoggedIn] = useState(false); // login and logout
 
   const toggleMenu = () => setIsOpen(!isOpen);
