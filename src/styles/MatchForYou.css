@@ -1,17 +1,17 @@
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&display=swap');
 
 .PerfectMatch {
-  background: #ffffff; /* White background */
-  color: #2b265a; /* Deep navy text */
-  padding: 60px 20px 80px;
+  background: #ffffff;
+  color: #2b265a;
+  padding: 40px 8px 60px;
   font-family: 'Playfair Display', serif;
   text-align: center;
-  box-shadow: inset 0 0 50px rgba(184, 134, 11, 0.05); /* Subtle golden glow */
+  box-shadow: inset 0 0 50px rgba(184, 134, 11, 0.05);
 }
 
 .PerfectMatch .section-title {
-  color: #b8860b; /* Royal golden tone */
-  font-size: 3rem;
+  color: #b8860b;
+  font-size: 1.5rem;
   font-weight: 700;
   text-shadow: 0 0 10px #f7e49b44, 0 0 15px #c0a10033;
   margin-bottom: 0.3rem;
@@ -22,33 +22,24 @@
   color: #5a5a5a;
   font-style: italic;
   font-weight: 400;
-  margin-bottom: 40px;
-  font-size: 1.25rem;
+  margin-bottom: 28px;
+  font-size: 1rem;
 }
 
+/* Mobile-first: 2 cards per row */
 .PerfectMatch .row {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 30px;
-  padding: 0 15px;
+  gap: 0px;
+  padding: 0 2px;
 }
-
-@media (min-width: 768px) {
-  .PerfectMatch .row {
-    grid-template-columns: repeat(4, 1fr);
-  }
+.PerfectMatch .col{
+  padding-top: 10px;
 }
-
-@media (min-width: 1200px) {
-  .PerfectMatch .row {
-    grid-template-columns: repeat(5, 1fr);
-  }
-}
-
 .product-card {
   position: relative;
-  background: #ffffff; /* Card background white */
-  border-radius: 15px;
+  background: #ffffff;
+  border-radius: 30px 0 30px 0;
   padding: 15px;
   border: 1px solid #eee;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
@@ -78,9 +69,9 @@
 }
 
 .product-card h4 {
-  color: #b8860b; /* Golden title */
+  color: #b8860b;
   font-weight: 700;
-  font-size: 1.35rem;
+  font-size: 1.1rem;
   text-shadow: 1px 1px 4px #f5f5f5;
   margin-top: 15px;
   white-space: nowrap;
@@ -89,7 +80,6 @@
   user-select: none;
 }
 
-/* Overlay golden gradient for a subtle shine effect */
 .product-card::before {
   content: "";
   position: absolute;
@@ -107,4 +97,60 @@
 
 .product-card:hover::before {
   opacity: 0.25;
+}
+
+/* Tablet styles */
+@media (min-width: 600px) {
+  .PerfectMatch {
+    padding: 60px 20px 80px;
+  }
+  .PerfectMatch .section-title {
+    font-size: 2rem;
+  }
+  .PerfectMatch h5 {
+    font-size: 1.1rem;
+    margin-bottom: 32px;
+  }
+  .PerfectMatch .row {
+    gap: 24px;
+    padding: 0 10px;
+  }
+  .product-card img {
+    height: 200px;
+  }
+  .product-card h4 {
+    font-size: 1.2rem;
+  }
+}
+
+/* Desktop styles */
+@media (min-width: 992px) {
+  .PerfectMatch .section-title {
+    font-size: 3rem;
+  }
+  .PerfectMatch h5 {
+    font-size: 1.25rem;
+    margin-bottom: 40px;
+  }
+  .PerfectMatch .row {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 30px;
+    padding: 0 15px;
+  }
+  .product-card {
+    border-radius: 30px 0 30px 0;
+  }
+  .product-card img {
+    height: 220px;
+  }
+  .product-card h4 {
+    font-size: 1.35rem;
+  }
+}
+
+/* Extra large screens */
+@media (min-width: 1200px) {
+  .PerfectMatch .row {
+    grid-template-columns: repeat(5,1fr);
+  }
 }

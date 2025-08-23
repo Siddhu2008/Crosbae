@@ -114,7 +114,7 @@
   padding: 20px;
   border-radius: 15px;
   text-align: center;
-  box-shadow: 0 0 20px rgba(191, 161, 74, 0.15);
+  box-shadow: 0 0 20px rgba(18, 14, 1, 0.15);
   transition: transform 0.3s ease;
 }
 
@@ -135,7 +135,7 @@
   font-size: 2rem;
   font-weight: 700;
   color: #2b2a4d;
-  text-shadow: 1px 1px 5px rgba(191, 161, 74, 0.3);
+  text-shadow: 1px 1px 5px rgba(38, 29, 1, 0.3);
 }
 
 .growth {

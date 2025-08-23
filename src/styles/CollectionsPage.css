@@ -1,11 +1,16 @@
 .collection-container {
-  padding: 3rem 2rem;
+  padding: 2rem 0.7rem;
   background: #ffffff;
   min-height: 80vh;
   font-family: 'Playfair Display', serif;
 }
 
-/* Responsive columns handled by Bootstrap row-cols-* classes */
+/* Responsive grid for cards (mobile-first: 1 column) */
+.collections-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* 2 cards per row on mobile */
+  gap: 1.2rem;
+}
 
 /* Card Styling */
 .royal-card {
@@ -28,7 +33,7 @@
 .img-wrapper {
   position: relative;
   width: 100%;
-  height: 240px;
+  height: 180px;
   overflow: hidden;
 }
 
@@ -74,4 +79,29 @@
 .btn-expo:hover {
   background: linear-gradient(145deg, #b68b2d, #e6c229);
   color: #fff;
+}
+
+/* Tablet styles */
+@media (min-width: 600px) {
+  .collection-container {
+    padding: 3rem 2rem;
+  }
+  .collections-grid {
+    grid-template-columns: repeat(2, 1fr); /* 2 cards per row on tablet */
+    gap: 1.5rem;
+  }
+  .img-wrapper {
+    height: 220px;
+  }
+}
+
+/* Desktop styles */
+@media (min-width: 992px) {
+  .collections-grid {
+    grid-template-columns: repeat(4, 1fr); /* 4 cards per row on desktop */
+    gap: 2rem;
+  }
+  .img-wrapper {
+    height: 240px;
+  }
 }

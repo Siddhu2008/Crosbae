@@ -291,4 +291,16 @@ body {
     .search-bar {
         display: none;
     }
+    
+.logo img {
+    height: 40px;
+    filter: drop-shadow(0 0 5px var(--gold));
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    margin-right: 2rem;
+}
+
+.logo img:hover {
+    transform: scale(1.1);
+}
 }

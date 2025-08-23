@@ -2,51 +2,48 @@
 .container {
   max-width: 960px;
   margin: 0 auto;
-  padding: 0 20px;
+  padding: 0 12px;
 }
 
 /* General page styles */
 .about-page.royal-theme {
   font-family: "Georgia", serif;
   color: #2b2a4d;
-  /* deep navy */
   background: #fffaf3;
-  /* warm ivory for premium feel */
   min-height: 100vh;
-  padding-bottom: 60px;
+  padding-bottom: 40px;
 }
 
 /* Section spacing */
 section {
-  padding: 60px 0;
+  padding: 36px 0;
   border-bottom: 1px solid rgba(0, 0, 0, 0.05);
 }
 
 /* Hero Section */
 .hero-section .brand-title {
-  font-size: 3.5rem;
+  font-size: 2.1rem;
   font-weight: 700;
   text-align: center;
   margin-bottom: 0.5rem;
   text-transform: uppercase;
   letter-spacing: 0.15em;
   color: #c6a34f;
-  /* luxury gold */
   text-shadow: 1px 1px 4px rgba(198, 163, 79, 0.5);
 }
 
 .hero-section .tagline {
-  font-size: 1.4rem;
+  font-size: 1.05rem;
   font-style: italic;
   text-align: center;
-  max-width: 600px;
+  max-width: 95vw;
   margin: 0 auto;
   color: #5a5a5a;
 }
 
 /* Story Section */
 .story-section h2 {
-  font-size: 2.4rem;
+  font-size: 1.5rem;
   color: #c6a34f;
   margin-bottom: 1rem;
   border-bottom: 2px solid #c6a34f;
@@ -54,7 +51,7 @@ section {
 }
 
 .story-section p {
-  font-size: 1.1rem;
+  font-size: 1rem;
   line-height: 1.7;
   margin-bottom: 1rem;
   color: #3b3b3b;
@@ -63,37 +60,38 @@ section {
 /* Mission Vision */
 .mission-vision .two-col {
   display: flex;
-  gap: 40px;
+  flex-direction: column;
+  gap: 18px;
   flex-wrap: wrap;
   justify-content: space-between;
 }
 
 .mission-vision .col {
-  flex: 1 1 45%;
+  flex: 1 1 100%;
   background: #f1d294;
-  /* soft golden cream */
-  padding: 20px 30px;
+  padding: 16px 12px;
   border-radius: 8px;
   box-shadow: 0 0 12px rgba(198, 163, 79, 0.2);
+  margin-bottom: 12px;
 }
 
 .mission-vision h3 {
-  font-size: 1.8rem;
+  font-size: 1.2rem;
   color: #c6a34f;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
   text-transform: uppercase;
   letter-spacing: 0.1em;
 }
 
 .mission-vision p {
-  font-size: 1.1rem;
+  font-size: 1rem;
   color: #444;
   line-height: 1.6;
 }
 
 /* Quality Section */
 .quality-section h2 {
-  font-size: 2.4rem;
+  font-size: 1.5rem;
   color: #c6a34f;
   margin-bottom: 1rem;
   border-bottom: 2px solid #c6a34f;
@@ -101,14 +99,14 @@ section {
 }
 
 .quality-section p {
-  font-size: 1.1rem;
+  font-size: 1rem;
   line-height: 1.7;
   color: #3b3b3b;
 }
 
 /* Why Choose Section */
 .why-choose h2 {
-  font-size: 2.4rem;
+  font-size: 1.5rem;
   color: #c6a34f;
   margin-bottom: 1rem;
   border-bottom: 2px solid #c6a34f;
@@ -119,53 +117,53 @@ section {
 .features-list {
   list-style: none;
   padding-left: 0;
-  font-size: 1.2rem;
+  font-size: 1rem;
   color: #3b3b3b;
-  max-width: 600px;
+  max-width: 100%;
   text-align: left;
   margin: 0 auto;
 }
 
 .features-list li {
-  margin: 12px 0;
-  padding-left: 30px;
+  margin: 10px 0;
+  padding-left: 24px;
   position: relative;
   font-weight: 500;
   cursor: default;
 }
 
 .features-list li::before {
-  
   position: absolute;
   left: 0;
   top: 0;
-  font-size: 1.3rem;
+  font-size: 1.1rem;
   color: #c6a34f;
+  content: "★";
 }
 
 /* CTA Section */
 .cta-section {
   text-align: center;
-  padding-top: 80px;
-  padding-bottom: 80px;
+  padding-top: 40px;
+  padding-bottom: 40px;
   background: #f1d294;
   border-radius: 12px;
   box-shadow: 0 0 20px rgba(198, 163, 79, 0.15);
-  max-width: 700px;
+  max-width: 100%;
   margin: 0 auto;
 }
 
 .cta-section h2 {
-  font-size: 2.6rem;
+  font-size: 1.6rem;
   color: #2b2a4d;
   margin-bottom: 16px;
   font-weight: 700;
 }
 
 .cta-section p {
-  font-size: 1.2rem;
+  font-size: 1rem;
   color: #3b3b3b;
-  margin-bottom: 32px;
+  margin-bottom: 24px;
   font-style: italic;
 }
 
@@ -176,12 +174,13 @@ section {
   color: white;
   font-weight: 700;
   text-transform: uppercase;
-  padding: 14px 32px;
+  padding: 12px 24px;
   border-radius: 30px;
   text-decoration: none;
   box-shadow: 0 5px 15px rgba(198, 163, 79, 0.4);
   transition: all 0.3s ease;
   letter-spacing: 0.1em;
+  font-size: 1rem;
 }
 
 .btn-explore:hover {
@@ -190,14 +189,76 @@ section {
   transform: translateY(-3px);
 }
 
-/* Responsive */
-@media (max-width: 768px) {
-  .mission-vision .two-col {
-    flex-direction: column;
+/* Tablet styles */
+@media (min-width: 600px) {
+  .container {
+    padding: 0 20px;
   }
-
+  .hero-section .brand-title {
+    font-size: 2.8rem;
+  }
+  .hero-section .tagline {
+    font-size: 1.2rem;
+    max-width: 600px;
+  }
+  .story-section h2,
+  .quality-section h2,
+  .why-choose h2 {
+    font-size: 2rem;
+  }
+  .mission-vision .two-col {
+    flex-direction: row;
+    gap: 32px;
+  }
   .mission-vision .col {
-    flex: 1 1 100%;
-    margin-bottom: 20px;
+    flex: 1 1 45%;
+    margin-bottom: 0;
+    padding: 20px 30px;
+  }
+  .mission-vision h3 {
+    font-size: 1.5rem;
+  }
+  .features-list {
+    font-size: 1.1rem;
+    max-width: 600px;
+  }
+  .cta-section {
+    padding-top: 60px;
+    padding-bottom: 60px;
+    max-width: 700px;
+  }
+  .cta-section h2 {
+    font-size: 2.2rem;
+  }
+  .cta-section p {
+    font-size: 1.1rem;
+  }
+}
+
+/* Desktop styles */
+@media (min-width: 992px) {
+  .container {
+    max-width: 960px;
+    padding: 0 20px;
+  }
+  .hero-section .brand-title {
+    font-size: 3.5rem;
+  }
+  .hero-section .tagline {
+    font-size: 1.4rem;
+  }
+  .story-section h2,
+  .quality-section h2,
+  .why-choose h2 {
+    font-size: 2.4rem;
+  }
+  .mission-vision h3 {
+    font-size: 1.8rem;
+  }
+  .cta-section h2 {
+    font-size: 2.6rem;
+  }
+  .cta-section p {
+    font-size: 1.2rem;
   }
 }
