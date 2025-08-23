@@ -6,26 +6,42 @@ import "../styles/Navbar.css";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [cartCount, setCartCount] = useState(3);
 
   const [isLoggedIn, setIsLoggedIn] = useState(false); // login and logout
 
   const toggleMenu = () => setIsOpen(!isOpen);
-
-  useEffect(() => {
-  const updateCartCount = () => {
-    const storedCart = JSON.parse(localStorage.getItem("cartItems")) || [];
-    const totalQuantity = storedCart.reduce((acc, item) => acc + item.quantity, 0);
-    setCartCount(totalQuantity);
+  
+  const getInitialCartCount = () => {
+    try {
+      const storedCart = JSON.parse(localStorage.getItem("cartItems")) || [];
+      return storedCart.reduce((acc, item) => acc + item.quantity, 0);
+    } catch (err) {
+      return 0; // in case of JSON parse error
+    }
   };
 
-  updateCartCount(); // update on component mount
+  const [cartCount, setCartCount] = useState(getInitialCartCount);
 
-  // Optional: listen for localStorage changes in other tabs/windows
+
+useEffect(() => {
+  const updateCartCount = () => {
+    try {
+      const storedCart = JSON.parse(localStorage.getItem("cartItems")) || [];
+      const totalQuantity = storedCart.reduce((acc, item) => acc + item.quantity, 0);
+      setCartCount(totalQuantity);
+    } catch (err) {
+      setCartCount(0);
+    }
+  };
+
+  updateCartCount(); // initial check
+
   window.addEventListener("storage", updateCartCount);
 
   return () => window.removeEventListener("storage", updateCartCount);
 }, []);
+
+
 
   return (
     <nav className="navbar royal-navbar">
@@ -37,16 +53,30 @@ const Navbar = () => {
 
         {/* Desktop Nav Links */}
         <div className="nav-links">
-          <Link to="/shop" className="nav-link">Shop</Link>
-          <Link to="/collections" className="nav-link">Collections</Link>
-          <Link to="/about" className="nav-link">About</Link>
-          <Link to="/contact" className="nav-link">Contact</Link>
-          <Link to="/admin" className="nav-link">Admin</Link>
+          <Link to="/shop" className="nav-link">
+            Shop
+          </Link>
+          <Link to="/collections" className="nav-link">
+            Collections
+          </Link>
+          <Link to="/about" className="nav-link">
+            About
+          </Link>
+          <Link to="/contact" className="nav-link">
+            Contact
+          </Link>
+          <Link to="/admin" className="nav-link">
+            Admin
+          </Link>
         </div>
 
         {/* Search Bar */}
         <div className="search-bar">
-          <input type="text" placeholder="Search jewelry..." aria-label="Search jewelry" />
+          <input
+            type="text"
+            placeholder="Search jewelry..."
+            aria-label="Search jewelry"
+          />
           <i className="fas fa-search search-icon"></i>
         </div>
 
@@ -91,9 +121,15 @@ const Navbar = () => {
           )}
 
           {/* Cart Icon */}
-          <Link to="/cart" className="cart-icon icon-link" aria-label="Cart">
+          <Link
+            to="/cart"
+            className="cart-icon icon-link"
+            aria-label="Cart"
+            style={{ position: "relative" }}
+          >
             <i className="fas fa-shopping-bag"></i>
-            {cartCount > 0 && <span className="cart-badge">{cartCount}</span>}
+            <span className={`cart-badge ${cartCount === 0 ? "empty" : ""}`}>{cartCount}</span>
+
           </Link>
 
           {/* Hamburger for Mobile */}
@@ -117,12 +153,24 @@ const Navbar = () => {
             className="mobile-search"
             aria-label="Mobile Search jewelry"
           />
-          <Link to="/shop" onClick={toggleMenu}>Shop</Link>
-          <Link to="/collections" onClick={toggleMenu}>Collections</Link>
-          <Link to="/about" onClick={toggleMenu}>About</Link>
-          <Link to="/contact" onClick={toggleMenu}>Contact</Link>
-          <Link to="/admin" onClick={toggleMenu}>Admin</Link>
-          <Link to="/wishlist" onClick={toggleMenu}>Wishlist</Link>
+          <Link to="/shop" onClick={toggleMenu}>
+            Shop
+          </Link>
+          <Link to="/collections" onClick={toggleMenu}>
+            Collections
+          </Link>
+          <Link to="/about" onClick={toggleMenu}>
+            About
+          </Link>
+          <Link to="/contact" onClick={toggleMenu}>
+            Contact
+          </Link>
+          <Link to="/admin" onClick={toggleMenu}>
+            Admin
+          </Link>
+          <Link to="/wishlist" onClick={toggleMenu}>
+            Wishlist
+          </Link>
         </div>
       )}
     </nav>
