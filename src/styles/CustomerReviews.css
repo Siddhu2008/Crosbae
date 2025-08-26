@@ -1,142 +1,138 @@
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&display=swap');
-
 .customer-reviews-section {
-  background: #ffffff;
-  color: #2b265a;
-  padding: 40px 8px 60px;
-  font-family: 'Playfair Display', serif;
-  box-shadow: inset 0 0 40px rgba(184, 134, 11, 0.05);
+  padding: 30px 20px;
+  border-radius: 20px;
+  position: relative;
 }
 
-.section-title {
-  color: #b8860b;
-  font-size: 1.2rem;         /* Reduced font size for mobile */
-  font-weight: bold;
-  text-shadow: 0 0 10px #f7e49b33, 0 0 15px #c0a10022;
-  margin-bottom: 1rem;
-  letter-spacing: 1.2px;
+.reviews-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
 }
 
-/* Testimonial Card Styling */
+/* Scroll buttons */
+.scroll-btn {
+  background: gold;
+  border: none;
+  font-size: 2rem;
+  padding: 10px 15px;
+  border-radius: 50%;
+  cursor: pointer;
+  color: white;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  z-index: 10;
+}
+
+.scroll-btn.left {
+  position: absolute;
+  left: -10px;
+}
+
+.scroll-btn.right {
+  position: absolute;
+  right: -10px;
+}
+
+.scroll-btn:hover {
+  background: darkgoldenrod;
+}
+
+/* Reviews container */
+.reviews-container {
+  display: flex;
+  gap: 20px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  padding: 20px 40px;
+}
+
+.reviews-container::-webkit-scrollbar {
+  display: none;
+}
+
+/* Testimonial card */
 .testimonial-card {
-  background: #ffffff;
-  border: 1px solid #eee;
-  border-radius: 15px;
-  transition: all 0.3s ease;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
-  height: 100%;
-  max-width: 500px;
-  margin: 0 auto;
-  padding: 22px 12px;
+  flex: 0 0 90%;
+  max-width: 20%;
+  background: white;
+  border-radius: 16px;
+  border: 1px solid #f1c40f;
+  box-shadow: 0 4px 10px rgba(241, 196, 15, 0.3);
+  scroll-snap-align: start;
+  padding: 20px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .testimonial-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 12px 35px rgba(184, 134, 11, 0.25);
+  box-shadow: 0 8px 18px rgba(241, 196, 15, 0.5);
 }
 
-.stars {
-  color: #b8860b;
-  font-size: 1rem;           /* Reduced font size for mobile */
-  letter-spacing: 1.5px;
-  text-shadow: 0 0 5px rgba(184, 134, 11, 0.3);
+/* Profile + product images */
+.profile-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 15px;
+}
+
+.profile-img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid gold;
+}
+
+.product-img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 12px;
+  border: 3px solid gold;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+/* Content */
+.testimonial-content {
+  text-align: center;
+}
+
+.star {
+  color: gold;
+  font-size: 1.2rem;
 }
 
 .review-text {
-  font-size: 0.92rem;        /* Reduced font size for mobile */
-  color: #4f4f4f;
   font-style: italic;
-  margin-bottom: 1rem;
-  line-height: 1.5;
+  color: #444;
+  margin: 10px 0;
 }
 
 .review-author {
-  color: #2b265a;
-  font-weight: 600;
-  font-family: 'Playfair Display', serif;
-  font-size: 0.98rem;        /* Reduced font size for mobile */
+  font-weight: bold;
+  color: #333;
+  margin: 5px 0;
 }
 
-/* Cards grid: 2 per row on mobile */
-.cards {
-  display: grid;
-  grid-template-columns: 1fr; /* Show 1 card per row on mobile */
-  gap: 14px;
-  margin-top: 24px;
-  width: 100%;
+.product-name {
+  font-size: 0.9rem;
+  color: #b8860b;
 }
 
-.card1,
-.card2 {
-  float: none;
-  width: 100%;
-}
-
-/* Gradient button style */
-.btn-gradient {
-  background: linear-gradient(135deg, #ffd700, #b39200);
-  color: #2b265a;
-  border: none;
-  border-radius: 30px;
-  font-weight: 700;
-  text-transform: uppercase;
-  font-family: 'Playfair Display', serif;
-  padding: 10px 30px;
-  margin-top: 30px;
-  box-shadow: 0 0 10px rgba(255, 215, 0, 0.2);
-  transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-.btn-gradient:hover {
-  background-color: #2b265a;
-  color: #ffd700;
-  box-shadow: 0 0 20px rgba(255, 215, 0, 0.4);
-}
-
-/* Tablet styles */
-@media (min-width: 600px) {
-  .customer-reviews-section {
-    padding: 60px 20px 80px;
-  }
-  .section-title {
-    font-size: 2rem;
-    margin-bottom: 2rem;
-  }
-  .review-text {
-    font-size: 1.1rem;
-  }
-  .stars {
-    font-size: 1.2rem;
-  }
-  .review-author {
-    font-size: 1.05rem;
-  }
-  .cards {
-    grid-template-columns: repeat(2, 1fr); /* 2 cards per row on tablet */
-    gap: 24px;
-  }
+/* Tablet: 2 cards */
+@media (min-width: 768px) {
   .testimonial-card {
-    padding: 30px 20px;
+    flex: 0 0 45%;
+    max-width: 90%;
   }
 }
 
-/* Desktop styles */
-@media (min-width: 992px) {
-  .section-title {
-    font-size: 2.8rem;
-  }
-  .cards {
-    grid-template-columns: repeat(4, 1fr); /* 4 cards per row on desktop */
-    gap: 30px;
-    margin-top: 40px;
-  }
+/* Desktop: 3 cards */
+@media (min-width: 1024px) {
   .testimonial-card {
-    padding: 30px;
+    flex: 0 0 30%;
+    max-width: 90%;
   }
-}
-
-/* Extra: Center row content */
-.customer-reviews-section .row {
-  justify-content: center;
-  padding: 0 40px;
 }
