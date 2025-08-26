@@ -1,5 +1,5 @@
 /* Mobile-first base styles */
-.top-category{
+.top-category {
     padding-top: 100px;
 }
 
@@ -8,10 +8,10 @@
     padding: 15px;
     user-select: none;
     cursor: grab;
-    background: #f8f7f7;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+    /* background: #f8f7f7; */
+    /* box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08); */
     border-radius: 10px;
-    margin: 5px;
+    margin: 0px;
     max-width: 100%;
 }
 
@@ -39,7 +39,7 @@
     border-radius: 50%;
     object-fit: cover;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
-    border: 2px solid #e0e0e0;
+    border: 2px solid #353935;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
@@ -107,9 +107,10 @@
 
 /* Laptop - min-width: 1024px */
 @media (min-width: 1024px) {
-    .top-category{
-    padding-top: 90px;
-}
+    .top-category {
+        padding-top: 90px;
+    }
+
     .scroll-track {
         gap: 2.5rem;
         padding: 0 2.5rem;
@@ -131,9 +132,10 @@
 
 /* Desktop - min-width: 1280px */
 @media (min-width: 1280px) {
-    .top-category{
-    padding-top: 90px;
-}
+    .top-category {
+        padding-top: 90px;
+    }
+
     .scroll-track {
         gap: 3rem;
         padding: 0 3rem;

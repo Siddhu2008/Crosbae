@@ -47,7 +47,7 @@ const categories = [
 export default function MatchForYou() {
   return (
     <div>
-      <section className=" PerfectMatch my-5">
+      <section className=" PerfectMatch ">
         <h2 className="section-title text-center" data-aos="fade-up">
           Find Your Perfect Match
         </h2>

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-
-import products from "../data/products"; // Your product dataset
+import "../styles/CartPage.css"; // custom css
 
 export default function CartPage() {
   const [cartItems, setCartItems] = useState([]);
@@ -12,6 +11,7 @@ export default function CartPage() {
   }, []);
 
   const updateQuantity = (productId, quantity) => {
+    if (quantity < 1) return;
     const updatedCart = cartItems.map((item) =>
       item.id === productId ? { ...item, quantity } : item
     );
@@ -25,78 +25,103 @@ export default function CartPage() {
     localStorage.setItem("cartItems", JSON.stringify(updatedCart));
   };
 
-  const calculateTotal = () => {
-    return cartItems.reduce(
-      (acc, item) => acc + item.price * item.quantity,
-      0
-    );
+  const calculateSubtotal = () => {
+    return cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
   };
 
+  const discount = 1000;
+  const shipping = 0;
+
   return (
-    <div
-      className="container"
-      style={{ paddingTop: "120px", paddingBottom: "100px" }}
-    >
-      <h2 className="mb-4 text-center">My Shopping Cart </h2>
+    <div className="cart-container my-5">
+      <h2 className="cart-title">Shopping Cart</h2>
+      <p className="cart-subtitle">{cartItems.length} items in your cart</p>
 
       {cartItems.length === 0 ? (
-        <div className="text-center">
+        <div className="cart-empty">
           <p>Your cart is empty.</p>
-          <Link to="/shop" className="btn btn-outline-primary">
+          <Link to="/shop" className="btn-link">
             Browse Jewellery
           </Link>
         </div>
       ) : (
-        <div className="row">
-          <div className="col-lg-8">
+        <div className="cart-layout">
+          {/* Cart Items */}
+          <div className="cart-items">
             {cartItems.map((item) => (
-              <div className="card mb-3 shadow-sm" key={item.id}>
-                <div className="row g-0">
-                  <div className="col-md-4">
-                    <img
-                      src={item.image}
-                      className="img-fluid"
-                      alt={item.productName}
-                      style={{ objectFit: "cover", height: "100%" }}
-                    />
+              <div className="cart-item" key={item.id}>
+                {/* LEFT: Image + Info */}
+                <div className="cart-left">
+                  <img
+                    src={item.image}
+                    alt={item.productName}
+                    className="cart-img"
+                  />
+
+                  <div className="cart-info">
+                    <h4 className="cart-name">{item.productName}</h4>
+                    <p className="cart-sku">SKU: {item.sku}</p>
+                    <p className="cart-price">
+                      ₹{item.price}{" "}
+                      {item.oldPrice && (
+                        <span className="cart-oldprice">₹{item.oldPrice}</span>
+                      )}
+                    </p>
                   </div>
-                  <div className="col-md-8 d-flex flex-column p-3">
-                    <h5>{item.productName}</h5>
-                    <p className="text-muted small">{item.description}</p>
-                    <p className="fw-semibold">₹ {item.price}</p>
-                    <div className="d-flex align-items-center gap-3">
-                      <label>Qty:</label>
-                      <input
-                        type="number"
-                        className="form-control w-25"
-                        min="1"
-                        value={item.quantity}
-                        onChange={(e) =>
-                          updateQuantity(item.id, parseInt(e.target.value))
-                        }
-                      />
-                      <button
-                        className="btn btn-outline-danger btn-sm"
-                        onClick={() => removeFromCart(item.id)}
-                      >
-                        Remove
-                      </button>
-                    </div>
-                  </div>
+                </div>
+
+                {/* RIGHT: Qty + Delete */}
+                <div className="cart-right">
+                  <button
+                    className="qty-btn"
+                    onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                  >
+                    −
+                  </button>
+                  <span className="qty-value">{item.quantity}</span>
+                  <button
+                    className="qty-btn"
+                    onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                  >
+                    +
+                  </button>
+
+                  <button
+                    className="delete-btn"
+                    onClick={() => removeFromCart(item.id)}
+                  >
+                    🗑
+                  </button>
                 </div>
               </div>
             ))}
           </div>
 
-          <div className="col-lg-4">
-            <div className="card p-4 shadow-sm">
-              <h5 className="mb-3">Order Summary</h5>
-              <p>Total Items: {cartItems.length}</p>
-              <p>Total Price: ₹ {calculateTotal()}</p>
-              <Link to="/checkout" className="btn btn-dark w-100">
-                Proceed to Checkout
-              </Link>
+          {/* Order Summary */}
+          <div className="order-summary">
+            <h3>Order Summary</h3>
+            <div className="summary-line">
+              <span>Subtotal</span>
+              <span>₹{calculateSubtotal()}</span>
             </div>
+            <div className="summary-line discount">
+              <span>Discount</span>
+              <span>-₹{discount}</span>
+            </div>
+            <div className="summary-line">
+              <span>Shipping</span>
+              <span>{shipping === 0 ? "Free" : `₹${shipping}`}</span>
+            </div>
+            <hr />
+            <div className="summary-line total">
+              <span>Total</span>
+              <span>₹{calculateSubtotal() - discount + shipping}</span>
+            </div>
+
+            <button className="checkout-btn">Proceed to Checkout</button>
+            <Link to="/shop" className="continue-btn">
+              Continue Shopping
+            </Link>
           </div>
         </div>
       )}

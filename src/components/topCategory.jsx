@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react";
-import { useNavigate} from "react-router-dom"; // 👈 import navigate
-import "../styles/topCategory.css"
+import { useNavigate } from "react-router-dom"; // 👈 import navigate
+import "../styles/topCategory.css";
 
 export default function TopCategory() {
   const scrollContainerRef = useRef(null);
@@ -16,8 +16,6 @@ export default function TopCategory() {
   const totalScrollableRef = useRef(0);
 
   const navigate = useNavigate(); // 👈 hook to navigate
-
-
 
   const items = [
     {

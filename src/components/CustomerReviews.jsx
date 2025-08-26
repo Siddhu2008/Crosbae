@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 export default function CustomerReviews() {
   return (
-    <section className="  py-5 customer-reviews-section">
+    <section className=" customer-reviews-section">
   
     <h2 className="section-title text-center mb-5" data-aos="fade-up">
       What Our Customers Say
