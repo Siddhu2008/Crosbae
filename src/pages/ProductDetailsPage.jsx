@@ -132,7 +132,7 @@ const ProductDetailsPage = () => {
         </div>
 
         <div className="action-buttons">
-          <button className="add-cart" onClick={() => addToCart(p)}>
+          <button className="add-cart" onClick={() => addToCart(product)}>
             Add to Cart
           </button>
           <button className="buy-now">Buy Now</button>
