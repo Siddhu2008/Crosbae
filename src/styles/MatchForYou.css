@@ -3,7 +3,7 @@
 .PerfectMatch {
   background: #ffffff;
   color: #2b265a;
-  padding: 40px 8px 20px;
+  padding: 30px 8px 0px;
   font-family: 'Playfair Display', serif;
   text-align: center;
   box-shadow: inset 0 0 50px rgba(184, 134, 11, 0.05);
@@ -36,7 +36,7 @@
 .PerfectMatch .col{
   padding-top: 10px;
 }
-.product-card {
+.category-card {
   position: relative;
   background: #ffffff;
   border-radius: 30px 0 30px 0;
@@ -48,13 +48,14 @@
   overflow: hidden;
 }
 
-.product-card:hover {
+.category-card:hover {
   transform: translateY(-8px);
   box-shadow: 0 12px 35px rgba(184, 134, 11, 0.25);
   z-index: 2;
 }
 
-.product-card img {
+.category-card img {
+  border-radius: 30px 0 30px 0;
   width: 100%;
   height: 160px;
   object-fit: cover;
@@ -64,11 +65,11 @@
   filter: brightness(0.95);
 }
 
-.product-card:hover img {
+.category-card:hover img {
   filter: brightness(1.05) saturate(1.05);
 }
 
-.product-card h4 {
+.category-card h4 {
   color: #b8860b;
   font-weight: 700;
   font-size: 1.1rem;
@@ -80,7 +81,7 @@
   user-select: none;
 }
 
-.product-card::before {
+.category-card::before {
   content: "";
   position: absolute;
   top: -60%;
@@ -95,14 +96,14 @@
   border-radius: 15px;
 }
 
-.product-card:hover::before {
+.category-card:hover::before {
   opacity: 0.25;
 }
 
 /* Tablet styles */
 @media (min-width: 600px) {
   .PerfectMatch {
-    padding: 60px 20px 80px;
+    padding: 30px 20px 0px;
   }
   .PerfectMatch .section-title {
     font-size: 2rem;
@@ -115,10 +116,11 @@
     gap: 24px;
     padding: 0 10px;
   }
-  .product-card img {
+  .category-card img {
+    border-radius: 30px 0 30px 0;
     height: 200px;
   }
-  .product-card h4 {
+  .category-card h4 {
     font-size: 1.2rem;
   }
 }
@@ -137,20 +139,15 @@
     gap: 30px;
     padding: 0 15px;
   }
-  .product-card {
+  .category-card {
     border-radius: 30px 0 30px 0;
   }
-  .product-card img {
+  .category-card img {
+    border-radius: 30px 0 30px 0;
+    width: 100%;
     height: 220px;
   }
-  .product-card h4 {
+  .category-card h4 {
     font-size: 1.35rem;
-  }
-}
-
-/* Extra large screens */
-@media (min-width: 1200px) {
-  .PerfectMatch .row {
-    grid-template-columns: repeat(5,1fr);
   }
 }

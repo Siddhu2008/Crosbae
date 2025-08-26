@@ -2,7 +2,7 @@
 
 section {
   background: #ffffff;
-  padding: 40px 8px 60px;
+  padding: 30px 8px 0px;
   font-family: 'Playfair Display', serif;
   color: #2b265a;
   text-align: center;
@@ -83,7 +83,7 @@ h5 {
 /* Tablet styles */
 @media (min-width: 600px) {
   section {
-    padding: 60px 20px 80px;
+    padding: 30px 20px 0px;
   }
   .section-title {
     font-size: 2rem;

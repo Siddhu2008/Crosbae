@@ -12,7 +12,7 @@ export default function ShopServices() {
           Trusted by thousands, crafted with care.
         </h5>
 
-        <div className="row row-cols-2 row-col-lg-4 row-col-sm-2 text-center mt-3">
+        <div className="row row-cols-2 row-col-lg-4 row-col-sm-2 text-center ">
           <div
             className="col-lg-3 col-sm-6 col-xs-6 mb-4"
             data-aos="zoom-in"

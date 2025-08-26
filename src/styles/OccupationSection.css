@@ -2,7 +2,7 @@
 
 .occasions {
   background: #ffffff;
-  padding: 40px 8px 20px;
+  padding: 0px 8px 0px;
   font-family: 'Playfair Display', serif;
   color: #2b265a;
   text-align: center;
@@ -72,7 +72,7 @@
 /* Tablet styles */
 @media (min-width: 600px) {
   .occasions {
-    padding: 60px 20px 20px;
+    padding: 0px 20px 0px;
   }
   .occasions .section-title {
     font-size: 2rem;

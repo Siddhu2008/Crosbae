@@ -29,15 +29,7 @@ const categories = [
   {
     title: "Finger Rings",
     img: "https://www.tanishq.co.in/dw/image/v2/BKCK_PRD/on/demandware.static/-/Library-Sites-TanishqSharedLibrary/default/dw47da8133/homepage/shopByCategory/rings-cat.jpg",
-  },
-  {
-    title: "Pendants",
-    img: "https://www.tanishq.co.in/dw/image/v2/BKCK_PRD/on/demandware.static/-/Library-Sites-TanishqSharedLibrary/default/dw63553376/homepage/shopByCategory/pendants-cat.jpg",
-  },
-  {
-    title: "Gold Jewelry",
-    img: "https://www.tanishq.co.in/dw/image/v2/BKCK_PRD/on/demandware.static/-/Library-Sites-TanishqSharedLibrary/default/dw811a2edc/homepage/shopByCategory/chains-cat.jpg",
-  },
+  },   
   {
     title: "View All",
     img: "https://www.tanishq.co.in/dw/image/v2/BKCK_PRD/on/demandware.static/-/Library-Sites-TanishqSharedLibrary/default/dw811a2edc/homepage/shopByCategory/all-jew-cat.jpg",
@@ -60,11 +52,11 @@ export default function MatchForYou() {
       data-aos-delay={100 * (index + 1)}
       key={index}
     >
-      <div className="product-card text-center">
+      <div className="category-card text-center">
         <img
           src={category.img}
           alt={category.title}
-          className="img-fluid rounded mb-3"
+          className="img-fluid"
         />
         <h4>{category.title}</h4>
       </div>

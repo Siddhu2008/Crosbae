@@ -3,7 +3,7 @@
 
 .trending-section {
   background: #fff;
-  padding: 40px 8px 60px;
+  padding: 30px 8px 60px;
   font-family: 'Playfair Display', serif;
   color: #2b265a;
   text-align: center;
@@ -149,7 +149,7 @@
 /* Desktop styles */
 @media (min-width: 992px) {
   .trending-section {
-    padding: 60px 20px 80px;
+    padding: 30px 20px 80px;
   }
   .cards-grid {
     grid-template-columns: repeat(4, 1fr);
