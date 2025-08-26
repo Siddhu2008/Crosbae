@@ -33,14 +33,16 @@ export default function CartPage() {
   const shipping = 0;
 
   return (
-    <div className="cart-container my-5">
-      <h2 className="cart-title">Shopping Cart</h2>
-      <p className="cart-subtitle">{cartItems.length} items in your cart</p>
+    <div className="cart-container container my-5">
+      <h2 className="cart-title text-center">Shopping Cart</h2>
+      <p className="cart-subtitle text-center">
+        {cartItems.length} items in your cart
+      </p>
 
       {cartItems.length === 0 ? (
-        <div className="cart-empty">
+        <div className="cart-empty text-center">
           <p>Your cart is empty.</p>
-          <Link to="/shop" className="btn-link">
+          <Link to="/shop" className="btn btn-outline-primary">
             Browse Jewellery
           </Link>
         </div>
