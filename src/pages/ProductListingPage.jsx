@@ -1,10 +1,10 @@
 import React, { useState, useMemo, useEffect } from "react";
 import { Link } from "react-router-dom";
 
-import products from "../data/products"; // your product data
-import "../styles/ProductListingPage.css"
+import products from "../data/products"; // product data
+import "../styles/ProductListingPage.css";
+
 export default function ProductListingPage() {
-  
   const [filters, setFilters] = useState({
     category: [],
     purity: [],
@@ -20,44 +20,19 @@ export default function ProductListingPage() {
   const toggleFilterSidebar = () => setShowFilter(!showFilter);
 
   useEffect(() => {
-  const storedLikes = JSON.parse(localStorage.getItem("likedProducts")) || [];
-  setLikedProducts(storedLikes);
-}, []);
+    const storedLikes = JSON.parse(localStorage.getItem("likedProducts")) || [];
+    setLikedProducts(storedLikes);
+  }, []);
 
-const toggleLike = (productId) => {
-  setLikedProducts((prev) => {
-    const updated = prev.includes(productId)
-      ? prev.filter((id) => id !== productId)
-      : [...prev, productId];
+  const toggleLike = (productId) => {
+    setLikedProducts((prev) => {
+      const updated = prev.includes(productId)
+        ? prev.filter((id) => id !== productId)
+        : [...prev, productId];
 
-    localStorage.setItem("likedProducts", JSON.stringify(updated));
-    return updated;
-  });
-};
-
-  const getTagStyle = (tag) => {
-    switch (tag) {
-      case "NEW":
-        return {
-          background: "linear-gradient(to right, #00c9a7, #92fe9d)",
-          color: "#fff",
-        };
-      case "Flat 50% OFF":
-        return {
-          background: "linear-gradient(to right, #e52d27, #b31217)",
-          color: "#fff",
-        };
-      case "Best Seller":
-        return {
-          background: "linear-gradient(to right, #f7971e, #ffd200)",
-          color: "#000",
-        };
-      default:
-        return {
-          background: "linear-gradient(to right, #bfa17f, #f5e6ca)",
-          color: "#fff",
-        };
-    }
+      localStorage.setItem("likedProducts", JSON.stringify(updated));
+      return updated;
+    });
   };
 
   const filteredProducts = useMemo(() => {
@@ -65,7 +40,7 @@ const toggleLike = (productId) => {
 
     if (filters.search) {
       result = result.filter((p) =>
-        p.name.toLowerCase().includes(filters.search.toLowerCase())
+        p.productName.toLowerCase().includes(filters.search.toLowerCase())
       );
     }
 
@@ -93,7 +68,7 @@ const toggleLike = (productId) => {
   }, [filteredProducts, currentPage]);
 
   useEffect(() => {
-    setCurrentPage(1); // Reset to page 1 when filters/sorting change
+    setCurrentPage(1);
   }, [filters, sortOption]);
 
   const handleCheckboxChange = (e, type) => {
@@ -107,28 +82,25 @@ const toggleLike = (productId) => {
   const handleSearchChange = (e) =>
     setFilters((prev) => ({ ...prev, search: e.target.value }));
 
+  const addToCart = (product) => {
+    const existingCart = JSON.parse(localStorage.getItem("cartItems")) || [];
+    const exists = existingCart.find((item) => item.id === product.id);
 
-const addToCart = (product) => {
-  const existingCart = JSON.parse(localStorage.getItem("cartItems")) || [];
-  const exists = existingCart.find((item) => item.id === product.id);
+    let updatedCart;
+    if (exists) {
+      updatedCart = existingCart.map((item) =>
+        item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
+      );
+    } else {
+      updatedCart = [...existingCart, { ...product, quantity: 1 }];
+    }
 
-  let updatedCart;
-  if (exists) {
-    updatedCart = existingCart.map((item) =>
-      item.id === product.id
-        ? { ...item, quantity: item.quantity + 1 }
-        : item
-    );
-  } else {
-    updatedCart = [...existingCart, { ...product, quantity: 1 }];
-  }
-
-  localStorage.setItem("cartItems", JSON.stringify(updatedCart));
-};
+    localStorage.setItem("cartItems", JSON.stringify(updatedCart));
+  };
 
   return (
     <div className="Product-container position-relative">
-      {/* Filter Toggle */}
+      {/* Header */}
       <div className="d-flex justify-content-between align-items-center mb-3">
         <button
           className="btn btn-outline-secondary"
@@ -153,16 +125,14 @@ const addToCart = (product) => {
 
       {/* Sidebar Filter */}
       <div
-        className={`filter-drawer bg-white  shadow-lg position-fixed top-0 h-100 ${
+        className={`filter-drawer bg-white shadow-lg position-fixed top-0 h-100 ${
           showFilter ? "start-0" : "start-100"
         }`}
         style={{
           width: "280px",
-          padding:"120px 20px",
+          padding: "120px 20px",
           zIndex: 1050,
           overflowY: "auto",
-          display: "flex",
-          flexDirection: "column",
         }}
       >
         <div className="d-flex justify-content-between align-items-center mb-3">
@@ -177,91 +147,21 @@ const addToCart = (product) => {
           onChange={handleSearchChange}
         />
 
-        {/* Category */}
+        {/* Example filter section (Category) */}
         <div className="mb-4">
           <h6>Category</h6>
-          {["Gold", "Diamond", "Platinum", "Silver"].map((cat) => (
+          {["Gold", "Diamond", "Silver"].map((cat) => (
             <div key={cat} className="form-check">
               <input
                 className="form-check-input"
                 type="checkbox"
                 value={cat}
-                id={`cat-${cat}`}
                 checked={filters.category.includes(cat)}
                 onChange={(e) => handleCheckboxChange(e, "category")}
               />
-              <label className="form-check-label" htmlFor={`cat-${cat}`}>
-                {cat}
-              </label>
+              <label className="form-check-label">{cat}</label>
             </div>
           ))}
-        </div>
-
-        {/* Purity */}
-        <div className="mb-4">
-          <h6>Purity</h6>
-          {["22KT", "18KT", "PT950", "925"].map((purity) => (
-            <div key={purity} className="form-check">
-              <input
-                className="form-check-input"
-                type="checkbox"
-                value={purity}
-                id={`purity-${purity}`}
-                checked={filters.purity.includes(purity)}
-                onChange={(e) => handleCheckboxChange(e, "purity")}
-              />
-              <label className="form-check-label" htmlFor={`purity-${purity}`}>
-                {purity}
-              </label>
-            </div>
-          ))}
-        </div>
-
-        {/* Occasion */}
-        <div className="mb-4">
-          <h6>Occasion</h6>
-          {[
-            "Wedding",
-            "Party",
-            "Festive",
-            "Anniversary",
-            "Daily Wear",
-            "Engagement",
-          ].map((occasion) => (
-            <div key={occasion} className="form-check">
-              <input
-                className="form-check-input"
-                type="checkbox"
-                value={occasion}
-                id={`occ-${occasion}`}
-                checked={filters.occasion.includes(occasion)}
-                onChange={(e) => handleCheckboxChange(e, "occasion")}
-              />
-              <label className="form-check-label" htmlFor={`occ-${occasion}`}>
-                {occasion}
-              </label>
-            </div>
-          ))}
-        </div>
-
-        {/* Apply & Clear Buttons */}
-        <div className="border-top p-3 d-flex justify-content-between">
-          <button
-            className="btn btn-outline-danger"
-            onClick={() =>
-              setFilters({
-                category: [],
-                purity: [],
-                occasion: [],
-                search: "",
-              })
-            }
-          >
-            Clear
-          </button>
-          <button className="btn btn-dark" onClick={toggleFilterSidebar}>
-            Apply
-          </button>
         </div>
       </div>
 
@@ -275,24 +175,12 @@ const addToCart = (product) => {
       )}
 
       {/* Product Cards */}
-      <div className="row row-cols-2 row-col-lg-4 row-col-sm-2 row-col-xs-1 g-3">
+      <div className="row row-cols-2 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-3">
         {paginatedProducts.length ? (
           paginatedProducts.map((p) => (
-            <div className="col-lg-3 col-sm-6 col-xs-12" key={p.id}>
+            <div className="col" key={p.id}>
               <div className="card h-100 shadow-sm position-relative like-hover-card">
-                {p.tags && (
-                  <div className="product-tag position-absolute top-0 start-0 p-2">
-                    {p.tags.map((tag, index) => (
-                      <span
-                        className="badge me-1 mb-1"
-                        style={getTagStyle(tag)}
-                        key={index}
-                      >
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                )}
+                {/* Wishlist button */}
                 <button
                   className={`like-btn ${
                     likedProducts.includes(p.id) ? "liked" : ""
@@ -304,24 +192,29 @@ const addToCart = (product) => {
                 >
                   ♥
                 </button>
-                <img
-                  src={p.image}
-                  alt={p.name}
-                  className="card-img-top"
-                  style={{ objectFit: "cover", height: "250px" }}
-                />
-                <div className="card-body d-flex flex-column">
-                  <div>
-                    <h6 className="fw-bold mb-1">{p.productName}</h6>
+
+                {/* Link to Product Details */}
+                <Link to={`/product/${p.id}`} className="text-decoration-none">
+                  <img
+                    src={p.image}
+                    alt={p.productName}
+                    className="card-img-top"
+                    style={{ objectFit: "cover", height: "250px" }}
+                  />
+                  <div className="card-body d-flex flex-column">
+                    <h6 className="fw-bold mb-1 text-dark">{p.productName}</h6>
                     <p className="text-muted small mb-1">{p.description}</p>
-                    <p className="fw-semibold text-dark mb-1 ">₹ {p.price}</p>
+                    <p className="fw-semibold text-dark mb-1">₹ {p.price}</p>
                   </div>
-                  <div className="mt-auto">
-                    <button className="btn custom-cart-btn w-100 " onClick={() => addToCart(p)}
->
-                      Add to Cart
-                    </button>
-                  </div>
+                </Link>
+
+                <div className="p-2">
+                  <button
+                    className="btn custom-cart-btn w-100"
+                    onClick={() => addToCart(p)}
+                  >
+                    Add to Cart
+                  </button>
                 </div>
               </div>
             </div>

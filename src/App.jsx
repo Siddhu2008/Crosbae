@@ -23,6 +23,7 @@ import FAQ from "./pages/FAQ";
 import EditProduct from "./components/EditProduct";
 import DeleteProduct from "./components/DeleteProduct";
 import CheckoutPage from "./components/CheckoutPage";
+import ProductDetailsPage from "./pages/ProductDetailsPage";
 const App = () => {
   useEffect(() => {
     AOS.init({
@@ -56,6 +57,7 @@ const App = () => {
           <Route path="/admin/EditProduct" element={<EditProduct />} />
           <Route path="/admin/DeleteProduct" element={<DeleteProduct />} />
           <Route path="/checkout" element={<CheckoutPage />} />
+          <Route path="/product/:id" element={<ProductDetailsPage />} />
         </Routes>
         <Footer />
       </div>
