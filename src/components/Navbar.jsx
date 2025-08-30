@@ -69,7 +69,11 @@ const Navbar = () => {
 
         {/* Icons */}
         <div className="nav-icons">
-          <Link to="/wishlist" aria-label="Wishlist" className="icon-link">
+          <Link
+            to="/wishlist"
+            aria-label="Wishlist"
+            className="icon-link text-decoration-none"
+          >
             <i className="far fa-heart"></i>
           </Link>
 
@@ -77,7 +81,7 @@ const Navbar = () => {
           {!isLoggedIn ? (
             <div className="dropdown">
               <button
-                className="border-0 bg-transparent"
+                className="border-0 bg-transparent icon-link"
                 type="button"
                 data-bs-toggle="dropdown"
                 aria-expanded="false"
@@ -108,7 +112,11 @@ const Navbar = () => {
           )}
 
           {/* Cart Icon */}
-          <Link to="/cart" className="cart-icon icon-link" aria-label="Cart">
+          <Link
+            to="/cart"
+            className="cart-icon icon-link text-decoration-none"
+            aria-label="Cart"
+          >
             <i className="fas fa-shopping-bag"></i>
             {cartCount > 0 && <span className="cart-badge">{cartCount}</span>}
           </Link>
