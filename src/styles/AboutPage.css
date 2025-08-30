@@ -150,7 +150,7 @@ section {
   border-radius: 12px;
   box-shadow: 0 0 20px rgba(198, 163, 79, 0.15);
   max-width: 100%;
-  margin: 0 auto;
+  margin: 15px;
 }
 
 .cta-section h2 {
@@ -191,6 +191,7 @@ section {
 
 /* Tablet styles */
 @media (min-width: 600px) {
+  
   .container {
     padding: 0 20px;
   }
@@ -226,6 +227,7 @@ section {
     padding-top: 60px;
     padding-bottom: 60px;
     max-width: 700px;
+    margin: 0 auto;
   }
   .cta-section h2 {
     font-size: 2.2rem;

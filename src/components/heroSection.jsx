@@ -73,7 +73,7 @@ export default function HeroSection() {
                 : "Experience the artistry in every piece."}
             </p>
             <div className="hero-btns">
-              <Link to="/shop" className="btn btn-gradient">
+              <Link to="/shop" className="btn btn-gradient btn-lg mt-3 ms-3">
                 {index === 0 ? "Shop Now" : "View Collections"}
               </Link>
               <Link

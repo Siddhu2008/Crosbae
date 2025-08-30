@@ -76,7 +76,7 @@ export default function Footer() {
         <hr className="footer-divider" />
 
         <div className="footer-bottom">
-          <p className="footer-copy">© 2024 Cros Bae. All rights reserved.</p>
+          <p className="footer-copy">© 2025 Cros Bae. All rights reserved.</p>
           <div className="footer-links">
             <a href="#">Privacy Policy</a>
             <a href="#">Terms of Service</a>

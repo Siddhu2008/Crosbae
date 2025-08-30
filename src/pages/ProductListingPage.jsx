@@ -275,109 +275,116 @@ const addToCart = (product) => {
       )}
 
       {/* Product Cards */}
-      <div className="row row-cols-2 row-col-lg-4 row-col-sm-2 row-col-xs-1 g-3">
-        {paginatedProducts.length ? (
-          paginatedProducts.map((p) => (
-            <div className="col-lg-3 col-sm-6 col-xs-12" key={p.id}>
-              <div className="card h-100 shadow-sm position-relative like-hover-card">
-                {p.tags && (
-                  <div className="product-tag position-absolute top-0 start-0 p-2">
-                    {p.tags.map((tag, index) => (
-                      <span
-                        className="badge me-1 mb-1"
-                        style={getTagStyle(tag)}
-                        key={index}
-                      >
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                )}
-                <button
-                  className={`like-btn ${
-                    likedProducts.includes(p.id) ? "liked" : ""
-                  }`}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    toggleLike(p.id);
-                  }}
-                >
-                  ♥
-                </button>
-                <img
-                  src={p.image}
-                  alt={p.name}
-                  className="card-img-top"
-                  style={{ objectFit: "cover", height: "250px" }}
-                />
-                <div className="card-body d-flex flex-column">
-                  <div>
-                    <h6 className="fw-bold mb-1">{p.productName}</h6>
-                    <p className="text-muted small mb-1">{p.description}</p>
-                    <p className="fw-semibold text-dark mb-1 ">₹ {p.price}</p>
-                  </div>
-                  <div className="mt-auto">
-                    <button className="btn custom-cart-btn w-100 " onClick={() => addToCart(p)}
->
-                      Add to Cart
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          ))
-        ) : (
-          <p>No products match the selected filters.</p>
-        )}
-      </div>
-
-      {/* Pagination */}
-      {filteredProducts.length > itemsPerPage && (
-        <div className="d-flex justify-content-center mt-4">
-          <nav>
-            <ul className="pagination">
-              <li className={`page-item ${currentPage === 1 && "disabled"}`}>
-                <button
-                  className="page-link"
-                  onClick={() => setCurrentPage((prev) => prev - 1)}
-                >
-                  Previous
-                </button>
-              </li>
-              {Array.from(
-                { length: Math.ceil(filteredProducts.length / itemsPerPage) },
-                (_, i) => (
-                  <li
-                    className={`page-item ${currentPage === i + 1 && "active"}`}
-                    key={i}
+      <div className="product-listing-page">
+  <div className="product-grid">
+    {paginatedProducts.length ? (
+      paginatedProducts.map((p) => (
+        <div className="product-card" key={p.id}>
+          <div className="product-image-section">
+            {p.tags && (
+              <div className="product-tags">
+                {p.tags.map((tag, index) => (
+                  <span
+                    className={`product-tag ${tag.replace(/\s+/g, "-").toLowerCase()}`}
+                    key={index}
                   >
-                    <button
-                      className="page-link"
-                      onClick={() => setCurrentPage(i + 1)}
-                    >
-                      {i + 1}
-                    </button>
-                  </li>
-                )
-              )}
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            )}
+            <button
+              className={`like-btn ${likedProducts.includes(p.id) ? "liked" : ""}`}
+              onClick={(e) => {
+                e.stopPropagation();
+                toggleLike(p.id);
+              }}
+              aria-label="Like"
+            >
+              ♥
+            </button>
+            <Link to={`/product/${p.id}`} className="product-image-link">
+              <img
+                src={p.image}
+                alt={p.name}
+                className="product-image"
+              />
+            </Link>
+          </div>
+          <div className="product-list-info">
+            <h6 className="product-cart-title">{p.productName}</h6>
+            <p className="product-desc">
+              {p.description
+                .split(" ")
+                .slice(0, 8)
+                .join(" ")}
+              {p.description.split(" ").length > 8 ? "..." : ""}
+            </p>
+              <span className="product-price">₹ {p.price}</span>
+            <div className="product-bottom-row">
+              <button className="cart-btn" onClick={() => addToCart(p)}>
+                <svg width="22" height="22" fill="none" stroke="#f7a707" strokeWidth="2" viewBox="0 0 24 24">
+                  <circle cx="9" cy="21" r="1"/>
+                  <circle cx="20" cy="21" r="1"/>
+                  <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h7.72a2 2 0 0 0 2-1.61l1.38-7.39H6"/>
+                </svg><span>Add to Cart</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      ))
+    ) : (
+      <p>No products match the selected filters.</p>
+    )}
+  </div>
+  {/* Pagination */}
+  {filteredProducts.length > itemsPerPage && (
+    <div className="d-flex justify-content-center mt-4">
+      <nav>
+        <ul className="pagination">
+          <li className={`page-item ${currentPage === 1 && "disabled"}`}>
+            <button
+              className="page-link"
+              onClick={() => setCurrentPage((prev) => prev - 1)}
+            >
+              Previous
+            </button>
+          </li>
+          {Array.from(
+            { length: Math.ceil(filteredProducts.length / itemsPerPage) },
+            (_, i) => (
               <li
-                className={`page-item ${
-                  currentPage ===
-                    Math.ceil(filteredProducts.length / itemsPerPage) &&
-                  "disabled"
-                }`}
+                className={`page-item ${currentPage === i + 1 && "active"}`}
+                key={i}
               >
                 <button
                   className="page-link"
-                  onClick={() => setCurrentPage((prev) => prev + 1)}
+                  onClick={() => setCurrentPage(i + 1)}
                 >
-                  Next
+                  {i + 1}
                 </button>
               </li>
-            </ul>
-          </nav>
-        </div>
-      )}
+            )
+          )}
+          <li
+            className={`page-item ${
+              currentPage ===
+                Math.ceil(filteredProducts.length / itemsPerPage) &&
+              "disabled"
+            }`}
+          >
+            <button
+              className="page-link"
+              onClick={() => setCurrentPage((prev) => prev + 1)}
+            >
+              Next
+            </button>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  )}
+</div>
     </div>
   );
 }
