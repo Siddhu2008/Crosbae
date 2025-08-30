@@ -30,11 +30,21 @@ export default function Footer() {
           <div className="footer-column">
             <h6 className="footer-heading">Quick Links</h6>
             <ul>
-              <li><Link to="/shop">Shop All</Link></li>
-              <li><Link to="/collections">Collections</Link></li>
-              <li><Link to="/about">About Us</Link></li>
-              <li><Link to="/contact">Contact</Link></li>
-              <li><Link to="/">Jewelry Care</Link></li>
+              <li>
+                <Link to="/shop">Shop All</Link>
+              </li>
+              <li>
+                <Link to="/collections">Collections</Link>
+              </li>
+              <li>
+                <Link to="/about">About Us</Link>
+              </li>
+              <li>
+                <Link to="/contact">Contact</Link>
+              </li>
+              <li>
+                <Link to="/">Jewelry Care</Link>
+              </li>
             </ul>
           </div>
 
@@ -42,11 +52,21 @@ export default function Footer() {
           <div className="footer-column">
             <h6 className="footer-heading">Customer Service</h6>
             <ul>
-              <li><a href="/contact">Shipping Info</a></li>
-              <li><a href="/contact">Returns & Exchange</a></li>
-              <li><a href="/contact">Size Guide</a></li>
-              <li><a href="/faq">FAQ</a></li>
-              <li><a href="/contact">Support</a></li>
+              <li>
+                <Link to="/contact">Shipping Info</Link>
+              </li>
+              <li>
+                <Link to="/contact">Returns & Exchange</Link>
+              </li>
+              <li>
+                <Link to="/contact">Size Guide</Link>
+              </li>
+              <li>
+                <Link to="/faq">FAQ</Link>
+              </li>
+              <li>
+                <Link to="/contact">Support</Link>
+              </li>
             </ul>
           </div>
 
