@@ -1,0 +1,78 @@
+.order-history {
+  font-family: "Poppins", sans-serif;
+  margin: 110px auto;
+}
+
+.order-card {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 20px;
+  background: #fff;
+}
+
+.order-header {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-bottom: 12px;
+  font-size: 14px;
+  color: #333;
+}
+
+.order-items {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.order-item {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.order-item img {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid #eee;
+}
+
+.item-details {
+  font-size: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.item-name {
+  font-weight: 600;
+  margin: 0;
+}
+
+.order-total {
+  font-size: 16px;
+  font-weight: 600;
+  text-align: right;
+  color: #222;
+}
+
+/* Tablet and above */
+@media (min-width: 768px) {
+  .order-header {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  .order-items {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .order-item {
+    width: 45%;
+  }
+}

@@ -1,262 +1,258 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
+import products from "../data/products";  // import local products data
 import "../styles/ProductDetailsPage.css";
 
 const ProductDetail = () => {
+  const { id } = useParams(); // Get product ID from URL
+  const [product, setProduct] = useState(null);
+  const [selectedImage, setSelectedImage] = useState(null);
   const [quantity, setQuantity] = useState(1);
   const [activeTab, setActiveTab] = useState("description");
-  const [selectedImage, setSelectedImage] = useState(
-    "https://www.tanishq.co.in/dw/image/v2/BKCK_PRD/on/demandware.static/-/Sites-Tanishq-product-catalog/default/dw402efbd6/images/hi-res/51D3D2DEMABA00_2.jpg?sw=1000&sh=1000"
-  );
+  const [loading, setLoading] = useState(true);
+const RatingBreakdown = ({ average, totalRatings, breakdown }) => {
+  return (
+    <div className="global-rating-box">
+      <div className="average-rating-row">
+        <div className="star-icons">
+          {"★".repeat(Math.floor(average)) + "☆".repeat(5 - Math.floor(average))}
+        </div>
+        <div className="rating-score">
+          {average.toFixed(1)} out of 5
+        </div>
+      </div>
+      <div className="rating-total">{totalRatings.toLocaleString()} global ratings</div>
 
-  const thumbnails = [
-   "https://www.tanishq.co.in/dw/image/v2/BKCK_PRD/on/demandware.static/-/Sites-Tanishq-product-catalog/default/dw81a79f28/images/hi-res/51D3D2DEMABA00_4.jpg?sw=1000&sh=1000",
-    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ28DUEa8FC7PR_R4Wg8X7gQJXykedQ0E9Fqg&s",
-    "https://www.tanishq.co.in/dw/image/v2/BKCK_PRD/on/demandware.static/-/Sites-Tanishq-product-catalog/default/dw81a79f28/images/hi-res/51D3D2DEMABA00_4.jpg?sw=1000&sh=1000",
-    "https://www.tanishq.co.in/dw/image/v2/BKCK_PRD/on/demandware.static/-/Sites-Tanishq-product-catalog/default/dw688a495e/images/hi-res/51D3D2DEMABA00_3.jpg?sw=1000&sh=1000",
-    "https://www.tanishq.co.in/dw/image/v2/BKCK_PRD/on/demandware.static/-/Sites-Tanishq-product-catalog/default/dw077eb895/images/hi-res/51D3D2DEMABA00_1.jpg?sw=1000&sh=1000",
-  ];
+      <div className="rating-bars">
+        {[5, 4, 3, 2, 1].map((star) => (
+          <div className="rating-bar-row" key={star}>
+            <span className="bar-label">{star} star</span>
+            <div className="bar-bg">
+              <div
+                className="bar-fill"
+                style={{ width: `${breakdown[star] || 0}%` }}
+              ></div>
+            </div>
+            <span className="bar-percent">{(breakdown[star] || 0)}%</span>
+          </div>
+        ))}
+      </div>
+
+      <div className="see-reviews-link">
+        <a href="#reviews">See all customer reviews ›</a>
+      </div>
+    </div>
+  );
+};
+
+  useEffect(() => {
+    setLoading(true);
+
+    const foundProduct = products.find((p) => p.id === id);
+
+    if (foundProduct) {
+      setProduct(foundProduct);
+      setSelectedImage(foundProduct.images?.[0] || null);
+    } else {
+      setProduct(null);
+    }
+
+    setLoading(false);
+  }, [id]);
 
   const increment = () => setQuantity((q) => q + 1);
   const decrement = () => setQuantity((q) => (q > 1 ? q - 1 : 1));
 
+  if (loading) {
+    return <div className="loading">Loading product...</div>;
+  }
+
+  if (!product) {
+    return <div className="error-message">Product not found.</div>;
+  }
+
   return (
     <div className="product-detail-page">
-      {/* Top Section: Images + Details */}
+      {/* Top Section */}
       <div className="product-top-section">
-        {/* Images */}
+        {/* Images Sidebar */}
         <div className="images-sidebar">
-          {thumbnails.map((img, idx) => (
-            <img
-              key={idx}
-              src={img}
-              alt={`thumb${idx + 1}`}
-              className={`thumbnail ${selectedImage === img ? "active" : ""}`}
-              onClick={() => setSelectedImage(img)}
-            />
-          ))}
-        </div>
-        <div className="main-image-wrapper">
-          <img className="main-image" src={selectedImage} alt="Main Product" />
+          {product.images && product.images.length > 0 ? (
+            product.images.map((img, idx) => (
+              <img
+                key={idx}
+                src={img}
+                alt={`Thumbnail ${idx + 1}`}
+                className={`thumbnail ${selectedImage === img ? "active" : ""}`}
+                onClick={() => setSelectedImage(img)}
+              />
+            ))
+          ) : (
+            <div>No images available</div>
+          )}
         </div>
 
-        {/* Details */}
+        {/* Main Image */}
+        <div className="main-image-wrapper">
+          {selectedImage ? (
+            <img
+              className="main-image"
+              src={selectedImage}
+              alt={product.name || "Product Image"}
+            />
+          ) : (
+            <div className="no-image">No image to display</div>
+          )}
+        </div>
+
+        {/* Product Info */}
         <div className="product-info">
-          <h2 className="product-title">Elegant Diamond Necklace</h2>
+          <h2 className="product-title">{product.name || "Unnamed Product"}</h2>
           <div className="rating-orders">
-            <span className="star">⭐ 4.8</span>
-            <span className="orders">(320 orders)</span>
+            <span className="star">⭐ {product.rating ?? "N/A"}</span>
+            <span className="orders">({product.orders ?? 0} orders)</span>
           </div>
+
           <ul className="product-meta">
-            <li><b>Made in:</b> Italy</li>
-            <li><b>Design:</b> Classic & Timeless</li>
-            <li><b>Delivery:</b> 3-5 days shipping</li>
+            <li>
+              <b>Made in:</b> {product.madeIn || "Unknown"}
+            </li>
+            <li>
+              <b>Design:</b> {product.design || "Unknown"}
+            </li>
+            <li>
+              <b>Delivery:</b> {product.delivery || "Unknown"}
+            </li>
           </ul>
+
+          {/* Options */}
           <div className="options-group">
             <div>
               <label className="option-label">Metal Type:</label>
               <div className="button-group">
-                <button className="option-button active">Gold</button>
-                <button className="option-button">Silver</button>
-                <button className="option-button">Platinum</button>
+                {product.metalTypes && product.metalTypes.length > 0 ? (
+                  product.metalTypes.map((metal, idx) => (
+                    <button key={idx} className="option-button">
+                      {metal}
+                    </button>
+                  ))
+                ) : (
+                  <span>Not available</span>
+                )}
               </div>
             </div>
             <div>
               <label className="option-label">Size:</label>
               <div className="button-group">
-                <button className="option-button">Small</button>
-                <button className="option-button active">Medium</button>
-                <button className="option-button">Large</button>
+                {product.sizes && product.sizes.length > 0 ? (
+                  product.sizes.map((size, idx) => (
+                    <button key={idx} className="option-button">
+                      {size}
+                    </button>
+                  ))
+                ) : (
+                  <span>Not available</span>
+                )}
               </div>
             </div>
             <div className="quantity-control">
-              <button onClick={decrement}>-</button>
-              <input type="text" value={quantity} readOnly />
-              <button onClick={increment}>+</button>
+              <button onClick={decrement} aria-label="Decrease quantity">
+                -
+              </button>
+              <input type="text" value={quantity} readOnly aria-live="polite" />
+              <button onClick={increment} aria-label="Increase quantity">
+                +
+              </button>
             </div>
           </div>
-          <div className="price">₹850.00</div>
+
+          <div className="price">₹{product.price ?? "N/A"}</div>
           <div className="action-buttons">
             <button className="btn-add-cart">Add to cart</button>
             <button className="btn-buy-now">Buy now</button>
           </div>
-         
-          <div className="global-rating">
-            <div className="rating-stars-row">
-              <span className="star-icons">
-                {/* 4 full stars, 1 half star */}
-                <span style={{color:'#f7a707', fontSize:'1.5rem'}}>★</span>
-                <span style={{color:'#f7a707', fontSize:'1.5rem'}}>★</span>
-                <span style={{color:'#f7a707', fontSize:'1.5rem'}}>★</span>
-                <span style={{color:'#f7a707', fontSize:'1.5rem'}}>★</span>
-                <span style={{color:'#f7a707', fontSize:'1.5rem'}}>☆</span>
-              </span>
-              <span className="rating-number" style={{marginLeft:'8px', fontWeight:'700', fontSize:'1.1rem'}}>4.7 out of 5</span>
-            </div>
-            <div className="rating-count">458 global ratings</div>
-            <div className="rating-bars">
-              <div className="rating-bar-row">
-                <span className="bar-label">5</span>
-                <span className="bar-star">★</span>
-                <div className="bar-bg">
-                  <div className="bar-fill" style={{width:'90%'}}></div>
-                </div>
-              </div>
-              <div className="rating-bar-row">
-                <span className="bar-label">4</span>
-                <span className="bar-star">★</span>
-                <div className="bar-bg">
-                  <div className="bar-fill" style={{width:'60%'}}></div>
-                </div>
-              </div>
-              <div className="rating-bar-row">
-                <span className="bar-label">3</span>
-                <span className="bar-star">★</span>
-                <div className="bar-bg">
-                  <div className="bar-fill" style={{width:'40%'}}></div>
-                </div>
-              </div>
-            </div>
-          </div>
+
+          {/* Global Rating */}
+          <RatingBreakdown
+  average={4.7}
+  totalRatings={1399}
+  breakdown={{
+    5: 81,
+    4: 13,
+    3: 2,
+    2: 1,
+    1: 3,
+  }}
+/>
+
         </div>
       </div>
 
-      {/* Tabs Section: Full Width Below */}
+      {/* Tabs */}
       <div className="product-tabs-section">
         <div className="tabs">
-          <button
-            className={activeTab === "description" ? "tab active" : "tab"}
-            onClick={() => setActiveTab("description")}
-          >
-            Description
-          </button>
-          <button
-            className={activeTab === "reviews" ? "tab active" : "tab"}
-            onClick={() => setActiveTab("reviews")}
-          >
-            Reviews
-          </button>
-          <button
-            className={activeTab === "company" ? "tab active" : "tab"}
-            onClick={() => setActiveTab("company")}
-          >
-            Company
-          </button>
-          <button
-            className={activeTab === "usage" ? "tab active" : "tab"}
-            onClick={() => setActiveTab("usage")}
-          >
-            Usage guide
-          </button>
+          {["description", "reviews", "company", "usage"].map((tab) => (
+            <button
+              key={tab}
+              className={activeTab === tab ? "tab active" : "tab"}
+              onClick={() => setActiveTab(tab)}
+            >
+              {tab.charAt(0).toUpperCase() + tab.slice(1)}
+            </button>
+          ))}
         </div>
         <div className="tab-content">
           {activeTab === "description" && (
             <div className="tab-card">
-              <p>
-                This elegant diamond necklace is crafted with the finest materials and designed to add a timeless sparkle to your look.
-              </p>
-              <p>Perfect for both everyday wear and special occasions.</p>
+              <p>{product.description || "No description available."}</p>
             </div>
           )}
           {activeTab === "reviews" && (
-            <div className="reviews-list">
-              <div className="review-card">
-                <div className="review-author">Jane D.</div>
-                <div className="review-stars">⭐⭐⭐⭐⭐</div>
-                <div className="review-text">
-                  "Absolutely stunning piece! I get compliments every time I wear it."
-                </div>
-              </div>
-              <div className="review-card">
-                <div className="review-author">Mark S.</div>
-                <div className="review-stars">⭐⭐⭐⭐☆</div>
-                <div className="review-text">
-                  "Great quality and design, but delivery was a bit slow."
-                </div>
-              </div>
+            <div className="reviews-list"id="reviews">
+              {product.reviews && product.reviews.length > 0 ? (
+                product.reviews.map((review, idx) => (
+                  <div key={idx} className="review-card">
+                    <div className="review-author">{review.name}</div>
+                    <div className="review-stars">{"⭐".repeat(review.rating)}</div>
+                    <div className="review-text">{review.comment}</div>
+                    <div className="review-text">{review.date}</div>
+
+                  </div>
+                ))
+              ) : (
+                <p>No reviews available.</p>
+              )}
             </div>
           )}
           {activeTab === "company" && (
             <div className="tab-card">
-              <p>Gemstone Traders Inc. is a renowned jeweler specializing in fine diamond pieces.</p>
-              <p>Established in Italy with over 20 years of experience.</p>
+              <p>{product.company || "No company information available."}</p>
             </div>
           )}
           {activeTab === "usage" && (
             <div className="tab-card">
-              <p>Wear this necklace with a simple dress or a blouse to add an elegant touch.</p>
-              <p>Store in a jewelry box to avoid scratches.</p>
-              <p>Clean gently with a soft cloth and avoid harsh chemicals.</p>
+              <p>{product.usage || "No usage information available."}</p>
             </div>
           )}
         </div>
       </div>
 
-      {/* Related Products Section */}
+      {/* Related Products */}
       <div className="related-products-section">
         <h3 className="related-title">Related Products</h3>
         <div className="related-products-list">
-          {/* Example related products, replace with your data */}
-          <div className="related-card">
-            <img src="https://5.imimg.com/data5/TG/DN/MY-37294786/designer-artificial-jewellery.jpg" alt="Product 1" />
-            <div className="related-name">Gold Earrings</div>
-            <div className="related-price">₹650.00</div>
-            <button className="related-cart-btn">Add to cart</button>
-          </div>
-          <div className="related-card">
-            <img src="https://5.imimg.com/data5/TG/DN/MY-37294786/designer-artificial-jewellery.jpg" alt="Product 2" />
-            <div className="related-name">Diamond Ring</div>
-            <div className="related-price">₹1,200.00</div>
-            <button className="related-cart-btn">Add to cart</button>
-          </div>
-          <div className="related-card">
-            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQtPWtIwSXil4ffkj9fMU8Ghum4bOhWEoBLJw&s" alt="Product 3" />
-            <div className="related-name">Silver Bracelet</div>
-            <div className="related-price">₹450.00</div>
-            <button className="related-cart-btn">Add to cart</button>
-          </div>
-          <div className="related-card">
-            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQtPWtIwSXil4ffkj9fMU8Ghum4bOhWEoBLJw&s" alt="Product 3" />
-            <div className="related-name">Silver Bracelet</div>
-            <div className="related-price">₹450.00</div>
-            <button className="related-cart-btn">Add to cart</button>
-          </div>
-          <div className="related-card">
-            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQtPWtIwSXil4ffkj9fMU8Ghum4bOhWEoBLJw&s" alt="Product 3" />
-            <div className="related-name">Silver Bracelet</div>
-            <div className="related-price">₹450.00</div>
-            <button className="related-cart-btn">Add to cart</button>
-          </div>
-          <div className="related-card">
-            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQtPWtIwSXil4ffkj9fMU8Ghum4bOhWEoBLJw&s" alt="Product 3" />
-            <div className="related-name">Silver Bracelet</div>
-            <div className="related-price">₹450.00</div>
-            <button className="related-cart-btn">Add to cart</button>
-          </div>
-          <div className="related-card">
-            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQtPWtIwSXil4ffkj9fMU8Ghum4bOhWEoBLJw&s" alt="Product 3" />
-            <div className="related-name">Silver Bracelet</div>
-            <div className="related-price">₹450.00</div>
-            <button className="related-cart-btn">Add to cart</button>
-          </div>
-          <div className="related-card">
-            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQtPWtIwSXil4ffkj9fMU8Ghum4bOhWEoBLJw&s" alt="Product 3" />
-            <div className="related-name">Silver Bracelet</div>
-            <div className="related-price">₹450.00</div>
-            <button className="related-cart-btn">Add to cart</button>
-          </div>
-          <div className="related-card">
-            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQtPWtIwSXil4ffkj9fMU8Ghum4bOhWEoBLJw&s" alt="Product 3" />
-            <div className="related-name">Silver Bracelet</div>
-            <div className="related-price">₹450.00</div>
-            <button className="related-cart-btn">Add to cart</button>
-          </div>
-          <div className="related-card">
-            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQtPWtIwSXil4ffkj9fMU8Ghum4bOhWEoBLJw&s" alt="Product 3" />
-            <div className="related-name">Silver Bracelet</div>
-            <div className="related-price">₹450.00</div>
-            <button className="related-cart-btn">Add to cart</button>
-          </div>
-          
+          {product.relatedProducts && product.relatedProducts.length > 0 ? (
+            product.relatedProducts.map((related, idx) => (
+              <div key={idx} className="related-card">
+                <img src={related.image} alt={related.name} />
+                <div className="related-name">{related.name}</div>
+                <div className="related-price">₹{related.price}</div>
+                <button className="related-cart-btn">Add to cart</button>
+              </div>
+            ))
+          ) : (
+            <p>No related products available.</p>
+          )}
         </div>
       </div>
     </div>

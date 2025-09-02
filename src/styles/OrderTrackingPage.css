@@ -1,0 +1,91 @@
+.order-tracking-page {
+  max-width: 700px;
+  margin: 110px auto;
+  padding: 20px;
+  font-family: "Poppins", sans-serif;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.order-tracking-page h2 {
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+.order-info p {
+  font-size: 16px;
+  margin: 5px 0;
+}
+
+.tracking-steps {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 30px;
+  position: relative;
+}
+
+.tracking-steps::before {
+  content: "";
+  position: absolute;
+  top: 25px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: #eee;
+  z-index: 0;
+}
+
+.step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 20%;
+  text-align: center;
+  z-index: 1;
+}
+
+.step .circle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #eee;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  color: #777;
+  margin-bottom: 8px;
+}
+
+.step.completed .circle {
+  background: #4caf50;
+  color: white;
+}
+
+.step p {
+  font-size: 14px;
+  color: #333;
+}
+
+@media (max-width: 600px) {
+  .tracking-steps {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .tracking-steps::before {
+    display: none;
+  }
+
+  .step {
+    flex-direction: row;
+    gap: 15px;
+    align-items: center;
+    width: 100%;
+  }
+
+  .step p {
+    font-size: 16px;
+  }
+}

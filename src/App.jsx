@@ -24,6 +24,10 @@ import EditProduct from "./components/EditProduct";
 import DeleteProduct from "./components/DeleteProduct";
 import CheckoutPage from "./components/CheckoutPage";
 import ProductDetailsPage from "./pages/ProductDetailsPage";
+import OrderHistoryPage from "./pages/OrderHistoryPage";
+import ProfilePage from "./pages/ProfilePage";
+import OrderTracking from "./pages/OrderTrackingPage";
+import EditProfile from "./pages/EditProfile";
 const App = () => {
   useEffect(() => {
     AOS.init({
@@ -58,6 +62,10 @@ const App = () => {
           <Route path="/admin/DeleteProduct" element={<DeleteProduct />} />
           <Route path="/checkout" element={<CheckoutPage />} />
           <Route path="/product/:id" element={<ProductDetailsPage />} />
+          <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/orders" element={<OrderHistoryPage />} />
+          <Route path="/track-order" element={<OrderTracking />} />
+          <Route path="/edit-profile" element={<EditProfile />} />
         </Routes>
         <Footer />
       </div>

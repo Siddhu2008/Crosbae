@@ -1,10 +1,10 @@
 import React, { useState, useMemo, useEffect } from "react";
 import { Link } from "react-router-dom";
 
-import products from "../data/products"; // your product data
+import products from "../data/products";
 import "../styles/ProductListingPage.css"
 export default function ProductListingPage() {
-  
+
   const [filters, setFilters] = useState({
     category: [],
     purity: [],
@@ -20,20 +20,20 @@ export default function ProductListingPage() {
   const toggleFilterSidebar = () => setShowFilter(!showFilter);
 
   useEffect(() => {
-  const storedLikes = JSON.parse(localStorage.getItem("likedProducts")) || [];
-  setLikedProducts(storedLikes);
-}, []);
+    const storedLikes = JSON.parse(localStorage.getItem("likedProducts")) || [];
+    setLikedProducts(storedLikes);
+  }, []);
 
-const toggleLike = (productId) => {
-  setLikedProducts((prev) => {
-    const updated = prev.includes(productId)
-      ? prev.filter((id) => id !== productId)
-      : [...prev, productId];
+  const toggleLike = (productId) => {
+    setLikedProducts((prev) => {
+      const updated = prev.includes(productId)
+        ? prev.filter((id) => id !== productId)
+        : [...prev, productId];
 
-    localStorage.setItem("likedProducts", JSON.stringify(updated));
-    return updated;
-  });
-};
+      localStorage.setItem("likedProducts", JSON.stringify(updated));
+      return updated;
+    });
+  };
 
   const getTagStyle = (tag) => {
     switch (tag) {
@@ -108,23 +108,23 @@ const toggleLike = (productId) => {
     setFilters((prev) => ({ ...prev, search: e.target.value }));
 
 
-const addToCart = (product) => {
-  const existingCart = JSON.parse(localStorage.getItem("cartItems")) || [];
-  const exists = existingCart.find((item) => item.id === product.id);
+  const addToCart = (product) => {
+    const existingCart = JSON.parse(localStorage.getItem("cartItems")) || [];
+    const exists = existingCart.find((item) => item.id === product.id);
 
-  let updatedCart;
-  if (exists) {
-    updatedCart = existingCart.map((item) =>
-      item.id === product.id
-        ? { ...item, quantity: item.quantity + 1 }
-        : item
-    );
-  } else {
-    updatedCart = [...existingCart, { ...product, quantity: 1 }];
-  }
+    let updatedCart;
+    if (exists) {
+      updatedCart = existingCart.map((item) =>
+        item.id === product.id
+          ? { ...item, quantity: item.quantity + 1 }
+          : item
+      );
+    } else {
+      updatedCart = [...existingCart, { ...product, quantity: 1 }];
+    }
 
-  localStorage.setItem("cartItems", JSON.stringify(updatedCart));
-};
+    localStorage.setItem("cartItems", JSON.stringify(updatedCart));
+  };
 
   return (
     <div className="Product-container position-relative my-5">
@@ -153,12 +153,11 @@ const addToCart = (product) => {
 
       {/* Sidebar Filter */}
       <div
-        className={`filter-drawer bg-white  shadow-lg position-fixed top-0 h-100 ${
-          showFilter ? "start-0" : "start-100"
-        }`}
+        className={`filter-drawer bg-white  shadow-lg position-fixed top-0 h-100 ${showFilter ? "start-0" : "start-100"
+          }`}
         style={{
           width: "280px",
-          padding:"120px 20px",
+          padding: "120px 20px",
           zIndex: 1050,
           overflowY: "auto",
           display: "flex",
@@ -276,115 +275,115 @@ const addToCart = (product) => {
 
       {/* Product Cards */}
       <div className="product-listing-page">
-  <div className="product-grid">
-    {paginatedProducts.length ? (
-      paginatedProducts.map((p) => (
-        <div className="product-card" key={p.id}>
-          <div className="product-image-section">
-            {p.tags && (
-              <div className="product-tags">
-                {p.tags.map((tag, index) => (
-                  <span
-                    className={`product-tag ${tag.replace(/\s+/g, "-").toLowerCase()}`}
-                    key={index}
+        <div className="product-grid">
+          {paginatedProducts.length ? (
+            paginatedProducts.map((p) => (
+              <div className="product-card" key={p.id}>
+                <div className="product-image-section">
+                  {p.tags && (
+                    <div className="product-tags">
+                      {p.tags.map((tag, index) => (
+                        <span
+                          className={`product-tag ${tag.replace(/\s+/g, "-").toLowerCase()}`}
+                          key={index}
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                  <button
+                    className={`like-btn ${likedProducts.includes(p.id) ? "liked" : ""}`}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      toggleLike(p.id);
+                    }}
+                    aria-label="Like"
                   >
-                    {tag}
-                  </span>
-                ))}
+                    ♥
+                  </button>
+                  <Link to={`/product/${p.id}`} className="product-image-link">
+                    <img
+                      src={p.images[0]}
+                      alt={p.name}
+                      className="product-image"
+                    />
+
+                  </Link>
+                </div>
+                <div className="product-list-info">
+                  <h6 className="product-cart-title">{p.productName}</h6>
+                  <p className="product-desc">
+                    {p.description
+                      .split(" ")
+                      .slice(0, 8)
+                      .join(" ")}
+                    {p.description.split(" ").length > 8 ? "..." : ""}
+                  </p>
+                  <span className="product-price">₹ {p.price}</span>
+                  <div className="product-bottom-row">
+                    <button className="cart-btn" onClick={() => addToCart(p)}>
+                      <svg width="22" height="22" fill="none" stroke="#f7a707" strokeWidth="2" viewBox="0 0 24 24">
+                        <circle cx="9" cy="21" r="1" />
+                        <circle cx="20" cy="21" r="1" />
+                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h7.72a2 2 0 0 0 2-1.61l1.38-7.39H6" />
+                      </svg><span>Add to Cart</span>
+                    </button>
+                  </div>
+                </div>
               </div>
-            )}
-            <button
-              className={`like-btn ${likedProducts.includes(p.id) ? "liked" : ""}`}
-              onClick={(e) => {
-                e.stopPropagation();
-                toggleLike(p.id);
-              }}
-              aria-label="Like"
-            >
-              ♥
-            </button>
-            <Link to={`/product/${p.id}`} className="product-image-link">
-              <img
-                src={p.image}
-                alt={p.name}
-                className="product-image"
-              />
-            </Link>
-          </div>
-          <div className="product-list-info">
-            <h6 className="product-cart-title">{p.productName}</h6>
-            <p className="product-desc">
-              {p.description
-                .split(" ")
-                .slice(0, 8)
-                .join(" ")}
-              {p.description.split(" ").length > 8 ? "..." : ""}
-            </p>
-              <span className="product-price">₹ {p.price}</span>
-            <div className="product-bottom-row">
-              <button className="cart-btn" onClick={() => addToCart(p)}>
-                <svg width="22" height="22" fill="none" stroke="#f7a707" strokeWidth="2" viewBox="0 0 24 24">
-                  <circle cx="9" cy="21" r="1"/>
-                  <circle cx="20" cy="21" r="1"/>
-                  <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h7.72a2 2 0 0 0 2-1.61l1.38-7.39H6"/>
-                </svg><span>Add to Cart</span>
-              </button>
-            </div>
-          </div>
-        </div>
-      ))
-    ) : (
-      <p>No products match the selected filters.</p>
-    )}
-  </div>
-  {/* Pagination */}
-  {filteredProducts.length > itemsPerPage && (
-    <div className="d-flex justify-content-center mt-4">
-      <nav>
-        <ul className="pagination">
-          <li className={`page-item ${currentPage === 1 && "disabled"}`}>
-            <button
-              className="page-link"
-              onClick={() => setCurrentPage((prev) => prev - 1)}
-            >
-              Previous
-            </button>
-          </li>
-          {Array.from(
-            { length: Math.ceil(filteredProducts.length / itemsPerPage) },
-            (_, i) => (
-              <li
-                className={`page-item ${currentPage === i + 1 && "active"}`}
-                key={i}
-              >
-                <button
-                  className="page-link"
-                  onClick={() => setCurrentPage(i + 1)}
-                >
-                  {i + 1}
-                </button>
-              </li>
-            )
+            ))
+          ) : (
+            <p>No products match the selected filters.</p>
           )}
-          <li
-            className={`page-item ${
-              currentPage ===
-                Math.ceil(filteredProducts.length / itemsPerPage) &&
-              "disabled"
-            }`}
-          >
-            <button
-              className="page-link"
-              onClick={() => setCurrentPage((prev) => prev + 1)}
-            >
-              Next
-            </button>
-          </li>
-        </ul>
-      </nav>
-    </div>
-  )}
-</div>
+        </div>
+        {/* Pagination */}
+        {filteredProducts.length > itemsPerPage && (
+          <div className="d-flex justify-content-center mt-4">
+            <nav>
+              <ul className="pagination">
+                <li className={`page-item ${currentPage === 1 && "disabled"}`}>
+                  <button
+                    className="page-link"
+                    onClick={() => setCurrentPage((prev) => prev - 1)}
+                  >
+                    Previous
+                  </button>
+                </li>
+                {Array.from(
+                  { length: Math.ceil(filteredProducts.length / itemsPerPage) },
+                  (_, i) => (
+                    <li
+                      className={`page-item ${currentPage === i + 1 && "active"}`}
+                      key={i}
+                    >
+                      <button
+                        className="page-link"
+                        onClick={() => setCurrentPage(i + 1)}
+                      >
+                        {i + 1}
+                      </button>
+                    </li>
+                  )
+                )}
+                <li
+                  className={`page-item ${currentPage ===
+                    Math.ceil(filteredProducts.length / itemsPerPage) &&
+                    "disabled"
+                    }`}
+                >
+                  <button
+                    className="page-link"
+                    onClick={() => setCurrentPage((prev) => prev + 1)}
+                  >
+                    Next
+                  </button>
+                </li>
+              </ul>
+            </nav>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

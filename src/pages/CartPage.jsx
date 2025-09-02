@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import "../styles/CartPage.css"; // custom css
+import "../styles/CartPage.css"; // Make sure to update your CSS accordingly
 
 export default function CartPage() {
   const [cartItems, setCartItems] = useState([]);
+  const [couponCode, setCouponCode] = useState("");
+  const [discount, setDiscount] = useState(0);
+  const [couponError, setCouponError] = useState("");
 
   useEffect(() => {
     const storedCart = JSON.parse(localStorage.getItem("cartItems")) || [];
@@ -29,15 +32,30 @@ export default function CartPage() {
     return cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
   };
 
-  const discount = 1000;
   const shipping = 0;
+
+  // Sample coupon codes and their discount values
+  const validCoupons = {
+    SAVE1000: 1000,
+    SAVE500: 500,
+    DISCOUNT10: calculateSubtotal() * 0.1, // 10% discount
+  };
+
+  const applyCoupon = () => {
+    const code = couponCode.trim().toUpperCase();
+    if (validCoupons[code]) {
+      setDiscount(validCoupons[code]);
+      setCouponError("");
+    } else {
+      setDiscount(0);
+      setCouponError("Invalid coupon code.");
+    }
+  };
 
   return (
     <div className="cart-container container my-5">
-      <h2 className="cart-title text-center">Shopping Cart</h2>
-      <p className="cart-subtitle text-center">
-        {cartItems.length} items in your cart
-      </p>
+      <h2 className="cart-title text-center my-3">Shopping Cart</h2>
+      <p className="cart-subtitle text-center">{cartItems.length} items in your cart</p>
 
       {cartItems.length === 0 ? (
         <div className="cart-empty text-center">
@@ -54,20 +72,14 @@ export default function CartPage() {
               <div className="cart-item" key={item.id}>
                 {/* LEFT: Image + Info */}
                 <div className="cart-left">
-                  <img
-                    src={item.image}
-                    alt={item.productName}
-                    className="cart-img"
-                  />
+                  <img src={item.image} alt={item.productName} className="cart-img" />
 
                   <div className="cart-info">
                     <h4 className="cart-name">{item.productName}</h4>
                     <p className="cart-sku">SKU: {item.sku}</p>
                     <p className="cart-price">
                       ₹{item.price}{" "}
-                      {item.oldPrice && (
-                        <span className="cart-oldprice">₹{item.oldPrice}</span>
-                      )}
+                      {item.oldPrice && <span className="cart-oldprice">₹{item.oldPrice}</span>}
                     </p>
                   </div>
                 </div>
@@ -88,45 +100,69 @@ export default function CartPage() {
                     +
                   </button>
 
-                  <button
-                    className="delete-btn"
-                    onClick={() => removeFromCart(item.id)}
-                  >
-                    🗑
+                  <button className="delete-btn" onClick={() => removeFromCart(item.id)}>
+                    <i class="bi bi-trash-fill"></i>
                   </button>
                 </div>
               </div>
             ))}
           </div>
 
-          {/* Order Summary */}
-          <div className="order-summary">
-            <h3>Order Summary</h3>
-            <div className="summary-line">
-              <span>Subtotal</span>
-              <span>₹{calculateSubtotal()}</span>
-            </div>
-            <div className="summary-line discount">
-              <span>Discount</span>
-              <span>-₹{discount}</span>
-            </div>
-            <div className="summary-line">
-              <span>Shipping</span>
-              <span>{shipping === 0 ? "Free" : `₹${shipping}`}</span>
-            </div>
-            <hr />
-            <div className="summary-line total">
-              <span>Total</span>
-              <span>₹{calculateSubtotal() - discount + shipping}</span>
+          {/* Sidebar with Coupon + Order Summary */}
+          <div className="cart-sidebar">
+            {/* Coupon Box */}
+            <div className="coupon-box">
+              <div className="coupon-header">
+                <span role="img" aria-label="gift">
+                  🎁
+                </span>{" "}
+                Have a coupon?
+              </div>
+              <div className="coupon-input-group">
+                <input
+                  type="text"
+                  placeholder="Enter coupon code"
+                  value={couponCode}
+                  onChange={(e) => setCouponCode(e.target.value)}
+                />
+                <button onClick={applyCoupon}>Apply</button>
+              </div>
+              {couponError && <p className="coupon-error">{couponError}</p>}
+              {discount > 0 && !couponError && (
+                <p className="coupon-success">Coupon applied! You saved ₹{discount.toFixed(2)}.</p>
+              )}
             </div>
 
-            <button className="checkout-btn">Proceed to Checkout</button>
-            <Link to="/shop" className="continue-btn">
-              Continue Shopping
-            </Link>
+            {/* Order Summary */}
+            <div className="order-summary">
+              <h3>Order Summary</h3>
+              <div className="summary-line">
+                <span>Subtotal</span>
+                <span>₹{calculateSubtotal().toFixed(2)}</span>
+              </div>
+              <div className="summary-line discount">
+                <span>Discount</span>
+                <span>-₹{discount.toFixed(2)}</span>
+              </div>
+              <div className="summary-line">
+                <span>Shipping</span>
+                <span>{shipping === 0 ? "Free" : `₹${shipping}`}</span>
+              </div>
+              <hr />
+              <div className="summary-line total">
+                <span>Total</span>
+                <span>₹{(calculateSubtotal() - discount + shipping).toFixed(2)}</span>
+              </div>
+
+              <button className="checkout-btn">Proceed to Checkout</button>
+              <Link to="/shop" className="continue-btn">
+                Continue Shopping
+              </Link>
+            </div>
           </div>
         </div>
       )}
     </div>
   );
 }
+         
