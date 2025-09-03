@@ -7,7 +7,7 @@ import MatchForYou from "../components/MatchForYou";
 import CustomerReviews from "../components/CustomerReviews";
 import ShopServices from "../components/ShopServices";
 import OccupationSection from "../components/OccupationSection";
-
+import FAQ from "../components/FAQ";
 export default function HomePage() {
   return (
     <>
@@ -19,6 +19,7 @@ export default function HomePage() {
       <ShopServices />
       <OccupationSection />
       <CustomerReviews />
+      <FAQ />
     </>
   );
 }

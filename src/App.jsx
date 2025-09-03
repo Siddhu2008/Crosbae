@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import HomePage from "./pages/HomePage";
-import ProductListingPage from "./pages/ProductListingPage"
+import ProductListingPage from "./pages/ProductListingPage";
 import CollectionsPage from "./pages/CollectionsPage";
 import AboutPage from "./pages/AboutPage";
 import ContactPage from "./pages/ContactPage";
@@ -19,7 +19,7 @@ import "aos/dist/aos.css";
 import WishlistPage from "./components/WishlistPage";
 import CartPage from "./pages/CartPage";
 import TestimonialsPage from "./pages/TestimonialsPage";
-import FAQ from "./pages/FAQ";
+import FAQ from "./components/FAQ";
 import EditProduct from "./components/EditProduct";
 import DeleteProduct from "./components/DeleteProduct";
 import CheckoutPage from "./components/CheckoutPage";
@@ -30,6 +30,7 @@ import OrderTracking from "./pages/OrderTrackingPage";
 import EditProfile from "./pages/EditProfile";
 import ForgotPasswordPage from "./pages/ForgotPasswordPage";
 import ResetPasswordPage from "./pages/ResetPasswordPage";
+import OrderDetailsPage from "./pages/OrderDetailsPage";
 const App = () => {
   useEffect(() => {
     AOS.init({
@@ -66,6 +67,7 @@ const App = () => {
           <Route path="/product/:id" element={<ProductDetailsPage />} />
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/orders" element={<OrderHistoryPage />} />
+          <Route path="/orders/:id" element={<OrderDetailsPage />} />
           <Route path="/track-order" element={<OrderTracking />} />
           <Route path="/edit-profile" element={<EditProfile />} />
           <Route path="/forgot-password" element={<ForgotPasswordPage />} />
@@ -75,7 +77,6 @@ const App = () => {
       </div>
     </Router>
   );
-
 };
 
 export default App;
