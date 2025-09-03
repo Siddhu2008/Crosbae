@@ -124,6 +124,8 @@ export default function ProductListingPage() {
     }
 
     localStorage.setItem("cartItems", JSON.stringify(updatedCart));
+    alert(`${quantity} item(s) added to cart`);
+
   };
 
   return (
