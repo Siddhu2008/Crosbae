@@ -157,7 +157,7 @@ const RatingBreakdown = ({ average, totalRatings, breakdown }) => {
             </div>
             <div className="quantity-control">
               <button onClick={decrement} aria-label="Decrease quantity">
-                -
+                –
               </button>
               <input type="text" value={quantity} readOnly aria-live="polite" />
               <button onClick={increment} aria-label="Increase quantity">
@@ -174,17 +174,16 @@ const RatingBreakdown = ({ average, totalRatings, breakdown }) => {
 
           {/* Global Rating */}
           <RatingBreakdown
-  average={4.7}
-  totalRatings={1399}
-  breakdown={{
-    5: 81,
-    4: 13,
-    3: 2,
-    2: 1,
-    1: 3,
-  }}
-/>
-
+            average={4.7}
+            totalRatings={1399}
+            breakdown={{
+              5: 81,
+              4: 13,
+              3: 2,
+              2: 1,
+              1: 3,
+            }}
+          />
         </div>
       </div>
 
@@ -208,15 +207,16 @@ const RatingBreakdown = ({ average, totalRatings, breakdown }) => {
             </div>
           )}
           {activeTab === "reviews" && (
-            <div className="reviews-list"id="reviews">
+            <div className="reviews-list" id="reviews">
               {product.reviews && product.reviews.length > 0 ? (
                 product.reviews.map((review, idx) => (
                   <div key={idx} className="review-card">
                     <div className="review-author">{review.name}</div>
-                    <div className="review-stars">{"⭐".repeat(review.rating)}</div>
+                    <div className="review-stars">
+                      {"⭐".repeat(review.rating)}
+                    </div>
                     <div className="review-text">{review.comment}</div>
                     <div className="review-text">{review.date}</div>
-
                   </div>
                 ))
               ) : (

@@ -9,11 +9,11 @@ export default function Footer() {
         <div className="footer-content">
           {/* Branding */}
           <div className="footer-column">
-            <h5 className="footer-logo">
+            <span className="footer-logo">
               <i className="bi bi-award-fill text-warning me-1"></i>
               <span className="text-warning">Cros</span>{" "}
-              <span className="text-orange">Bae</span>
-            </h5>
+              <span className="footer-heading">Bae</span>
+            </span>
             <p className="footer-description">
               Discover the finest collection of imitation jewelry crafted with
               precision and passion. Every piece tells a story of elegance and

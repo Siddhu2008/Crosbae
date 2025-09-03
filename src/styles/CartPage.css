@@ -161,7 +161,11 @@
     outline-offset: 2px;
     transition: border-color 0.3s;
 }
-
+@media (min-width:320px) and (max-width:747px) {
+    .coupon-input-group input{
+        padding: 3px 3px;
+    }
+}
 .coupon-input-group input:focus {
     border-color: #ff9900;
 }

@@ -131,7 +131,7 @@ export default function ProductListingPage() {
       {/* Filter Toggle */}
       <div className="d-flex justify-content-between align-items-center mb-3">
         <button
-          className="btn btn-outline-secondary"
+          className="btn btn-outline-secondary filter"
           onClick={toggleFilterSidebar}
         >
           <i className="bi bi-funnel-fill"></i> Filters
@@ -153,19 +153,12 @@ export default function ProductListingPage() {
 
       {/* Sidebar Filter */}
       <div
-        className={`filter-drawer bg-white  shadow-lg position-fixed top-0 h-100 ${showFilter ? "start-0" : "start-100"
-          }`}
-        style={{
-          width: "280px",
-          padding: "120px 20px",
-          zIndex: 1050,
-          overflowY: "auto",
-          display: "flex",
-          flexDirection: "column",
-        }}
+        className={`filter-drawer bg-white  shadow-lg position-fixedh-100 ${
+          showFilter ? "start-0" : "start-100"
+        }`}
       >
         <div className="d-flex justify-content-between align-items-center mb-3">
-          <h5 className="mb-0">Filters</h5>
+          <h5 className="mb-0 ">Filters</h5>
           <button className="btn-close" onClick={toggleFilterSidebar}></button>
         </div>
         <input
@@ -284,8 +277,11 @@ export default function ProductListingPage() {
                     <div className="product-tags">
                       {p.tags.map((tag, index) => (
                         <span
-                          className={`product-tag ${tag.replace(/\s+/g, "-").toLowerCase()}`}
+                          className={`product-tag ${tag
+                            .replace(/\s+/g, "-")
+                            .toLowerCase()}`}
                           key={index}
+                          style={getTagStyle(tag)}
                         >
                           {tag}
                         </span>
@@ -293,7 +289,9 @@ export default function ProductListingPage() {
                     </div>
                   )}
                   <button
-                    className={`like-btn ${likedProducts.includes(p.id) ? "liked" : ""}`}
+                    className={`like-btn ${
+                      likedProducts.includes(p.id) ? "liked" : ""
+                    }`}
                     onClick={(e) => {
                       e.stopPropagation();
                       toggleLike(p.id);
@@ -308,26 +306,30 @@ export default function ProductListingPage() {
                       alt={p.name}
                       className="product-image"
                     />
-
                   </Link>
                 </div>
                 <div className="product-list-info">
                   <h6 className="product-cart-title">{p.productName}</h6>
                   <p className="product-desc">
-                    {p.description
-                      .split(" ")
-                      .slice(0, 8)
-                      .join(" ")}
+                    {p.description.split(" ").slice(0, 8).join(" ")}
                     {p.description.split(" ").length > 8 ? "..." : ""}
                   </p>
                   <span className="product-price">₹ {p.price}</span>
                   <div className="product-bottom-row">
                     <button className="cart-btn" onClick={() => addToCart(p)}>
-                      <svg width="22" height="22" fill="none" stroke="#f7a707" strokeWidth="2" viewBox="0 0 24 24">
+                      <svg
+                        width="22"
+                        height="22"
+                        fill="none"
+                        stroke="#f7a707"
+                        strokeWidth="2"
+                        viewBox="0 0 24 24"
+                      >
                         <circle cx="9" cy="21" r="1" />
                         <circle cx="20" cy="21" r="1" />
                         <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h7.72a2 2 0 0 0 2-1.61l1.38-7.39H6" />
-                      </svg><span>Add to Cart</span>
+                      </svg>
+                      <span>Add to Cart</span>
                     </button>
                   </div>
                 </div>
@@ -354,7 +356,9 @@ export default function ProductListingPage() {
                   { length: Math.ceil(filteredProducts.length / itemsPerPage) },
                   (_, i) => (
                     <li
-                      className={`page-item ${currentPage === i + 1 && "active"}`}
+                      className={`page-item ${
+                        currentPage === i + 1 && "active"
+                      }`}
                       key={i}
                     >
                       <button
@@ -367,10 +371,11 @@ export default function ProductListingPage() {
                   )
                 )}
                 <li
-                  className={`page-item ${currentPage ===
-                    Math.ceil(filteredProducts.length / itemsPerPage) &&
+                  className={`page-item ${
+                    currentPage ===
+                      Math.ceil(filteredProducts.length / itemsPerPage) &&
                     "disabled"
-                    }`}
+                  }`}
                 >
                   <button
                     className="page-link"
