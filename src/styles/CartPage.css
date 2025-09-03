@@ -161,11 +161,6 @@
     outline-offset: 2px;
     transition: border-color 0.3s;
 }
-@media (min-width:320px) and (max-width:747px) {
-    .coupon-input-group input{
-        padding: 3px 3px;
-    }
-}
 .coupon-input-group input:focus {
     border-color: #ff9900;
 }
@@ -179,6 +174,16 @@
     border-radius: 6px;
     cursor: pointer;
     transition: background-color 0.3s;
+}
+@media (min-width:320px) and (max-width:747px) {
+    .coupon-input-group input{
+        padding: 3px 3px;
+        
+    }
+        .coupon-input-group button{
+            padding: 3px 3px;
+            font-size: 15px;
+        }
 }
 
 .coupon-input-group button:hover {
