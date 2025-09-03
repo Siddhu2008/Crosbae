@@ -309,12 +309,17 @@ export default function ProductListingPage() {
                   </Link>
                 </div>
                 <div className="product-list-info">
-                  <h6 className="product-cart-title">{p.productName}</h6>
-                  <p className="product-desc">
-                    {p.description.split(" ").slice(0, 8).join(" ")}
-                    {p.description.split(" ").length > 8 ? "..." : ""}
-                  </p>
-                  <span className="product-price">₹ {p.price}</span>
+                  <Link
+                    to={`/product/${p.id}`}
+                    className=" text-decoration-none"
+                  >
+                    <h6 className="product-cart-title">{p.productName}</h6>
+                    <p className="product-desc">
+                      {p.description.split(" ").slice(0, 8).join(" ")}
+                      {p.description.split(" ").length > 8 ? "..." : ""}
+                    </p>
+                    <span className="product-price">₹ {p.price}</span>
+                  </Link>
                   <div className="product-bottom-row">
                     <button className="cart-btn" onClick={() => addToCart(p)}>
                       <svg
