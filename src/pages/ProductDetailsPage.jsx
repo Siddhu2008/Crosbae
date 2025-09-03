@@ -10,40 +10,62 @@ const ProductDetail = () => {
   const [quantity, setQuantity] = useState(1);
   const [activeTab, setActiveTab] = useState("description");
   const [loading, setLoading] = useState(true);
-const RatingBreakdown = ({ average, totalRatings, breakdown }) => {
-  return (
-    <div className="global-rating-box">
-      <div className="average-rating-row">
-        <div className="star-icons">
-          {"★".repeat(Math.floor(average)) + "☆".repeat(5 - Math.floor(average))}
-        </div>
-        <div className="rating-score">
-          {average.toFixed(1)} out of 5
-        </div>
-      </div>
-      <div className="rating-total">{totalRatings.toLocaleString()} global ratings</div>
-
-      <div className="rating-bars">
-        {[5, 4, 3, 2, 1].map((star) => (
-          <div className="rating-bar-row" key={star}>
-            <span className="bar-label">{star} star</span>
-            <div className="bar-bg">
-              <div
-                className="bar-fill"
-                style={{ width: `${breakdown[star] || 0}%` }}
-              ></div>
-            </div>
-            <span className="bar-percent">{(breakdown[star] || 0)}%</span>
+  const RatingBreakdown = ({ average, totalRatings, breakdown }) => {
+    return (
+      <div className="global-rating-box">
+        <div className="average-rating-row">
+          <div className="star-icons">
+            {"★".repeat(Math.floor(average)) +
+              "☆".repeat(5 - Math.floor(average))}
           </div>
-        ))}
-      </div>
+          <div className="rating-score">{average.toFixed(1)} out of 5</div>
+        </div>
+        <div className="rating-total">
+          {totalRatings.toLocaleString()} global ratings
+        </div>
 
-      <div className="see-reviews-link">
-        <a href="#reviews">See all customer reviews ›</a>
+        <div className="rating-bars">
+          {[5, 4, 3, 2, 1].map((star) => (
+            <div className="rating-bar-row" key={star}>
+              <span className="bar-label">{star} star</span>
+              <div className="bar-bg">
+                <div
+                  className="bar-fill"
+                  style={{ width: `${breakdown[star] || 0}%` }}
+                ></div>
+              </div>
+              <span className="bar-percent">{breakdown[star] || 0}%</span>
+            </div>
+          ))}
+        </div>
+
+        <div className="see-reviews-link">
+          <a href="#reviews">See all customer reviews ›</a>
+        </div>
       </div>
-    </div>
-  );
-};
+    );
+  };
+
+  // Add to Cart handler
+  const addToCart = (product, quantity) => {
+    const existingCart = JSON.parse(localStorage.getItem("cartItems")) || [];
+    const exists = existingCart.find((item) => item.id === product.id);
+
+    let updatedCart;
+    if (exists) {
+      // increase quantity if already exists
+      updatedCart = existingCart.map((item) =>
+        item.id === product.id
+          ? { ...item, quantity: item.quantity + quantity }
+          : item
+      );
+    } else {
+      updatedCart = [...existingCart, { ...product, quantity }];
+    }
+
+    localStorage.setItem("cartItems", JSON.stringify(updatedCart));
+    alert(`${quantity} item(s) added to cart`);
+  };
 
   useEffect(() => {
     setLoading(true);
@@ -53,6 +75,7 @@ const RatingBreakdown = ({ average, totalRatings, breakdown }) => {
     if (foundProduct) {
       setProduct(foundProduct);
       setSelectedImage(foundProduct.images?.[0] || null);
+      console.log(foundProduct)
     } else {
       setProduct(null);
     }
@@ -168,7 +191,13 @@ const RatingBreakdown = ({ average, totalRatings, breakdown }) => {
 
           <div className="price">₹{product.price ?? "N/A"}</div>
           <div className="action-buttons">
-            <button className="btn-add-cart">Add to cart</button>
+            <button
+              className="btn-add-cart"
+              onClick={() => addToCart(product, quantity)}
+            >
+              Add to cart
+            </button>
+
             <button className="btn-buy-now">Buy now</button>
           </div>
 

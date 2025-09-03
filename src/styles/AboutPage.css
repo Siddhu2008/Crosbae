@@ -4,7 +4,9 @@
   margin: 0 auto;
   padding: 0 12px;
 }
-
+.about-page{
+  padding-top: 40px;
+}
 /* General page styles */
 .about-page.royal-theme {
   font-family: "Georgia", serif;

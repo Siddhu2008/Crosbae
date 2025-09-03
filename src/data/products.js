@@ -9,7 +9,7 @@ const products = [
     purity: "18KT",
     occasion: "Anniversary",
     tags: ["Best Seller", "NEW"],
-   images: [
+    images: [
       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSq_5-pOX_tXH7pVf_6s0tyD5MnZ0YZmTvwTg&s",
       "https://www.foreverjewelsindia.com/cdn/shop/files/rn-image_picker_lib_temp_b186ade9-9aab-45f6-b810-ed47f48c26a8.jpg?v=1727336455",
       "https://www.soosi.co.in/cdn/shop/products/WhatsAppImage2021-07-24at23.49.59_2048x.jpg?v=1627190767",

@@ -9,6 +9,9 @@ const RegisterPage = () => {
     password: "",
   });
 
+  // state for password visibility
+  const [showPassword, setShowPassword] = useState(false);
+
   const handleChange = (e) => {
     setFormData((prev) => ({
       ...prev,
@@ -28,7 +31,7 @@ const RegisterPage = () => {
   return (
     <div
       className="container-fluid min-vh-100 d-flex justify-content-center align-items-center bg-light px-5 "
-      style={{ paddingTop: "8rem", paddingBottom: "3rem" }} // Mobile offset
+      style={{ paddingTop: "8rem", paddingBottom: "3rem" }}
     >
       <div className="card shadow p-4" style={{ maxWidth: 450, width: "100%" }}>
         <h3 className="mb-4 text-center">Sign up</h3>
@@ -122,30 +125,47 @@ const RegisterPage = () => {
             <label htmlFor="password" className="form-label">
               Password
             </label>
-            <input
-              type="password"
-              className="form-control"
-              id="password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              placeholder="Enter your password"
-              required
-            />
+            <div className="input-group">
+              <input
+                type={showPassword ? "text" : "password"}
+                className="form-control"
+                id="password"
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
+                placeholder="Enter your password"
+                required
+              />
+              <button
+                type="button"
+                className="btn btn-outline-secondary"
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                {showPassword ? (
+                  <i className="bi bi-eye"></i>
+                ) : (
+                  <i className="bi bi-eye-slash"></i>
+                )}
+              </button>
+            </div>
           </div>
 
-          <button type="submit" className="btn  w-100 mb-3" style={{  background: "#f19e04ff" }}>
+          <button
+            type="submit"
+            className="btn w-100 mb-3"
+            style={{ background: "#f19e04ff" }}
+          >
             Sign up
           </button>
         </form>
 
         <div className="text-center mt-2">
-        <Link to="/login" className="login" >
-          <span
-            style={{ fontSize: 14, color: "#0d6efd", textDecoration: "none" }}
-          >
-            Already have an account? Sign in
-          </span>
+          <Link to="/login" className="login">
+            <span
+              style={{ fontSize: 14, color: "#0d6efd", textDecoration: "none" }}
+            >
+              Already have an account? Sign in
+            </span>
           </Link>
         </div>
       </div>

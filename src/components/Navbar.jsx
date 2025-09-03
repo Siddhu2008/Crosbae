@@ -99,6 +99,21 @@ const Navbar = () => {
                     Register
                   </Link>
                 </li>
+                <li>
+                  <Link to="/profile" className="dropdown-item">
+                    Profile
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/orders" className="dropdown-item">
+                    Order History
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/track-order" className="dropdown-item">
+                    Track Order
+                  </Link>
+                </li>
               </ul>
             </div>
           ) : (

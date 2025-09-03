@@ -72,7 +72,7 @@ export default function CartPage() {
               <div className="cart-item" key={item.id}>
                 {/* LEFT: Image + Info */}
                 <div className="cart-left">
-                  <img src={item.image} alt={item.productName} className="cart-img" />
+                  <img src={item.images[0]} alt={item.productName} className="cart-img" />
 
                   <div className="cart-info">
                     <h4 className="cart-name">{item.productName}</h4>

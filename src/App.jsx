@@ -28,6 +28,8 @@ import OrderHistoryPage from "./pages/OrderHistoryPage";
 import ProfilePage from "./pages/ProfilePage";
 import OrderTracking from "./pages/OrderTrackingPage";
 import EditProfile from "./pages/EditProfile";
+import ForgotPasswordPage from "./pages/ForgotPasswordPage";
+import ResetPasswordPage from "./pages/ResetPasswordPage";
 const App = () => {
   useEffect(() => {
     AOS.init({
@@ -66,6 +68,8 @@ const App = () => {
           <Route path="/orders" element={<OrderHistoryPage />} />
           <Route path="/track-order" element={<OrderTracking />} />
           <Route path="/edit-profile" element={<EditProfile />} />
+          <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+          <Route path="/reset-password" element={<ResetPasswordPage />} />
         </Routes>
         <Footer />
       </div>

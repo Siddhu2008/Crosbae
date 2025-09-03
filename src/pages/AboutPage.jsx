@@ -5,7 +5,7 @@ import "../styles/AboutPage.css";
 
 export default function AboutPage() {
   return (
-    <div className="about-page royal-theme" style={{paddingTop:"120px",paddingBottom:"100px"}}>
+    <div className="about-page royal-theme">
       <section className="hero-section">
         <div className="container">
           <h1 className="brand-title">About Crosbae</h1>

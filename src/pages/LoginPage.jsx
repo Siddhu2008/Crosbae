@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false); // 👈 added state
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -15,16 +16,21 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="container-fluid min-vh-100 d-flex justify-content-center align-items-center bg-light px-3 "  style={{ paddingTop: "8rem", paddingBottom:'3rem'}} >
+    <div
+      className="container-fluid min-vh-100 d-flex justify-content-center align-items-center bg-light px-3"
+      style={{ paddingTop: "8rem", paddingBottom: "3rem" }}
+    >
       <div className="card shadow p-4" style={{ maxWidth: 400, width: "100%" }}>
         <h3 className="mb-4 text-center">Sign in</h3>
 
+        {/* Google Button */}
         <button
           onClick={handleGoogleLogin}
           type="button"
           className="btn text-black bg-white border-secondary w-100 d-flex align-items-center justify-content-center mb-3"
           style={{ gap: 10 }}
         >
+          {/* Google SVG */}
           <svg
             width="20"
             height="20"
@@ -54,6 +60,7 @@ const LoginPage = () => {
         <div className="text-center mb-3 fw-bold">OR</div>
 
         <form onSubmit={handleSubmit}>
+          {/* Email */}
           <div className="mb-3">
             <label htmlFor="email" className="form-label">
               Email address
@@ -70,43 +77,61 @@ const LoginPage = () => {
             />
           </div>
 
+          {/* Password */}
           <div className="mb-3">
             <label htmlFor="password" className="form-label">
               Password
             </label>
-            <input
-              type="password"
-              id="password"
-              className="form-control"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="Password"
-              required
-              autoComplete="current-password"
-            />
+            <div className="input-group">
+              <input
+                type={showPassword ? "text" : "password"}
+                id="password"
+                className="form-control"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Password"
+                required
+                autoComplete="current-password"
+              />
+              <button
+                type="button"
+                className="btn btn-outline-secondary"
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                {showPassword ? (
+                  <i className="bi bi-eye"></i> // bootstrap icon
+                ) : (
+                  <i className="bi bi-eye-slash"></i>
+                )}
+              </button>
+            </div>
           </div>
 
           <div className="mb-2 text-end">
-            <a
-              href="#"
+            <Link
+              to="/forgot-password"
               style={{ fontSize: 14, color: "#0d6efd", textDecoration: "none" }}
             >
               Forgotten your password?
-            </a>
+            </Link>
           </div>
 
-          <button type="submit" className="btn  w-100 mb-3" style={{  background: "#f19e04ff" }}>
+          <button
+            type="submit"
+            className="btn w-100 mb-3"
+            style={{ background: "#f19e04ff" }}
+          >
             Sign in
           </button>
         </form>
 
         <div className="text-center mt-2">
-        <Link to="/register" className="register" >
-          <span
-            style={{ fontSize: 14, color: "#0d6efd", textDecoration: "none" }}
-          >
-            Create a new Account? Sign up
-          </span>
+          <Link to="/register" className="register">
+            <span
+              style={{ fontSize: 14, color: "#0d6efd", textDecoration: "none" }}
+            >
+              Create a new Account? Sign up
+            </span>
           </Link>
         </div>
       </div>
