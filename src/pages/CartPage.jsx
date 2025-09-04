@@ -61,7 +61,9 @@ export default function CartPage() {
         keywords="shopping cart, my cart, jewellery checkout, view bag"
       />
       <h2 className="cart-title text-center my-3">Shopping Cart</h2>
-      <p className="cart-subtitle text-center">{cartItems.length} items in your cart</p>
+      <p className="cart-subtitle text-center">
+        {cartItems.length} items in your cart
+      </p>
 
       {cartItems.length === 0 ? (
         <div className="cart-empty text-center">
@@ -78,7 +80,11 @@ export default function CartPage() {
               <div className="cart-item" key={`${item.id}-${index}`}>
                 {/* LEFT: Image + Info */}
                 <div className="cart-left">
-                  <img src={item.images?.[0]} alt={item.productName} className="cart-img" />
+                 {Array.isArray(item.images) && item.images.length > 0 ? (
+                  <img src={item.images[0]} alt={item.productName} className="cart-img" />
+                  ) : (
+                    <div className="no-image">No image</div>  
+                  )}
 
 
                   <div className="cart-info">
@@ -86,7 +92,9 @@ export default function CartPage() {
                     <p className="cart-sku">SKU: {item.sku}</p>
                     <p className="cart-price">
                       ₹{item.price}{" "}
-                      {item.oldPrice && <span className="cart-oldprice">₹{item.oldPrice}</span>}
+                      {item.oldPrice && (
+                        <span className="cart-oldprice">₹{item.oldPrice}</span>
+                      )}
                     </p>
                   </div>
                 </div>
@@ -107,7 +115,10 @@ export default function CartPage() {
                     +
                   </button>
 
-                  <button className="delete-btn" onClick={() => removeFromCart(item.id)}>
+                  <button
+                    className="delete-btn"
+                    onClick={() => removeFromCart(item.id)}
+                  >
                     <i className="bi bi-trash-fill"></i>
                   </button>
                 </div>
@@ -136,7 +147,9 @@ export default function CartPage() {
               </div>
               {couponError && <p className="coupon-error">{couponError}</p>}
               {discount > 0 && !couponError && (
-                <p className="coupon-success">Coupon applied! You saved ₹{discount.toFixed(2)}.</p>
+                <p className="coupon-success">
+                  Coupon applied! You saved ₹{discount.toFixed(2)}.
+                </p>
               )}
             </div>
 
@@ -158,10 +171,14 @@ export default function CartPage() {
               <hr />
               <div className="summary-line total">
                 <span>Total</span>
-                <span>₹{(calculateSubtotal() - discount + shipping).toFixed(2)}</span>
+                <span>
+                  ₹{(calculateSubtotal() - discount + shipping).toFixed(2)}
+                </span>
               </div>
 
-              <Link to="/checkout" className="btn checkout-btn">Proceed to Checkout</Link>
+              <Link to="/checkout" className="btn checkout-btn">
+                Proceed to Checkout
+              </Link>
               <Link to="/shop" className="continue-btn">
                 Continue Shopping
               </Link>
