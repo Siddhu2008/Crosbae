@@ -76,54 +76,57 @@ export default function CartPage() {
         <div className="cart-layout">
           {/* Cart Items */}
           <div className="cart-items">
-            {cartItems.map((item, index) => (
-              <div className="cart-item" key={`${item.id}-${index}`}>
-                {/* LEFT: Image + Info */}
-                <div className="cart-left">
-                 {Array.isArray(item.images) && item.images.length > 0 ? (
-                  <img src={item.images[0]} alt={item.productName} className="cart-img" />
-                  ) : (
-                    <div className="no-image">No image</div>  
-                  )}
+            {cartItems
+              .filter((item) => item && typeof item === "object")
+              .map((item, index) => (
+                <div className="cart-item" key={`${item.id}-${index}`}>
+                  <div className="cart-left">
+                    {Array.isArray(item.images) && item.images.length > 0 && (
+                      <img
+                        src={item.images[0]}
+                        alt={item.productName}
+                        className="cart-img"
+                      />
+                    )}
+                    <div className="cart-info">
+                      <h4 className="cart-name">{item.productName}</h4>
+                      <p className="cart-sku">SKU: {item.sku}</p>
+                      <p className="cart-price">
+                        ₹{item.price}{" "}
+                        {item.oldPrice && (
+                          <span className="cart-oldprice">
+                            ₹{item.oldPrice}
+                          </span>
+                        )}
+                      </p>
+                    </div>
+                  </div>
 
+                  {/* RIGHT: Qty + Delete */}
+                  <div className="cart-right">
+                    <button
+                      className="qty-btn"
+                      onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                    >
+                      −
+                    </button>
+                    <span className="qty-value">{item.quantity}</span>
+                    <button
+                      className="qty-btn"
+                      onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                    >
+                      +
+                    </button>
 
-                  <div className="cart-info">
-                    <h4 className="cart-name">{item.productName}</h4>
-                    <p className="cart-sku">SKU: {item.sku}</p>
-                    <p className="cart-price">
-                      ₹{item.price}{" "}
-                      {item.oldPrice && (
-                        <span className="cart-oldprice">₹{item.oldPrice}</span>
-                      )}
-                    </p>
+                    <button
+                      className="delete-btn"
+                      onClick={() => removeFromCart(item.id)}
+                    >
+                      <i className="bi bi-trash-fill"></i>
+                    </button>
                   </div>
                 </div>
-
-                {/* RIGHT: Qty + Delete */}
-                <div className="cart-right">
-                  <button
-                    className="qty-btn"
-                    onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                  >
-                    −
-                  </button>
-                  <span className="qty-value">{item.quantity}</span>
-                  <button
-                    className="qty-btn"
-                    onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                  >
-                    +
-                  </button>
-
-                  <button
-                    className="delete-btn"
-                    onClick={() => removeFromCart(item.id)}
-                  >
-                    <i className="bi bi-trash-fill"></i>
-                  </button>
-                </div>
-              </div>
-            ))}
+              ))}
           </div>
 
           {/* Sidebar with Coupon + Order Summary */}
