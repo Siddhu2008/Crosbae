@@ -1,5 +1,6 @@
 import React from "react";
-import "../styles/MatchForYou.css"
+import { Link } from "react-router-dom";
+import "../styles/MatchForYou.css";
 
 const categories = [
   {
@@ -27,10 +28,6 @@ const categories = [
     img: "https://www.tanishq.co.in/dw/image/v2/BKCK_PRD/on/demandware.static/-/Library-Sites-TanishqSharedLibrary/default/dwd0550e4c/homepage/shopByCategory/chains-cat.jpg",
   },
   {
-    title: "Finger Rings",
-    img: "https://www.tanishq.co.in/dw/image/v2/BKCK_PRD/on/demandware.static/-/Library-Sites-TanishqSharedLibrary/default/dw47da8133/homepage/shopByCategory/rings-cat.jpg",
-  },   
-  {
     title: "View All",
     img: "https://www.tanishq.co.in/dw/image/v2/BKCK_PRD/on/demandware.static/-/Library-Sites-TanishqSharedLibrary/default/dw811a2edc/homepage/shopByCategory/all-jew-cat.jpg",
   },
@@ -53,12 +50,14 @@ export default function MatchForYou() {
       key={index}
     >
       <div className="category-card text-center">
+        <Link to="/collections" className="text-decoration-none">
         <img
           src={category.img}
           alt={category.title}
           className="img-fluid"
         />
         <h4>{category.title}</h4>
+        </Link>
       </div>
     </div>
   ))}

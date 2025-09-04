@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import logo from "../assets/logo.png";
 import "../styles/Navbar.css";
 
@@ -12,11 +12,16 @@ const Navbar = () => {
 
   const toggleMenu = () => setIsOpen(!isOpen);
 
+  const handleProfileClick = () => {
+    // Placeholder for profile click logic
+    console.log("Profile icon clicked");
+  };
+
   useEffect(() => {
     const updateCartCount = () => {
       const storedCart = JSON.parse(localStorage.getItem("cartItems")) || [];
       const totalQuantity = storedCart.reduce(
-        (acc, item) => acc + item.quantity,
+        (acc, item) => acc + item.quantity, 
         0
       );
       setCartCount(totalQuantity);

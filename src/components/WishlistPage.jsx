@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
 import products from "../data/products";
+import Seo from "./Seo";
 import "../styles/WishlistPage.css"; // new stylesheet
 
 export default function WishlistPage() {
@@ -36,10 +37,16 @@ export default function WishlistPage() {
     }
 
     localStorage.setItem("cartItems", JSON.stringify(updatedCart));
+    alert("1 item added to cart");
   };
 
   return (
     <div className="wishlist-page ">
+      <Seo
+        title="My Wishlist"
+        description="View and manage your wishlist at Cros Bae. Save your favorite imitation jewellery pieces and shop them later."
+        keywords="wishlist, my wishlist, favorite jewellery, saved items"
+      />
       <h2 className="wishlist-title">My Wishlist</h2>
 
       {wishlistItems.length === 0 ? (
@@ -54,7 +61,7 @@ export default function WishlistPage() {
           {wishlistItems.map((item) => (
             <div className="wishlist-card" key={item.id}>
               <img
-                src={item.image}
+                src={item.images?.[0]}
                 alt={item.productName}
                 className="wishlist-img"
               />

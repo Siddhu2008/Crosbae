@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import Seo from "../components/Seo";
 
 const ForgotPasswordPage = () => {
   const [email, setEmail] = useState("");
@@ -15,6 +16,7 @@ const ForgotPasswordPage = () => {
       className="container-fluid min-vh-100 d-flex justify-content-center align-items-center bg-light px-3"
       style={{ paddingTop: "8rem", paddingBottom: "3rem" }}
     >
+      <Seo title="Forgot Password" noIndex />
       <div className="card shadow p-4" style={{ maxWidth: 400, width: "100%" }}>
         <h3 className="mb-4 text-center">Forgot Password</h3>
         <p className="text-center" style={{ fontSize: 14 }}>

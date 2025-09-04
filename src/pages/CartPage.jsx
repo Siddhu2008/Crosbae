@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import "../styles/CartPage.css"; // Make sure to update your CSS accordingly
+import Seo from "../components/Seo";
 
 export default function CartPage() {
   const [cartItems, setCartItems] = useState([]);
@@ -54,6 +55,11 @@ export default function CartPage() {
 
   return (
     <div className="cart-container container my-5">
+      <Seo
+        title="Shopping Cart"
+        description="Review your shopping cart at Cros Bae. Proceed to checkout to purchase your selected imitation jewellery items."
+        keywords="shopping cart, my cart, jewellery checkout, view bag"
+      />
       <h2 className="cart-title text-center my-3">Shopping Cart</h2>
       <p className="cart-subtitle text-center">{cartItems.length} items in your cart</p>
 
@@ -68,11 +74,12 @@ export default function CartPage() {
         <div className="cart-layout">
           {/* Cart Items */}
           <div className="cart-items">
-            {cartItems.map((item) => (
-              <div className="cart-item" key={item.id}>
+            {cartItems.map((item, index) => (
+              <div className="cart-item" key={`${item.id}-${index}`}>
                 {/* LEFT: Image + Info */}
                 <div className="cart-left">
-                  <img src={item.images[0]} alt={item.productName} className="cart-img" />
+                  <img src={item.images?.[0]} alt={item.productName} className="cart-img" />
+
 
                   <div className="cart-info">
                     <h4 className="cart-name">{item.productName}</h4>
@@ -101,7 +108,7 @@ export default function CartPage() {
                   </button>
 
                   <button className="delete-btn" onClick={() => removeFromCart(item.id)}>
-                    <i class="bi bi-trash-fill"></i>
+                    <i className="bi bi-trash-fill"></i>
                   </button>
                 </div>
               </div>
@@ -154,7 +161,7 @@ export default function CartPage() {
                 <span>₹{(calculateSubtotal() - discount + shipping).toFixed(2)}</span>
               </div>
 
-              <button className="checkout-btn">Proceed to Checkout</button>
+              <Link to="/checkout" className="btn checkout-btn">Proceed to Checkout</Link>
               <Link to="/shop" className="continue-btn">
                 Continue Shopping
               </Link>

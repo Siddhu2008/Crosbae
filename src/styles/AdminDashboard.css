@@ -1,63 +1,118 @@
-/* ===== Base Mobile-First Styles ===== */
-
-/* Admin Dashboard Container */
-.admin-dashboard {
+/* ================= BASE STYLES ================== */
+body {
+  margin: 0;
   font-family: "Georgia", serif;
-  background: linear-gradient(135deg, #ffffff, #f7f3eb);
+  background: #f7f3eb;
   color: #2b2a4d;
-  min-height: 100vh;
-  padding: 20px;
-  box-sizing: border-box;
-  width: 100%;
-  max-width: 100%;
-  margin: 0 auto;
-  border-radius: 15px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
 }
 
-/* Header Section */
+/* Container */
+.admin-dashboard {
+  background: linear-gradient(135deg, #ffffff, #f7f3eb);
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  max-width: 100%;
+  margin: 0 auto;
+  min-height: 100vh;
+}
+
+/* ================= HEADER ================== */
 .admin-dashboard .header h1 {
   font-size: 2rem;
   color: #bfa14a;
   text-transform: uppercase;
   letter-spacing: 0.15em;
-  margin-bottom: 0;
-  text-shadow: 1px 1px 8px rgba(191, 161, 74, 0.3);
   text-align: center;
+  text-shadow: 1px 1px 8px rgba(191, 161, 74, 0.3);
+  margin-bottom: 0;
 }
 
 .admin-dashboard .header p {
-  font-style: italic;
-  font-size: 1rem;
-  margin: 6px 0 0 0;
-  color: #5a4f3c;
   text-align: center;
+  font-style: italic;
+  color: #5a4f3c;
+  margin: 6px 0 20px;
 }
 
-/* Buttons */
+/* ================= BUTTONS ================== */
+.add-product-btn,
+.action-btn,
+.save-btn,
+.cancel-btn,
+.edit-btn,
+.delete-btn {
+  font-weight: 700;
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 1rem;
+}
+
+/* Add / Action Buttons */
 .add-product-btn,
 .action-btn {
   background: linear-gradient(45deg, #d4af37, #bfa14a);
-  border: none;
+  color: white;
   padding: 10px 20px;
-  border-radius: 30px;
-  font-weight: 700;
-  font-size: 1rem;
-  color: #fff;
-  cursor: pointer;
-  box-shadow: 0 5px 15px rgba(191, 161, 74, 0.6);
-  transition: all 0.3s ease;
   width: 100%;
+  box-shadow: 0 5px 15px rgba(191, 161, 74, 0.6);
 }
 
 .add-product-btn:hover,
 .action-btn:hover {
   background: linear-gradient(45deg, #bfa14a, #d4af37);
-  box-shadow: 0 8px 25px rgba(191, 161, 74, 0.9);
   transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(191, 161, 74, 0.9);
 }
 
-/* Tabs */
+/* Save / Cancel Buttons */
+.save-btn {
+  background-color: #28a745;
+  color: #fff;
+  padding: 12px;
+}
+
+.save-btn:hover {
+  background-color: #218838;
+}
+
+.cancel-btn {
+  background-color: #dc3545;
+  color: #fff;
+  padding: 12px;
+}
+
+.cancel-btn:hover {
+  background-color: #c82333;
+}
+
+/* Table Action Buttons */
+.edit-btn,
+.delete-btn {
+  padding: 6px 12px;
+  font-size: 0.9rem;
+  margin: 0 4px;
+  border: 2px solid #bfa14a;
+  color: #bfa14a;
+  background: transparent;
+}
+
+.edit-btn:hover {
+  background: #d4af37;
+  color: white;
+  box-shadow: 0 0 12px #d4af37;
+}
+
+.delete-btn:hover {
+  background: #e63946;
+  border-color: #e63946;
+  color: white;
+  box-shadow: 0 0 12px #e63946;
+}
+
+/* ================= TABS ================== */
 .tabs {
   display: flex;
   flex-wrap: wrap;
@@ -67,41 +122,31 @@
 }
 
 .tab {
+  padding: 10px 16px;
   background: rgba(191, 161, 74, 0.1);
   border-radius: 30px;
-  padding: 10px 16px;
   font-weight: 600;
-  color: #2b2a4d;
-  cursor: pointer;
   font-size: 0.9rem;
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  box-shadow: 0 0 15px rgba(191, 161, 74, 0.15);
-  border: 2px solid transparent;
+  color: #2b2a4d;
+  cursor: pointer;
   transition: all 0.3s ease;
+  border: 2px solid transparent;
+  
 }
 
 .tab:hover {
   background: rgba(191, 161, 74, 0.2);
-  box-shadow: 0 0 25px rgba(191, 161, 74, 0.4);
 }
 
 .tab.active {
   background: #d4af37;
-  color: #fff;
-  box-shadow: 0 0 30px rgba(191, 161, 74, 0.8);
+  color: white;
   border-color: #bfa14a;
 }
 
-/* Tab Content */
-.tab-content {
-  background: rgba(255, 255, 255, 0.6);
-  border-radius: 15px;
-  padding: 20px;
-  box-shadow: inset 0 0 25px rgba(191, 161, 74, 0.15);
-}
-
-/* Stats Section */
+/* ================= STATS ================== */
 .stats-section {
   display: flex;
   flex-direction: column;
@@ -124,18 +169,17 @@
 }
 
 .stat-card h4 {
-  color: #bfa14a;
-  font-size: 1rem;
-  margin-bottom: 8px;
   text-transform: uppercase;
   letter-spacing: 0.1em;
+  margin-bottom: 8px;
+  font-size: 1rem;
+  color: #bfa14a;
 }
 
 .count {
   font-size: 2rem;
   font-weight: 700;
   color: #2b2a4d;
-  text-shadow: 1px 1px 5px rgba(38, 29, 1, 0.3);
 }
 
 .growth {
@@ -148,23 +192,72 @@
   font-weight: 600;
 }
 
-/* Quick Actions */
-.quick-actions h2 {
-  color: #bfa14a;
-  margin-bottom: 15px;
-  font-size: 1.5rem;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  text-align: center;
-}
-
-.actions {
+/* ================= FORM ================== */
+.form-card {
+  background-color: #fffaf5;
+  padding: 30px 25px;
+  max-width: 480px;
+  width: 100%;
+  border-radius: 12px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 18px;
 }
 
-/* Data Table */
+.form-card input,
+.form-card select,
+.form-card textarea {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+  background-color: #fff;
+  transition: border-color 0.3s ease;
+}
+
+.form-card input:focus,
+.form-card select:focus,
+.form-card textarea:focus {
+  border-color: #bfa14a;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(191, 161, 74, 0.2);
+}
+
+.form-card .save-btn,
+.form-card .cancel-btn {
+  width: 100%;
+  padding: 12px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
+
+.form-card .save-btn {
+  background: linear-gradient(45deg, #d4af37, #bfa14a);
+  color: #fff;
+}
+
+.form-card .save-btn:hover {
+  background: linear-gradient(45deg, #bfa14a, #d4af37);
+}
+
+.form-card .cancel-btn {
+  background: #f5f5f5;
+  color: #444;
+  border: 1px solid red;
+}
+
+.form-card .cancel-btn:hover {
+  background: #f13c3c;
+}
+
+
+/* ================= TABLE ================== */
 .products-tab {
   width: 100%;
   overflow-x: auto;
@@ -173,18 +266,16 @@
 .data-table {
   border-collapse: collapse;
   width: 100%;
-  
-  background: #fff;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  background: white;
   border-radius: 8px;
   overflow: hidden;
-  color: #2b2a4d;
   font-size: 0.9rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
 .data-table thead {
   background: #d4af37;
-  color: #fff;
+  color: white;
   text-transform: uppercase;
   letter-spacing: 0.1em;
 }
@@ -203,38 +294,17 @@
 }
 
 .data-table img {
-  border-radius: 4px;
   max-width: 60px;
-  height: auto;
+  border-radius: 4px;
 }
 
-/* Table Action Buttons */
-.edit-btn,
-.delete-btn {
-  background: transparent;
-  border: 2px solid #bfa14a;
-  color: #bfa14a;
-  font-weight: 600;
-  padding: 6px 10px;
-  border-radius: 25px;
-  margin: 0 2px;
-  cursor: pointer;
-  transition: all 0.3s ease;
+/* Responsive table wrapper */
+.table-responsive {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
-.edit-btn:hover {
-  background: #d4af37;
-  color: #fff;
-  box-shadow: 0 0 12px #d4af37;
-}
-
-.delete-btn:hover {
-  background: #e63946;
-  border-color: #e63946;
-  color: #fff;
-  box-shadow: 0 0 12px #e63946;
-}
-
+/* ================= BADGES ================== */
 .badge.completed {
   background: linear-gradient(45deg, #ffd700, #ffcc33);
   color: #3a2f63;
@@ -245,101 +315,7 @@
   box-shadow: 0 0 12px rgba(255, 215, 0, 0.8);
 }
 
-/* Forms */
-.form-container,
-.delete-card {
-  background: #fff;
-  padding: 20px;
-  border-radius: 15px;
-  box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.08);
-}
-
-.form-container label {
-  display: block;
-  margin-bottom: 6px;
-  font-weight: 600;
-  color: #444;
-}
-
-.form-container input {
-  width: 100%;
-  padding: 10px;
-  margin-bottom: 15px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  font-size: 15px;
-  transition: all 0.2s ease;
-}
-
-.form-container input:focus {
-  outline: none;
-  border-color: #8c52ff;
-  box-shadow: 0 0 0 3px rgba(140, 82, 255, 0.2);
-}
-
-.form-actions {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.save-btn {
-  background: #8c52ff;
-  color: white;
-  padding: 10px;
-  border: none;
-  border-radius: 8px;
-  font-size: 15px;
-  cursor: pointer;
-  transition: background 0.2s ease;
-}
-
-.save-btn:hover {
-  background: #7b47e6;
-}
-
-.cancel-btn {
-  background: #f5f5f5;
-  color: #444;
-  padding: 10px;
-  border: none;
-  border-radius: 8px;
-  font-size: 15px;
-  cursor: pointer;
-  transition: background 0.2s ease;
-}
-
-.cancel-btn:hover {
-  background: #e0e0e0;
-}
-
-.delete-card p {
-  font-size: 16px;
-  color: #555;
-  margin-bottom: 20px;
-  text-align: center;
-}
-
-.delete-card strong {
-  color: #000;
-}
-
-.delete-btn {
-  background: #ff4d4d;
-  color: white;
-  padding: 10px;
-  border: none;
-  border-radius: 8px;
-  font-size: 15px;
-  cursor: pointer;
-  transition: background 0.2s ease;
-}
-
-.delete-btn:hover {
-  background: #e64545;
-}
-
-/* ===== Responsive Enhancements ===== */
+/* ================= MEDIA QUERIES ================== */
 @media (min-width: 768px) {
   .stats-section {
     flex-direction: row;
@@ -360,10 +336,6 @@
     width: auto;
   }
 
-  .tabs {
-    gap: 18px;
-  }
-
   .admin-dashboard .header h1 {
     font-size: 2.8rem;
   }
@@ -376,17 +348,48 @@
 @media (max-width: 768px) {
   .data-table {
     min-width: 700px;
-    /* forces horizontal scroll instead of squishing */
   }
 }
-/* Force only the table to scroll horizontally */
-.table-responsive {
-  width: 100%;
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
+.quick-actions {
+  margin-top: 40px;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.6);
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(191, 161, 74, 0.15);
 }
 
-/* Ensure table is wider than screen when needed */
-.table-responsive .data-table {
-  min-width: 700px;
+.quick-actions h2 {
+  color: #2b2a4d;
+  font-size: 1.8rem;
+  text-align: center;
+  margin-bottom: 25px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  align-items: center;
+}
+
+.action-btn {
+  background: linear-gradient(45deg, #d4af37, #bfa14a);
+  color: #fff;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 30px;
+  font-weight: 600;
+  font-size: 1rem;
+  width: 90%;
+  max-width: 300px;
+  text-align: center;
+  transition: all 0.3s ease;
+  box-shadow: 0 6px 20px rgba(191, 161, 74, 0.3);
+}
+
+.action-btn:hover {
+  background: linear-gradient(45deg, #bfa14a, #d4af37);
+  transform: translateY(-3px);
 }

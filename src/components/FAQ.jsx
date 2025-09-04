@@ -40,7 +40,11 @@ const FAQ = () => {
   };
 
   return (
-    <div style={{ maxWidth: "800px", margin: "auto", padding: "2rem" ,paddingTop: "80px", paddingBottom: "20px" }}>
+    <div
+      style={{
+        maxWidth: "800px", margin: "auto", padding: "2rem", paddingTop: "80px", paddingBottom: "20px",
+      }}
+    >
       <h1 className="text-center mb-4">Frequently Asked Questions</h1>
       <div className="faq-list">
         {faqData.map((item, index) => (

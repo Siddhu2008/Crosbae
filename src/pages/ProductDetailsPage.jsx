@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
-import products from "../data/products";  // import local products data
+import { useParams, useLocation,Link } from "react-router-dom";
+import products from "../data/products"; // import local products data
 import "../styles/ProductDetailsPage.css";
+import Seo from "../components/Seo";
 
 const ProductDetail = () => {
   const { id } = useParams(); // Get product ID from URL
   const [product, setProduct] = useState(null);
+  const location = useLocation();
   const [selectedImage, setSelectedImage] = useState(null);
   const [quantity, setQuantity] = useState(1);
   const [activeTab, setActiveTab] = useState("description");
@@ -37,10 +39,6 @@ const ProductDetail = () => {
               <span className="bar-percent">{breakdown[star] || 0}%</span>
             </div>
           ))}
-        </div>
-
-        <div className="see-reviews-link">
-          <a href="#reviews">See all customer reviews ›</a>
         </div>
       </div>
     );
@@ -94,8 +92,34 @@ const ProductDetail = () => {
     return <div className="error-message">Product not found.</div>;
   }
 
+  // Structured Data for Rich Snippets
+  const productStructuredData = {
+    '@context': 'https://schema.org/',
+    '@type': 'Product',
+    name: product.productName,
+    image: product.images?.[0] || '',
+    description: product.description,
+    sku: product.id,
+    offers: {
+      '@type': 'Offer',
+      url: `https://www.crosbae.com${location.pathname}`, // Replace with your domain
+      priceCurrency: 'INR',
+      price: product.price,
+      availability: 'https://schema.org/InStock', // Or OutOfStock, PreOrder
+      itemCondition: 'https://schema.org/NewCondition',
+    },
+  };
+
   return (
     <div className="product-detail-page">
+      <Seo
+        title={product.productName}
+        description={product.description}
+        keywords={`${product.productName}, ${product.category}, ${product.purity} jewellery`}
+        imageUrl={product.images?.[0]}
+        url={location.pathname}
+        structuredData={productStructuredData}
+      />
       {/* Top Section */}
       <div className="product-top-section">
         {/* Images Sidebar */}
@@ -121,7 +145,7 @@ const ProductDetail = () => {
             <img
               className="main-image"
               src={selectedImage}
-              alt={product.name || "Product Image"}
+              alt={product.productName || "Product Image"}
             />
           ) : (
             <div className="no-image">No image to display</div>
@@ -130,7 +154,7 @@ const ProductDetail = () => {
 
         {/* Product Info */}
         <div className="product-info">
-          <h2 className="product-title">{product.name || "Unnamed Product"}</h2>
+          <h2 className="product-title">{product.productName || "Unnamed Product"}</h2>
           <div className="rating-orders">
             <span className="star">⭐ {product.rating ?? "N/A"}</span>
             <span className="orders">({product.orders ?? 0} orders)</span>
@@ -198,7 +222,7 @@ const ProductDetail = () => {
               Add to cart
             </button>
 
-            <button className="btn-buy-now">Buy now</button>
+            <Link to="/checkout" className="btn btn-buy-now">Buy now</Link>
           </div>
 
           {/* Global Rating */}

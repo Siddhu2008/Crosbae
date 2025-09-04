@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
-export default function CheckoutPage() {
+export default function CheckoutPage() { // Note: This seems to be a duplicate of pages/CheckoutPage.jsx
   const [cartItems, setCartItems] = useState([]);
   const navigate = useNavigate();
 

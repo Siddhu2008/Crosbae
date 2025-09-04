@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import "../styles/CollectionsPage.css";
+import Seo from "../components/Seo";
 
 const collections = [
   {
@@ -33,6 +34,11 @@ export default function CollectionsPage() {
 
   return (
     <div className="collection-container" style={{ paddingTop: "120px" }}>
+      <Seo
+        title="Jewellery Collections"
+        description="Explore our curated jewellery collections. From timeless classics to modern designs, find the perfect collection to match your style at Cros Bae."
+        keywords="jewellery collections, ring collections, necklace sets, earring collections, fashion jewellery sets"
+      />
       <h2 className="text-center mb-5" data-aos="fade-down">
         Our Collections
       </h2>

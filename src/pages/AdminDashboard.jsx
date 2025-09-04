@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import "../styles/AdminDashboard.css";
-
+import Seo from "../components/Seo";
 
 const tabs = ["Overview", "Products", "Orders", "Customers"];
 
@@ -169,6 +169,7 @@ export default function AdminDashboard() {
 
   return (
     <div className="admin-dashboard text-center" style={{paddingTop:"120px",paddingBottom:"100px"}}>
+      <Seo title="Admin Dashboard" noIndex />
       <div className="header">
         <div>
           <h1>Admin Dashboard</h1>

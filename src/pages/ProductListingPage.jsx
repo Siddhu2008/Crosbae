@@ -2,9 +2,9 @@ import React, { useState, useMemo, useEffect } from "react";
 import { Link } from "react-router-dom";
 
 import products from "../data/products";
-import "../styles/ProductListingPage.css"
+import Seo from "../components/Seo";
+import "../styles/ProductListingPage.css";
 export default function ProductListingPage() {
-
   const [filters, setFilters] = useState({
     category: [],
     purity: [],
@@ -130,6 +130,11 @@ export default function ProductListingPage() {
 
   return (
     <div className="Product-container position-relative my-5">
+      <Seo
+        title="Shop All Jewellery"
+        description="Explore our wide range of stunning imitation jewellery. Find the perfect piece for every occasion, from gold and diamond to platinum and silver."
+        keywords="shop jewellery, buy rings, buy necklaces, artificial jewellery"
+      />
       {/* Filter Toggle */}
       <div className="d-flex justify-content-between align-items-center mb-3">
         <button

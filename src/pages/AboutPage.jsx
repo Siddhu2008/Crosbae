@@ -1,11 +1,17 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
+import Seo from "../components/Seo";
 import "../styles/AboutPage.css";
 
 export default function AboutPage() {
   return (
     <div className="about-page royal-theme">
+      <Seo
+        title="About Us"
+        description="Learn about Crosbae's story, our mission, and our commitment to quality in luxury imitation jewelry. Discover why thousands trust us for elegance and style."
+        keywords="about cros bae, jewellery brand, imitation jewellery story"
+      />
       <section className="hero-section">
         <div className="container">
           <h1 className="brand-title">About Crosbae</h1>

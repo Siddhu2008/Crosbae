@@ -1,5 +1,5 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom"; // Seo component is not used
 import "../styles/AdminDashboard.css";
 
 export default function DeleteProduct() {

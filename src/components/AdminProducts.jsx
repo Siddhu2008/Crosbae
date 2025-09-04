@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "../styles/AdminProducts.css";
+import Seo from "./Seo";
 
 const dummyProducts = [
   {
@@ -34,6 +35,7 @@ export default function AdminProducts() {
 
   return (
     <section className="admin-products-container">
+      <Seo title="Manage Products" noIndex />
       <h2>All Products</h2>
       <div className="admin-products-grid">
         {products.map((product) => (
