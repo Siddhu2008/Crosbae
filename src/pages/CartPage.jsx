@@ -61,9 +61,7 @@ export default function CartPage() {
         keywords="shopping cart, my cart, jewellery checkout, view bag"
       />
       <h2 className="cart-title text-center my-3">Shopping Cart</h2>
-      <p className="cart-subtitle text-center">
-        {cartItems.length} items in your cart
-      </p>
+      <p className="cart-subtitle text-center">{cartItems.length} items in your cart</p>
 
       {cartItems.length === 0 ? (
         <div className="cart-empty text-center">
@@ -76,57 +74,45 @@ export default function CartPage() {
         <div className="cart-layout">
           {/* Cart Items */}
           <div className="cart-items">
-            {cartItems
-              .filter((item) => item && typeof item === "object")
-              .map((item, index) => (
-                <div className="cart-item" key={`${item.id}-${index}`}>
-                  <div className="cart-left">
-                    {Array.isArray(item.images) && item.images.length > 0 && (
-                      <img
-                        src={item.images[0]}
-                        alt={item.productName}
-                        className="cart-img"
-                      />
-                    )}
-                    <div className="cart-info">
-                      <h4 className="cart-name">{item.productName}</h4>
-                      <p className="cart-sku">SKU: {item.sku}</p>
-                      <p className="cart-price">
-                        ₹{item.price}{" "}
-                        {item.oldPrice && (
-                          <span className="cart-oldprice">
-                            ₹{item.oldPrice}
-                          </span>
-                        )}
-                      </p>
-                    </div>
-                  </div>
+            {cartItems.map((item, index) => (
+              <div className="cart-item" key={`${item.id}-${index}`}>
+                {/* LEFT: Image + Info */}
+                <div className="cart-left">
+                  <img src={item.images?.[0]} alt={item.productName} className="cart-img" />
 
-                  {/* RIGHT: Qty + Delete */}
-                  <div className="cart-right">
-                    <button
-                      className="qty-btn"
-                      onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                    >
-                      −
-                    </button>
-                    <span className="qty-value">{item.quantity}</span>
-                    <button
-                      className="qty-btn"
-                      onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                    >
-                      +
-                    </button>
 
-                    <button
-                      className="delete-btn"
-                      onClick={() => removeFromCart(item.id)}
-                    >
-                      <i className="bi bi-trash-fill"></i>
-                    </button>
+                  <div className="cart-info">
+                    <h4 className="cart-name">{item.productName}</h4>
+                    <p className="cart-sku">SKU: {item.sku}</p>
+                    <p className="cart-price">
+                      ₹{item.price}{" "}
+                      {item.oldPrice && <span className="cart-oldprice">₹{item.oldPrice}</span>}
+                    </p>
                   </div>
                 </div>
-              ))}
+
+                {/* RIGHT: Qty + Delete */}
+                <div className="cart-right">
+                  <button
+                    className="qty-btn"
+                    onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                  >
+                    −
+                  </button>
+                  <span className="qty-value">{item.quantity}</span>
+                  <button
+                    className="qty-btn"
+                    onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                  >
+                    +
+                  </button>
+
+                  <button className="delete-btn" onClick={() => removeFromCart(item.id)}>
+                    <i className="bi bi-trash-fill"></i>
+                  </button>
+                </div>
+              </div>
+            ))}
           </div>
 
           {/* Sidebar with Coupon + Order Summary */}
@@ -150,9 +136,7 @@ export default function CartPage() {
               </div>
               {couponError && <p className="coupon-error">{couponError}</p>}
               {discount > 0 && !couponError && (
-                <p className="coupon-success">
-                  Coupon applied! You saved ₹{discount.toFixed(2)}.
-                </p>
+                <p className="coupon-success">Coupon applied! You saved ₹{discount.toFixed(2)}.</p>
               )}
             </div>
 
@@ -174,14 +158,10 @@ export default function CartPage() {
               <hr />
               <div className="summary-line total">
                 <span>Total</span>
-                <span>
-                  ₹{(calculateSubtotal() - discount + shipping).toFixed(2)}
-                </span>
+                <span>₹{(calculateSubtotal() - discount + shipping).toFixed(2)}</span>
               </div>
 
-              <Link to="/checkout" className="btn checkout-btn">
-                Proceed to Checkout
-              </Link>
+              <Link to="/checkout" className="btn checkout-btn">Proceed to Checkout</Link>
               <Link to="/shop" className="continue-btn">
                 Continue Shopping
               </Link>
