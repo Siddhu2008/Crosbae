@@ -393,3 +393,41 @@ body {
   background: linear-gradient(45deg, #bfa14a, #d4af37);
   transform: translateY(-3px);
 }
+/* Common style for all tab search bars */
+.admin-search-bar {
+  width: 100%;
+  max-width: 320px;
+  /* adjust max width */
+  padding: 10px 14px;
+  margin: 8px 0;
+  font-size: 15px;
+  color: #333;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  /* rounded corners */
+  outline: none;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  transition: all 0.2s ease;
+}
+
+/* On focus */
+.admin-search-bar:focus {
+  border-color: #007bff;
+  /* your primary color */
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.15);
+}
+
+/* Place it nicely in the header area */
+.tab-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.tab-header h2 {
+  margin: 0;
+  font-size: 1.5rem;
+}
