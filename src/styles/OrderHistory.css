@@ -344,7 +344,13 @@
   color: #1b7c3f;
   /* green text */
 }
-
+.oh-badge.inprogress {
+  background: #e6f8ec;
+  /* soft green background */
+  border-color: #c2e8cd;
+  color: #1b7c3f;
+  /* green text */
+}
 .oh-badge.cancelled {
   background: #fce8e6;
   /* soft red background */
@@ -390,6 +396,11 @@
   background: #4CAF50;
   /* green fill */
 }
+.oh-progress-bar.inprogress::after {
+  width: 46%;
+  background: #4CAF50;
+  /* green fill */
+}
 
 /* Cancelled: fill red until cancel stage */
 .oh-progress-bar.cancelled::after {
@@ -399,8 +410,4 @@
   /* red fill */
 }
 
-/* In progress (neutral grey) */
-.oh-progress-bar.inprogress::after {
-  width: 50%;
-  background: #bbb;
-}
+

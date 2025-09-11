@@ -26,6 +26,21 @@ const dummyOrders = [
     ],
   },
   {
+    id: "ORD124",
+    date: "2025-09-05",
+    total: 2799,
+    status: "inprogress", // 👈 not delivered yet
+    items: [
+      {
+        name: "Platinum Bracelet",
+        price: 2799,
+        qty: 1,
+        image:
+          "https://images.unsplash.com/photo-1616627891960-9d26b9d54b19?auto=format&fit=crop&w=500&q=60",
+      },
+    ],
+  },
+  {
     id: "ORD122",
     date: "2025-07-15",
     total: 1899,
