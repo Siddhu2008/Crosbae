@@ -34,29 +34,6 @@ const dummyOrders = [
     ],
   },
   {
-    id: "ORD124",
-    date: "2025-09-05",
-    total: 2799,
-    status: "inprogress", // 👈 not delivered yet
-    cancelStage: null,
-    address: {
-      name: "Siddhu Kumar",
-      line1: "123 Gold Street",
-      city: "Mumbai",
-      pincode: "400001",
-      phone: "9876543210",
-    },
-    items: [
-      {
-        name: "Platinum Bracelet",
-        price: 2799,
-        qty: 1,
-        image:
-          "https://images.unsplash.com/photo-1616627891960-9d26b9d54b19?auto=format&fit=crop&w=500&q=60",
-      },
-    ],
-  },
-  {
     id: "ORD122",
     date: "2025-07-15",
     total: 1899,

@@ -33,12 +33,6 @@ import ResetPasswordPage from "./pages/ResetPasswordPage";
 import OrderDetailsPage from "./pages/OrderDetailsPage";
 import { CheckoutPage } from "./pages/CheckoutPage";
 import PlaceOrderPage from "./pages/PlaceOrderPage";
-import AddCategory from "./components/AddCategory";
-import EditCategory from "./components/EditCategory";
-import DeleteCategory from "./components/DeleteCategory";
-import EditCoupon from "./components/EditCoupon";
-import AddCoupon from "./components/AddCoupon";
-import DeleteCoupon from "./components/DeleteCoupon";
 const App = () => {
   useEffect(() => {
     AOS.init({
@@ -70,15 +64,8 @@ const App = () => {
             <Route path="/cart" element={<CartPage />} />
             <Route path="/testimonials" element={<TestimonialsPage />} />
             <Route path="/faq" element={<FAQPage />} />
-            <Route path="/admin/edit-product" element={<EditProduct />} />
-            <Route path="/admin/delete-product" element={<DeleteProduct />} />
-            <Route path="/admin/add-category" element={<AddCategory />} />
-            <Route path="/admin/edit-category" element={<EditCategory />} />
-            <Route path="/admin/delete-category" element={<DeleteCategory />} />
-            <Route path="/admin/add-coupon" element={<AddCoupon />} />
-            <Route path="/admin/edit-coupon" element={<EditCoupon />} />
-            <Route path="/admin/delete-coupon" element={<DeleteCoupon />} />
-
+            <Route path="/admin/EditProduct" element={<EditProduct />} />
+            <Route path="/admin/DeleteProduct" element={<DeleteProduct />} />
             <Route path="/product/:id" element={<ProductDetailsPage />} />
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/orders" element={<OrderHistoryPage />} />

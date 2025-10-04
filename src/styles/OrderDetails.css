@@ -1,30 +1,23 @@
 :root {
-    --od-border: #e5e7eb;
-    /* light gray */
-    --od-muted: #6b7280;
-    /* neutral gray */
-    --od-bg: #ffffff;
-    --od-radius: 14px;
-    --od-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-    --od-accent: #2563eb;
-    /* blue accent for in progress */
-    --od-success: #22c55e;
-    --od-danger: #ef4444;
+    --od-border: #e9e9e9;
+    --od-muted: #777;
+    --od-bg: #fff;
+    --od-radius: 16px;
+    --od-shadow: 0 4px 14px rgba(0, 0, 0, .06);
 }
 
 .order-details {
-    font-family: "Inter", "Poppins", sans-serif;
-    margin: 72px auto;
+    font-family: "Poppins", sans-serif;
+    margin: 96px auto;
     max-width: 800px;
-    padding: 30px 16px;
-    color: #111827;
-    background-color: var(--od-bg);
+    padding: 0 16px;
+    color: #222;
 }
 
 /* Header */
 .od-header {
     text-align: center;
-    margin-bottom: 24px;
+    margin-bottom: 20px;
 }
 
 .od-back {
@@ -33,18 +26,12 @@
     font-size: 13px;
     color: var(--od-muted);
     text-decoration: none;
-    transition: color 0.2s ease;
-}
-
-.od-back:hover {
-    color: #374151;
 }
 
 .od-title {
-    font-size: 22px;
+    font-size: 24px;
     margin: 0 0 8px;
-    letter-spacing: 0.5px;
-    font-weight: 600;
+    letter-spacing: 1px;
 }
 
 .od-meta {
@@ -59,7 +46,7 @@
     .od-meta {
         flex-direction: row;
         justify-content: center;
-        gap: 20px;
+        gap: 16px;
     }
 }
 
@@ -67,40 +54,35 @@
 .od-badge {
     display: inline-block;
     font-size: 12px;
-    padding: 5px 12px;
+    padding: 6px 10px;
     border-radius: 999px;
     border: 1px solid var(--od-border);
     background: var(--od-bg);
-    font-weight: 500;
+    font-weight: 600;
 }
 
 .od-badge.delivered {
-    background: #dcfce7;
-    border-color: #bbf7d0;
-    color: var(--od-success);
+    background: #e6f8ec;
+    border-color: #c2e8cd;
+    color: #1b7c3f;
 }
 
-.od-badge.inprogress {
-    background: #dcfce7;
-    border-color: #bbf7d0;
-    color: var(--od-success);
-}
 .od-badge.cancelled {
-    background: #fee2e2;
-    border-color: #fecaca;
-    color: var(--od-danger);
+    background: #fce8e6;
+    border-color: #f5c2c0;
+    color: #b0231c;
 }
 
 /* Progress */
 .od-progress {
-    padding: 16px 0 8px;
+    padding: 14px 0 8px;
 }
 
 .od-progress-bar {
     position: relative;
     height: 6px;
     width: 100%;
-    background: #f3f4f6;
+    background: #eee;
     border-radius: 999px;
     overflow: hidden;
 }
@@ -112,7 +94,7 @@
     top: 0;
     height: 100%;
     width: 40%;
-    background: var(--od-accent);
+    background: #bbb;
     border-radius: inherit;
     transition: width .3s ease, background .3s ease;
 }
@@ -120,13 +102,13 @@
 /* delivered full green */
 .od-progress-bar.delivered::after {
     width: 100%;
-    background: var(--od-success);
+    background: #4CAF50;
 }
 
 /* cancelled partial red */
 .od-progress-bar.cancelled::after {
     width: var(--cancel-width, 66%);
-    background: var(--od-danger);
+    background: #E53935;
 }
 
 .od-progress-steps {
@@ -135,8 +117,6 @@
     font-size: 11px;
     color: var(--od-muted);
     margin-top: 8px;
-    text-transform: uppercase;
-    letter-spacing: 0.3px;
 }
 
 /* Sections */
@@ -154,11 +134,10 @@
 .od-address {
     border: 1px solid var(--od-border);
     border-radius: var(--od-radius);
-    padding: 14px 16px;
+    padding: 12px;
     font-size: 14px;
     background: var(--od-bg);
     box-shadow: var(--od-shadow);
-    line-height: 1.5;
 }
 
 /* Items */
@@ -173,24 +152,22 @@
     gap: 12px;
     border: 1px solid var(--od-border);
     border-radius: var(--od-radius);
-    padding: 12px;
+    padding: 10px;
     background: var(--od-bg);
     box-shadow: var(--od-shadow);
-    align-items: center;
 }
 
 .od-thumb {
     width: 64px;
     height: 64px;
     object-fit: cover;
-    border-radius: 8px;
-    border: 1px solid #f3f4f6;
+    border-radius: 50%;
+    border: 1px solid #eee;
 }
 
 .od-item-name {
     margin: 0 0 4px;
-    font-weight: 500;
-    color: #111827;
+    font-weight: 600;
 }
 
 .od-item-meta {
@@ -201,34 +178,26 @@
 /* Footer buttons */
 .od-footer {
     display: flex;
-    flex-direction: column;
     gap: 10px;
     justify-content: center;
     margin-top: 24px;
-}
-
-@media (min-width: 500px) {
-    .od-footer {
-        flex-direction: row;
-    }
 }
 
 .od-btn {
     border: 1px solid var(--od-border);
     background: var(--od-bg);
     border-radius: 999px;
-    padding: 10px 18px;
+    padding: 10px 16px;
     font-size: 13px;
     cursor: pointer;
-    transition: transform .12s ease, box-shadow .12s ease, background .2s ease;
+    transition: transform .12s ease, box-shadow .12s ease;
 }
 
 .od-btn:hover {
     transform: translateY(-1px);
     box-shadow: var(--od-shadow);
-    background: #f9fafb;
 }
 
 .od-btn.outline {
-    background: #f9fafb;
+    background: #f9f9f9;
 }
