@@ -2,10 +2,18 @@ import React from "react";
 import { Link } from "react-router-dom";
 import "../styles/MatchForYou.css";
 import { useCategory } from "../contexts/CategoryContext";
+import { useProduct } from "../contexts/ProductContext";
 
 export default function MatchForYou() {
   const { state } = useCategory();
   const { categories, loading, error } = state;
+  const { state: productState } = useProduct();
+  const products = productState?.products || [];
+
+  const categoriesWithProducts = (categories || []).map((cat) => ({
+    ...cat,
+    products: products.filter((p) => String(p.category) === String(cat.id)),
+  }));
 
   if (loading) {
     return (
@@ -31,7 +39,7 @@ export default function MatchForYou() {
       <h5 className="text-center fw-light">Shop by Categories</h5>
 
       <div className="row mt-4">
-        {categories.map((category, index) => (
+        {categoriesWithProducts.map((category, index) => (
           <div
             className="col"
             data-aos="fade-up"
@@ -44,7 +52,9 @@ export default function MatchForYou() {
                 className="text-decoration-none"
               >
                 <img
-                  src={ ("https://cdn.crosbae.com/"+category.image) || "https://via.placeholder.com/300"}
+                  src={
+                    (category.image && "https://cdn.crosbae.com/" + category.image) || (category.products && category.products[0] && category.products[0].images?.[0]) || "https://via.placeholder.com/300"
+                  }
                   alt={category.name}
                   className="img-fluid"
                 />

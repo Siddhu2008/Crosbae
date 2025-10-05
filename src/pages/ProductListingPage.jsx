@@ -2,7 +2,7 @@
 import React, { useState, useMemo, useEffect } from "react";
 import { Link } from "react-router-dom";
 
-import products from "../data/products";
+import { useProduct } from "../contexts/ProductContext";
 import Seo from "../components/Seo";
 import "../styles/ProductListingPage.css";
 export default function ProductListingPage() {
@@ -17,6 +17,8 @@ export default function ProductListingPage() {
   const [likedProducts, setLikedProducts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 8;
+  const { state } = useProduct();
+  const productsList = state?.products || [];
 
   const toggleFilterSidebar = () => setShowFilter(!showFilter);
 
@@ -62,7 +64,7 @@ export default function ProductListingPage() {
   };
 
   const filteredProducts = useMemo(() => {
-    let result = [...products];
+  let result = [...productsList];
 
     if (filters.search) {
       result = result.filter((p) =>
@@ -281,21 +283,24 @@ export default function ProductListingPage() {
             paginatedProducts.map((p) => (
               <div className="product-card" key={p.id}>
                 <div className="product-image-section">
-                  {p.tags && (
-                    <div className="product-tags">
-                      {p.tags.map((tag, index) => (
-                        <span
-                          className={`product-tag ${tag
-                            .replace(/\s+/g, "-")
-                            .toLowerCase()}`}
-                          key={index}
-                          style={getTagStyle(tag)}
-                        >
-                          {tag}
-                        </span>
-                      ))}
-                    </div>
-                  )}
+                  {
+                    // Ensure tags is always an array before mapping (API may return string/null)
+                    (Array.isArray(p.tags) ? p.tags : p.tags ? [p.tags] : []).length > 0 && (
+                      <div className="product-tags">
+                        {(Array.isArray(p.tags) ? p.tags : p.tags ? [p.tags] : []).map((tag, index) => (
+                          <span
+                            className={`product-tag ${String(tag)
+                              .replace(/\s+/g, "-")
+                              .toLowerCase()}`}
+                            key={index}
+                            style={getTagStyle(tag)}
+                          >
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
+                    )
+                  }
                   <button
                     className={`like-btn ${
                       likedProducts.includes(p.id) ? "liked" : ""

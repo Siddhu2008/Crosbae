@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useLocation,Link } from "react-router-dom";
-import products from "../data/products"; // import local products data
+import { useProduct } from "../contexts/ProductContext";
 import "../styles/ProductDetailsPage.css";
 import Seo from "../components/Seo";
 
@@ -65,21 +65,22 @@ const ProductDetail = () => {
     alert(`${quantity} item(s) added to cart`);
   };
 
+  const { state } = useProduct();
+
   useEffect(() => {
     setLoading(true);
 
-    const foundProduct = products.find((p) => p.id === id);
+    const foundProduct = (state.products || []).find((p) => String(p.id) === String(id));
 
     if (foundProduct) {
       setProduct(foundProduct);
       setSelectedImage(foundProduct.images?.[0] || null);
-      console.log(foundProduct)
     } else {
       setProduct(null);
     }
 
     setLoading(false);
-  }, [id]);
+  }, [id, state.products]);
 
   const increment = () => setQuantity((q) => q + 1);
   const decrement = () => setQuantity((q) => (q > 1 ? q - 1 : 1));

@@ -24,14 +24,24 @@ export default function TopCategory() {
   const { products = [], loading: productLoading } = productState;
   const { categories = [], loading: categoryLoading } = categoryState;
 
+  // Augment categories with their products for easier consumption in UI
+  const categoriesWithProducts = useMemo(() => {
+    if (!Array.isArray(categories)) return [];
+    return categories.map((cat) => {
+      const catProducts = (products || []).filter((p) => String(p.category) === String(cat.id));
+      return { ...cat, products: catProducts };
+    });
+  }, [categories, products]);
+
   // ✅ Calculate trending categories using product ratings and reviews
   const trendingCategories = useMemo(() => {
-    if (productLoading || categoryLoading || !products.length || !categories.length) return [];
+
+  if (productLoading || categoryLoading || !products.length || !categories.length) return [];
 
     // Prepare category scores
     const scores = {};
     for (const product of products) {
-      const cat = categories.find((c) => c.id === product.category);
+      const cat = categories.find((c) => String(c.id) === String(product.category));
       if (cat) {
         const score = (product.avg_rating || 0) * (product.total_reviews || 1);
         scores[cat.id] = (scores[cat.id] || 0) + score;
@@ -43,7 +53,9 @@ export default function TopCategory() {
       (a, b) => (scores[b.id] || 0) - (scores[a.id] || 0)
     );
 
-    return sorted.slice(0, 12); // top 12 categories
+    // attach products to result categories from precomputed map
+    const top = sorted.slice(0, 12);
+    return top.map((c) => ({ ...c, products: (categoriesWithProducts.find((cc) => String(cc.id) === String(c.id)) || {}).products || [] }));
   }, [products, categories, productLoading, categoryLoading]);
 
   const handleCategoryClick = (name) => {
@@ -140,10 +152,13 @@ export default function TopCategory() {
               style={{ minWidth: "120px", cursor: "pointer" }}
               onClick={() => handleCategoryClick(item.name)}
             >
+              {/* Prefer category image, fallback to first product image, then placeholder */}
               <img
                 src={
                   item.image
                     ? `https://cdn.crosbae.com/${item.image}`
+                    : item.products && item.products.length
+                    ? item.products[0].images?.[0]
                     : "https://via.placeholder.com/100"
                 }
                 alt={item.name}

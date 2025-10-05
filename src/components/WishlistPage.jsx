@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
-import products from "../data/products";
+import { useProduct } from "../contexts/ProductContext";
 import Seo from "./Seo";
 import "../styles/WishlistPage.css"; // new stylesheet
 
 export default function WishlistPage() {
   const [likedProducts, setLikedProducts] = useState([]);
+  const { state } = useProduct();
+  const productsList = state?.products || [];
 
   useEffect(() => {
     const storedLikes = JSON.parse(localStorage.getItem("likedProducts")) || [];
@@ -19,8 +21,8 @@ export default function WishlistPage() {
     localStorage.setItem("likedProducts", JSON.stringify(updatedLikes));
   };
 
-  const wishlistItems = products.filter((product) =>
-    likedProducts.includes(product.id)
+  const wishlistItems = productsList.filter((product) =>
+    likedProducts.includes(String(product.id)) || likedProducts.includes(product.id)
   );
 
   const addToCart = (product) => {
