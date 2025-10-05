@@ -3,12 +3,22 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import logo from "../assets/logo.png";
 import "../styles/Navbar.css";
+import { useAuth } from "../contexts/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [cartCount, setCartCount] = useState(3);
 
-  const [isLoggedIn, setIsLoggedIn] = useState(false); // login and logout
+  // derive login state from AuthContext user or presence of access token
+  const { user, logout } = useAuth();
+  const isLoggedIn = !!(user || localStorage.getItem("access"));
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    if (logout) logout();
+    navigate("/");
+  };
 
   const toggleMenu = () => setIsOpen(!isOpen);
 
@@ -107,6 +117,11 @@ const Navbar = () => {
                     Track Order
                   </Link>
                 </li>
+                <li>
+                  <button className="dropdown-item btn btn-link text-start" onClick={handleLogout}>
+                    Logout
+                  </button>
+                </li>
               </ul>
             </div>
           ) : (
@@ -190,6 +205,9 @@ const Navbar = () => {
               <Link to="/track-order" className="dropdown-item" onClick={toggleMenu}>
                 Track Order
               </Link>
+              <button className="dropdown-item btn btn-link text-start" onClick={() => { toggleMenu(); handleLogout(); }}>
+                Logout
+              </button>
             </>
           ) : (
             <>

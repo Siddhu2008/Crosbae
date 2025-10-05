@@ -4,7 +4,8 @@ import axios from "axios";
 const API_URL = "https://api.crosbae.com";
 
 export const register = (userData) => {
-  return axios.post(API_URL + "/api/auth/user/", userData);
+  // Some backends expose register at /api/auth/register/ (adjusted to match your API)
+  return axios.post(API_URL + "/api/auth/register/", userData);
 };
 
 export const login = (userData) => {

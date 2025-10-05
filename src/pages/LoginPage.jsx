@@ -4,6 +4,7 @@ import { GoogleOAuthProvider } from "@react-oauth/google";
 import { getGoogleClientId } from "../api/auth";
 import GoogleLoginButton from "../components/GoogleLoginButton";
 import { login } from "../api/auth";
+import { useAuth } from "../contexts/AuthContext";
 
 const LoginPage = () => {
   const [clientId, setClientId] = useState("");
@@ -11,6 +12,7 @@ const LoginPage = () => {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
+  const { setUser } = useAuth();
 
   useEffect(() => {
     getGoogleClientId().then((res) => {
@@ -21,6 +23,9 @@ const LoginPage = () => {
   const handleLogin = (data) => {
     localStorage.setItem("access", data.access);
     localStorage.setItem("refresh", data.refresh);
+    // If API returned user data, store it in AuthContext for app-wide access
+    const returnedUser = data.user_data || data.user || null;
+    if (setUser && returnedUser) setUser(returnedUser);
     alert("Login Successful");
     navigate("/");
   };

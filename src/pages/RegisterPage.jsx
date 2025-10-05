@@ -1,5 +1,8 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { register } from "../api/auth";
+import { useAuth } from "../contexts/AuthContext";
+import { login } from "../api/auth";
 
 const RegisterPage = () => {
   const [formData, setFormData] = useState({
@@ -11,6 +14,8 @@ const RegisterPage = () => {
 
   // state for password visibility
   const [showPassword, setShowPassword] = useState(false);
+  const navigate = useNavigate();
+  const { setUser } = useAuth();
 
   const handleChange = (e) => {
     setFormData((prev) => ({
@@ -19,9 +24,43 @@ const RegisterPage = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    alert(`Registered with: ${JSON.stringify(formData, null, 2)}`);
+    try {
+      const res = await register(formData);
+      // If API returns tokens and user data, store them
+      if (res.data.access) {
+        localStorage.setItem("access", res.data.access);
+        if (res.data.refresh) localStorage.setItem("refresh", res.data.refresh);
+        const returnedUser = res.data.user_data || res.data.user || null;
+        if (setUser && returnedUser) setUser(returnedUser);
+        alert("Registration successful");
+        navigate("/");
+      } else {
+        // If register didn't return tokens, attempt login with provided credentials
+        try {
+          const loginRes = await login({ username: formData.email, password: formData.password });
+          if (loginRes.data.access) {
+            localStorage.setItem("access", loginRes.data.access);
+            if (loginRes.data.refresh) localStorage.setItem("refresh", loginRes.data.refresh);
+            const returnedUser = loginRes.data.user_data || loginRes.data.user || null;
+            if (setUser && returnedUser) setUser(returnedUser);
+            alert("Registration successful — logged in");
+            navigate("/");
+          } else {
+            alert("Registration successful. Please log in.");
+            navigate("/login");
+          }
+        } catch (err) {
+          console.error("Auto-login failed after registration:", err);
+          alert("Registration successful. Please log in.");
+          navigate("/login");
+        }
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Registration failed");
+    }
   };
 
   const handleGoogleSignup = () => {

@@ -12,21 +12,30 @@ export const AuthProvider = ({ children }) => {
     try {
       // const res = await axios.post("http://127.0.0.1:8000/api/auth/google/", {
       const res = await axios.post(API_URL + "/api/auth/google/", {
-        "token": googleToken,
+        token: googleToken,
       });
-      
+
       localStorage.setItem("access", res.data.access);
       localStorage.setItem("refresh", res.data.refresh);
-      setUser(res.data.user_data); 
-      return true;
+      setUser(res.data.user_data);
+      // return full response data so callers can act on tokens/user
+      return res.data;
     } catch (err) {
       console.error("Google auth failed:", err);
-      return false;
+      return null;
     }
   };
 
+  const logout = () => {
+    // Clear tokens and user state
+    localStorage.removeItem("access");
+    localStorage.removeItem("refresh");
+    setUser(null);
+    // Optionally: navigate or trigger other cleanup in callers
+  };
+
   return (
-    <AuthContext.Provider value={{ user, setUser, loginWithGoogle }}>
+    <AuthContext.Provider value={{ user, setUser, loginWithGoogle, logout }}>
       {children}
     </AuthContext.Provider>
   );
