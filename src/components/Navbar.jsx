@@ -57,9 +57,7 @@ const Navbar = () => {
           <Link to="/contact" className="nav-link">
             Contact
           </Link>
-          <Link to="/admin" className="nav-link">
-            Admin
-          </Link>
+          
         </div>
 
         {/* Search Bar */}
@@ -82,8 +80,36 @@ const Navbar = () => {
             <i className="far fa-heart"></i>
           </Link>
 
-          {/* Login/Register or Profile based on login */}
-          {!isLoggedIn ? (
+          {/* Show Login/Register when NOT logged in; show Profile/Orders when logged in */}
+          {isLoggedIn ? (
+            <div className="dropdown">
+              <button
+                className="border-0 bg-transparent icon-link"
+                type="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                <i className="far fa-user"></i>
+              </button>
+              <ul className="dropdown-menu">
+                <li>
+                  <Link to="/profile" className="dropdown-item">
+                    Profile
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/orders" className="dropdown-item">
+                    Order History
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/track-order" className="dropdown-item">
+                    Track Order
+                  </Link>
+                </li>
+              </ul>
+            </div>
+          ) : (
             <div className="dropdown">
               <button
                 className="border-0 bg-transparent icon-link"
@@ -104,31 +130,8 @@ const Navbar = () => {
                     Register
                   </Link>
                 </li>
-                <li>
-                  <Link to="/profile" className="dropdown-item">
-                    Profile
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/orders" className="dropdown-item">
-                    Order History
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/track-order" className="dropdown-item">
-                    Track Order
-                  </Link>
-                </li>
               </ul>
             </div>
-          ) : (
-            <button
-              className="border-0 bg-transparent"
-              onClick={handleProfileClick}
-              aria-label="Profile"
-            >
-              <i className="far fa-user"></i>
-            </button>
           )}
 
           {/* Cart Icon */}
@@ -174,12 +177,30 @@ const Navbar = () => {
           <Link to="/contact" onClick={toggleMenu}>
             Contact
           </Link>
-          <Link to="/admin" onClick={toggleMenu}>
-            Admin
-          </Link>
-          <Link to="/wishlist" onClick={toggleMenu}>
-            Wishlist
-          </Link>
+
+          {/* Mobile auth links depend on login state */}
+          {isLoggedIn ? (
+            <>
+              <Link to="/profile" className="dropdown-item" onClick={toggleMenu}>
+                Profile
+              </Link>
+              <Link to="/orders" className="dropdown-item" onClick={toggleMenu}>
+                Order History
+              </Link>
+              <Link to="/track-order" className="dropdown-item" onClick={toggleMenu}>
+                Track Order
+              </Link>
+            </>
+          ) : (
+            <>
+              <Link to="/login" className="dropdown-item" onClick={toggleMenu}>
+                Login
+              </Link>
+              <Link to="/register" className="dropdown-item" onClick={toggleMenu}>
+                Register
+              </Link>
+            </>
+          )}
         </div>
       )}
     </nav>
