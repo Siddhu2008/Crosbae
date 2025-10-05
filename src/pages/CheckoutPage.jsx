@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "../styles/CheckoutPage.css";
 import Seo from "../components/Seo";
@@ -17,83 +17,6 @@ export function CheckoutPage() {
     expiryDate: "",
     cvv: "",
   });
-
-  // Prefill from selectedAddress saved in localStorage by CartPage
-  React.useEffect(() => {
-    try {
-      const sel = JSON.parse(localStorage.getItem("selectedAddress"));
-      if (sel) {
-        setForm((f) => ({
-          ...f,
-          fullName: sel.fullName || f.fullName,
-          address: sel.addressLine || f.address,
-          city: sel.city || f.city,
-          postalCode: sel.postalCode || f.postalCode,
-          country: sel.country || f.country,
-        }));
-      }
-    } catch (e) {
-      // ignore
-    }
-  }, []);
-
-  // Load saved addresses and manage add-address UI
-  const [addresses, setAddresses] = useState([]);
-  const [showAddNew, setShowAddNew] = useState(false);
-  const [addAddressForm, setAddAddressForm] = useState({
-    fullName: "",
-    phone: "",
-    addressLine: "",
-    city: "",
-    postalCode: "",
-    country: "",
-  });
-
-  useEffect(() => {
-    try {
-      const stored = JSON.parse(localStorage.getItem("addresses")) || [];
-      setAddresses(stored);
-    } catch (e) {
-      setAddresses([]);
-    }
-  }, []);
-
-  const useSavedAddress = (addr) => {
-    setForm((f) => ({
-      ...f,
-      fullName: addr.fullName || f.fullName,
-      address: addr.addressLine || f.address,
-      city: addr.city || f.city,
-      postalCode: addr.postalCode || f.postalCode,
-      country: addr.country || f.country,
-    }));
-    localStorage.setItem("selectedAddress", JSON.stringify(addr));
-  };
-
-  const handleAddAddressChange = (e) => {
-    const { name, value } = e.target;
-    setAddAddressForm((s) => ({ ...s, [name]: value }));
-  };
-
-  const addNewAddress = (e) => {
-    e.preventDefault();
-    const id = Date.now();
-    const addr = { ...addAddressForm, id };
-    const updated = [...addresses, addr];
-    setAddresses(updated);
-    localStorage.setItem("addresses", JSON.stringify(updated));
-    setShowAddNew(false);
-    setAddAddressForm({ fullName: "", phone: "", addressLine: "", city: "", postalCode: "", country: "" });
-    useSavedAddress(addr);
-  };
-
-  const deleteAddress = (id) => {
-    const filtered = addresses.filter((a) => a.id !== id);
-    setAddresses(filtered);
-    localStorage.setItem("addresses", JSON.stringify(filtered));
-    const sel = JSON.parse(localStorage.getItem("selectedAddress"));
-    if (sel && sel.id === id) localStorage.removeItem("selectedAddress");
-  };
 
   const [errors, setErrors] = useState({});
 
@@ -122,7 +45,6 @@ export function CheckoutPage() {
     if (validate()) {
       // Simulate successful checkout
       alert("Thank you for your purchase!");
-      localStorage.removeItem("selectedAddress");
       navigate("/"); // Redirect to home or order confirmation page
     }
   };
@@ -132,56 +54,6 @@ export function CheckoutPage() {
       <Seo title="Checkout" noIndex />
       <h2 className="checkout-title text-center mb-4">Checkout</h2>
       <form className="checkout-form" onSubmit={handleSubmit} noValidate>
-        {/* Address chooser */}
-        <div className="checkout-address-chooser mb-3">
-          <h5>Choose Shipping Address</h5>
-          {addresses.length === 0 ? (
-            <div className="no-address">No saved addresses. Please add one below.</div>
-          ) : (
-            <div className="address-chooser-grid">
-              {addresses.map((addr) => (
-                <div key={addr.id} className="address-card p-2">
-                  <div>
-                    <strong>{addr.fullName}</strong>
-                    <div>{addr.addressLine}, {addr.city}, {addr.postalCode}, {addr.country}</div>
-                    <div>Phone: {addr.phone}</div>
-                  </div>
-                  <div className="address-actions mt-2">
-                    <button type="button" className="btn btn-outline-primary me-2" onClick={() => useSavedAddress(addr)}>Use this</button>
-                    <button type="button" className="btn btn-outline-danger" onClick={() => deleteAddress(addr.id)}>Delete</button>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-
-          <div className="mt-3">
-            <button type="button" className="btn btn-link" onClick={() => setShowAddNew((s) => !s)}>{showAddNew ? 'Cancel' : 'Add new address'}</button>
-          </div>
-
-          {showAddNew && (
-            <form className="add-address-form mt-2" onSubmit={addNewAddress}>
-              <div className="form-row">
-                <input name="fullName" placeholder="Full name" value={addAddressForm.fullName} onChange={handleAddAddressChange} required />
-                <input name="phone" placeholder="Phone" value={addAddressForm.phone} onChange={handleAddAddressChange} required />
-              </div>
-              <div className="form-row mt-2">
-                <input name="addressLine" placeholder="Address line" value={addAddressForm.addressLine} onChange={handleAddAddressChange} required />
-              </div>
-              <div className="form-row mt-2">
-                <input name="city" placeholder="City" value={addAddressForm.city} onChange={handleAddAddressChange} required />
-                <input name="postalCode" placeholder="Postal code" value={addAddressForm.postalCode} onChange={handleAddAddressChange} required />
-              </div>
-              <div className="form-row mt-2">
-                <input name="country" placeholder="Country" value={addAddressForm.country} onChange={handleAddAddressChange} required />
-              </div>
-              <div className="form-actions mt-2">
-                <button type="submit" className="btn btn-outline-primary">Save address</button>
-              </div>
-            </form>
-          )}
-        </div>
-
         <fieldset>
           <legend>Shipping Details</legend>
           <label>
@@ -303,19 +175,9 @@ export function CheckoutPage() {
           </div>
         </fieldset>
 
-        <button type="submit" className="btn btn-checkout">Place Order</button>
-
-        <button
-          type="button"
-          className="btn btn-outline-secondary ms-2"
-          onClick={() => {
-            // allow user to change address: clear selected and go back to cart where modal will open
-            localStorage.removeItem("selectedAddress");
-            navigate("/cart");
-          }}
-        >
-          Change Address
-        </button>
+        <Link to="/place-order" type="submit" className="btn btn-checkout">
+          Place Order
+        </Link>
 
         <Link to="/cart" className="btn-back">
           ← Back to Cart
