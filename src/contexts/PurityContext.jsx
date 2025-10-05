@@ -1,4 +1,4 @@
-import React, { createContext, useReducer, useEffect } from "react";
+import React, { createContext, useReducer, useEffect, useContext } from "react";
 import axios from "axios";
 import API_URL from "../api/auth";
 
@@ -48,3 +48,12 @@ export const PurityProvider = ({ children }) => {
 };
 
 export default PurityContext;
+
+// Custom hook for easy access
+export const usePurity = () => {
+  const context = useContext(PurityContext);
+  if (!context) {
+    throw new Error("usePurity must be used within a PurityProvider");
+  }
+  return context;
+};

@@ -1,4 +1,4 @@
-import React, { createContext, useReducer, useEffect } from "react";
+import React, { createContext, useReducer, useEffect, useContext } from "react";
 import axios from "axios";
 import API_URL from "../api/auth";
 
@@ -48,3 +48,9 @@ export const MetalTypeProvider = ({ children }) => {
 };
 
 export default MetalTypeContext;
+
+export const useMetalType = () => {
+  const context = useContext(MetalTypeContext);
+  if (!context) throw new Error("useMetalType must be used within a MetalTypeProvider");
+  return context;
+};

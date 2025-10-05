@@ -1,15 +1,21 @@
 
 import React, { useState, useMemo, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 import { useProduct } from "../contexts/ProductContext";
+import { useCategory } from "../contexts/CategoryContext";
+import { useMetalType } from "../contexts/MetalTypeContext";
+import { useStoneType } from "../contexts/StoneTypeContext";
 import Seo from "../components/Seo";
+import { usePurity } from "../contexts/PurityContext";
 import "../styles/ProductListingPage.css";
 export default function ProductListingPage() {
   const [filters, setFilters] = useState({
     category: [],
     purity: [],
     occasion: [],
+    metalType: [],
+    stoneType: [],
     search: "",
   });
   const [sortOption, setSortOption] = useState("");
@@ -19,6 +25,19 @@ export default function ProductListingPage() {
   const itemsPerPage = 8;
   const { state } = useProduct();
   const productsList = state?.products || [];
+  const { state: categoryState } = useCategory();
+  const categories = categoryState?.categories || [];
+  const { state: metalState } = useMetalType();
+  const metalTypes = metalState?.metalTypes || [];
+  const { state: stoneState } = useStoneType();
+  const stoneTypes = stoneState?.stoneTypes || [];
+  const { state: purityState } = usePurity();
+  const purities = purityState?.purities || [];
+  const location = useLocation();
+
+  // Read category query param if present (expects category id)
+  const query = useMemo(() => new URLSearchParams(location.search), [location.search]);
+  const categoryQuery = query.get("category");
 
   const toggleFilterSidebar = () => setShowFilter(!showFilter);
 
@@ -73,9 +92,13 @@ export default function ProductListingPage() {
     }
 
     if (filters.category.length)
-      result = result.filter((p) => filters.category.includes(p.category));
+      result = result.filter((p) => filters.category.includes(String(p.category)));
     if (filters.purity.length)
-      result = result.filter((p) => filters.purity.includes(p.purity));
+      result = result.filter((p) => filters.purity && filters.purity.includes(String(p.purity)));
+    if (filters.metalType && filters.metalType.length)
+      result = result.filter((p) => p.metal_type && filters.metalType.includes(String(p.metal_type)));
+    if (filters.stoneType && filters.stoneType.length)
+      result = result.filter((p) => p.stone_type && filters.stoneType.includes(String(p.stone_type)));
     if (filters.occasion.length)
       result = result.filter((p) => filters.occasion.includes(p.occasion));
 
@@ -90,10 +113,19 @@ export default function ProductListingPage() {
     return result;
   }, [filters, sortOption]);
 
+  // If a category query param is present, split products into matched and others.
+  const { matchedProducts, otherProducts } = useMemo(() => {
+    if (!categoryQuery) return { matchedProducts: [], otherProducts: filteredProducts };
+    const matched = filteredProducts.filter((p) => String(p.category) === String(categoryQuery));
+    const others = filteredProducts.filter((p) => String(p.category) !== String(categoryQuery));
+    return { matchedProducts: matched, otherProducts: others };
+  }, [filteredProducts, categoryQuery]);
+
+  // Pagination applies to the 'otherProducts' set (matched products are shown first unpaginated)
   const paginatedProducts = useMemo(() => {
     const startIndex = (currentPage - 1) * itemsPerPage;
-    return filteredProducts.slice(startIndex, startIndex + itemsPerPage);
-  }, [filteredProducts, currentPage]);
+    return otherProducts.slice(startIndex, startIndex + itemsPerPage);
+  }, [otherProducts, currentPage]);
 
   useEffect(() => {
     setCurrentPage(1); // Reset to page 1 when filters/sorting change
@@ -182,18 +214,18 @@ export default function ProductListingPage() {
         {/* Category */}
         <div className="mb-4">
           <h6>Category</h6>
-          {["Gold", "Diamond", "Platinum", "Silver"].map((cat) => (
-            <div key={cat} className="form-check">
+          {(categories || []).map((cat) => (
+            <div key={cat.id} className="form-check">
               <input
                 className="form-check-input"
                 type="checkbox"
-                value={cat}
-                id={`cat-${cat}`}
-                checked={filters.category.includes(cat)}
+                value={String(cat.id)}
+                id={`cat-${cat.id}`}
+                checked={filters.category.includes(String(cat.id))}
                 onChange={(e) => handleCheckboxChange(e, "category")}
               />
-              <label className="form-check-label" htmlFor={`cat-${cat}`}>
-                {cat}
+              <label className="form-check-label" htmlFor={`cat-${cat.id}`}>
+                {cat.name}
               </label>
             </div>
           ))}
@@ -202,21 +234,25 @@ export default function ProductListingPage() {
         {/* Purity */}
         <div className="mb-4">
           <h6>Purity</h6>
-          {["22KT", "18KT", "PT950", "925"].map((purity) => (
-            <div key={purity} className="form-check">
-              <input
-                className="form-check-input"
-                type="checkbox"
-                value={purity}
-                id={`purity-${purity}`}
-                checked={filters.purity.includes(purity)}
-                onChange={(e) => handleCheckboxChange(e, "purity")}
-              />
-              <label className="form-check-label" htmlFor={`purity-${purity}`}>
-                {purity}
-              </label>
-            </div>
-          ))}
+          {(purities || []).map((pur) => {
+            const val = pur.id ?? pur.name ?? pur.value ?? String(pur);
+            const label = pur.name || pur.label || String(pur);
+            return (
+              <div key={val} className="form-check">
+                <input
+                  className="form-check-input"
+                  type="checkbox"
+                  value={String(val)}
+                  id={`purity-${val}`}
+                  checked={filters.purity.includes(String(val))}
+                  onChange={(e) => handleCheckboxChange(e, "purity")}
+                />
+                <label className="form-check-label" htmlFor={`purity-${val}`}>
+                  {label}
+                </label>
+              </div>
+            );
+          })}
         </div>
 
         {/* Occasion */}
@@ -279,6 +315,86 @@ export default function ProductListingPage() {
       {/* Product Cards */}
       <div className="product-listing-page">
         <div className="product-grid">
+          { /* Render matched category products first (if any) */ }
+          {matchedProducts.length > 0 && (
+            <>
+              <h4 className="mb-3">Showing {matchedProducts.length} item(s) in this category</h4>
+              {matchedProducts.map((p) => (
+                <div className="product-card" key={`matched-${p.id}`}>
+                  <div className="product-image-section">
+                    {
+                      (Array.isArray(p.tags) ? p.tags : p.tags ? [p.tags] : []).length > 0 && (
+                        <div className="product-tags">
+                          {(Array.isArray(p.tags) ? p.tags : p.tags ? [p.tags] : []).map((tag, index) => (
+                            <span
+                              className={`product-tag ${String(tag)
+                                .replace(/\s+/g, "-")
+                                .toLowerCase()}`}
+                              key={index}
+                              style={getTagStyle(tag)}
+                            >
+                              {tag}
+                            </span>
+                          ))}
+                        </div>
+                      )
+                    }
+                    <button
+                      className={`like-btn ${
+                        likedProducts.includes(p.id) ? "liked" : ""
+                      }`}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        toggleLike(p.id);
+                      }}
+                      aria-label="Like"
+                    >
+                      ♥
+                    </button>
+                    <Link to={`/product/${p.id}`} className="product-image-link">
+                      <img
+                        src={p.images[0]}
+                        alt={p.name}
+                        className="product-image"
+                      />
+                    </Link>
+                  </div>
+                  <div className="product-list-info">
+                    <Link
+                      to={`/product/${p.id}`}
+                      className=" text-decoration-none"
+                    >
+                      <h6 className="product-cart-title">{p.productName}</h6>
+                      <p className="product-desc">
+                        {p.description.split(" ").slice(0, 8).join(" ")}
+                        {p.description.split(" ").length > 8 ? "..." : ""}
+                      </p>
+                      <span className="product-price">₹ {p.price}</span>
+                    </Link>
+                    <div className="product-bottom-row">
+                      <button className="cart-btn" onClick={() => addToCart(p)}>
+                        <svg
+                          width="22"
+                          height="22"
+                          fill="none"
+                          stroke="#f7a707"
+                          strokeWidth="2"
+                          viewBox="0 0 24 24"
+                        >
+                          <circle cx="9" cy="21" r="1" />
+                          <circle cx="20" cy="21" r="1" />
+                          <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h7.72a2 2 0 0 0 2-1.61l1.38-7.39H6" />
+                        </svg>
+                        <span>Add to Cart</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+              <hr />
+            </>
+          )}
+
           {paginatedProducts.length ? (
             paginatedProducts.map((p) => (
               <div className="product-card" key={p.id}>

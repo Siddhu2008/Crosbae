@@ -1,4 +1,4 @@
-import React, { createContext, useReducer, useEffect } from "react";
+import React, { createContext, useReducer, useEffect, useContext } from "react";
 import axios from "axios";
 import API_URL from "../api/auth";
 
@@ -48,3 +48,9 @@ export const StoneTypeProvider = ({ children }) => {
 };
 
 export default StoneTypeContext;
+
+export const useStoneType = () => {
+  const context = useContext(StoneTypeContext);
+  if (!context) throw new Error("useStoneType must be used within a StoneTypeProvider");
+  return context;
+};
