@@ -1,52 +1,96 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import "../styles/AdminDashboard.css"; // Your shared styles
+import axios from "axios";
+import "../styles/AdminDashboard.css";
 
-export default function EditProduct() {
+export default function EditProfile() {
   const navigate = useNavigate();
-
-  const [product, setProduct] = useState({
-    name: "Gold Necklace",
-    category: "Necklace",
-    purity: "22K",
-    price: "25000",
-    description: "Elegant handcrafted gold necklace.",
-    imageUrl: "https://example.com/images/gold-necklace.jpg",
-    imageFile: null,
+  const [user, setUser] = useState({
+    username: "",
+    email: "",
+    first_name: "",
+    last_name: "",
+    gender: "",
+    dob: "",
+    profile_pic: "",
+    profilePicFile: null,
   });
+  const [preview, setPreview] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  const token = localStorage.getItem("access");
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const res = await axios.get("https://api.crosbae.com/api/auth/user", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setUser({
+          ...res.data,
+          profile_pic: res.data.profile_pic || "",
+          profilePicFile: null,
+        });
+      } catch (err) {
+        alert("Failed to fetch user data.");
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchUser();
+  }, [token]);
+
+  useEffect(() => {
+    if (user.profilePicFile) {
+      const objectUrl = URL.createObjectURL(user.profilePicFile);
+      setPreview(objectUrl);
+      return () => URL.revokeObjectURL(objectUrl);
+    } else {
+      setPreview(null);
+    }
+  }, [user.profilePicFile]);
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
-    if (name === "image") {
-      setProduct((prev) => ({
+    if (name === "profile_pic") {
+      setUser((prev) => ({
         ...prev,
-        imageFile: files[0],
+        profilePicFile: files[0],
       }));
     } else {
-      setProduct((prev) => ({
+      setUser((prev) => ({
         ...prev,
         [name]: value,
       }));
     }
   };
 
-  const [preview, setPreview] = useState(null);
-
-  useEffect(() => {
-    if (product.imageFile) {
-      const objectUrl = URL.createObjectURL(product.imageFile);
-      setPreview(objectUrl);
-
-      return () => URL.revokeObjectURL(objectUrl);
-    } else {
-      setPreview(null);
+  const handleSave = async () => {
+    try {
+      const formData = new FormData();
+      formData.append("username", user.username);
+      formData.append("email", user.email);
+      formData.append("first_name", user.first_name);
+      formData.append("last_name", user.last_name);
+      formData.append("gender", user.gender);
+      formData.append("dob", user.dob);
+      if (user.profilePicFile) {
+        formData.append("profile_pic", user.profilePicFile);
+      }
+      await axios.patch("https://api.crosbae.com/api/auth/user", formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      alert("Profile updated successfully!");
+      navigate("/profile");
+    } catch (err) {
+      alert("Failed to update profile.");
     }
-  }, [product.imageFile]);
-
-  const handleSave = () => {
-    alert("Product updated successfully!");
-    navigate("/admin");
   };
+
+  if (loading) return <div>Loading...</div>;
 
   return (
     <div
@@ -59,91 +103,83 @@ export default function EditProduct() {
       }}
     >
       <div className="form-card" style={{ maxWidth: "550px", width: "100%" }}>
-        <h2 className="text-center mb-4">Edit Product</h2>
+        <h2 className="text-center mb-4">Edit Profile</h2>
 
-        <label htmlFor="name">Product Name</label>
+        <label htmlFor="username">Username</label>
         <input
-          id="name"
+          id="username"
           type="text"
-          name="name"
-          placeholder="Product Name"
-          value={product.name}
+          name="username"
+          value={user.username}
           onChange={handleChange}
           required
         />
 
-        <label htmlFor="category">Category</label>
-        <select
-          id="category"
-          name="category"
-          value={product.category}
+        <label htmlFor="email">Email</label>
+        <input
+          id="email"
+          type="email"
+          name="email"
+          value={user.email}
           onChange={handleChange}
           required
+        />
+
+        <label htmlFor="first_name">First Name</label>
+        <input
+          id="first_name"
+          type="text"
+          name="first_name"
+          value={user.first_name}
+          onChange={handleChange}
+        />
+
+        <label htmlFor="last_name">Last Name</label>
+        <input
+          id="last_name"
+          type="text"
+          name="last_name"
+          value={user.last_name}
+          onChange={handleChange}
+        />
+
+        <label htmlFor="gender">Gender</label>
+        <select
+          id="gender"
+          name="gender"
+          value={user.gender}
+          onChange={handleChange}
         >
-          <option value="">Select Category</option>
-          <option value="Necklace">Necklace</option>
-          <option value="Ring">Ring</option>
-          <option value="Bracelet">Bracelet</option>
-          <option value="Earrings">Earrings</option>
+          <option value="">Select Gender</option>
+          <option value="male">Male</option>
+          <option value="female">Female</option>
+          <option value="other">Other</option>
         </select>
 
-        <label htmlFor="purity">Purity</label>
-        <select
-          id="purity"
-          name="purity"
-          value={product.purity}
-          onChange={handleChange}
-          required
-        >
-          <option value="">Select Purity</option>
-          <option value="22K">22K</option>
-          <option value="18K">18K</option>
-          <option value="14K">14K</option>
-        </select>
-
-        <label htmlFor="price">Price (₹)</label>
+        <label htmlFor="dob">Date of Birth</label>
         <input
-          id="price"
-          type="number"
-          name="price"
-          placeholder="Price (₹)"
-          value={product.price}
+          id="dob"
+          type="date"
+          name="dob"
+          value={user.dob}
           onChange={handleChange}
-          required
-          min="0"
         />
 
-        <label htmlFor="description">Product Description</label>
-        <textarea
-          id="description"
-          name="description"
-          placeholder="Product Description"
-          rows="4"
-          value={product.description}
-          onChange={handleChange}
-          required
-        />
-
-        <label htmlFor="imageUrl">Image URL</label>
+        <label htmlFor="profile_pic">Profile Picture</label>
         <input
-          id="imageUrl"
-          type="text"
-          name="imageUrl"
-          placeholder="Image URL"
-          value={product.imageUrl}
+          id="profile_pic"
+          type="file"
+          name="profile_pic"
+          accept="image/*"
           onChange={handleChange}
-          style={{ marginBottom: "10px" }}
         />
 
-        <label htmlFor="image">Upload New Image</label>
-        <input id="image" type="file" name="image" onChange={handleChange} />
-
-        {preview && (
+        {(preview || user.profile_pic) && (
           <div style={{ marginTop: "10px", textAlign: "center" }}>
-            <p>New Image Preview:</p>
+            <p>Profile Picture Preview:</p>
             <img
-              src={preview}
-              alt="New Preview"
+              src={preview || user.profile_pic}
+              alt="Profile Preview"
               style={{
                 width: "150px",
                 borderRadius: "8px",
@@ -162,7 +198,7 @@ export default function EditProduct() {
         </button>
         <button
           className="cancel-btn"
-          onClick={() => navigate("/admin")}
+          onClick={() => navigate("/profile")}
         >
           Cancel
         </button>

@@ -1,4 +1,3 @@
-
 import React, { useState, useMemo, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 
@@ -8,6 +7,8 @@ import { useMetalType } from "../contexts/MetalTypeContext";
 import { useStoneType } from "../contexts/StoneTypeContext";
 import Seo from "../components/Seo";
 import { usePurity } from "../contexts/PurityContext";
+import { getCart, updateCart } from "../api/cart";
+import { getWishlist, addToWishlist, removeFromWishlist } from "../api/wishlist";
 import "../styles/ProductListingPage.css";
 export default function ProductListingPage() {
   const [filters, setFilters] = useState({
@@ -20,7 +21,7 @@ export default function ProductListingPage() {
   });
   const [sortOption, setSortOption] = useState("");
   const [showFilter, setShowFilter] = useState(false);
-  const [likedProducts, setLikedProducts] = useState([]);
+  const [wishlistProductIds, setWishlistProductIds] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 8;
   const { state } = useProduct();
@@ -43,11 +44,11 @@ export default function ProductListingPage() {
 
   useEffect(() => {
     const storedLikes = JSON.parse(localStorage.getItem("likedProducts")) || [];
-    setLikedProducts(storedLikes);
+    setWishlistProductIds(storedLikes);
   }, []);
 
   const toggleLike = (productId) => {
-    setLikedProducts((prev) => {
+    setWishlistProductIds((prev) => {
       const updated = prev.includes(productId)
         ? prev.filter((id) => id !== productId)
         : [...prev, productId];
@@ -142,25 +143,77 @@ export default function ProductListingPage() {
   const handleSearchChange = (e) =>
     setFilters((prev) => ({ ...prev, search: e.target.value }));
 
+  const token = localStorage.getItem("access");
 
-  const addToCart = (product) => {
-    const existingCart = JSON.parse(localStorage.getItem("cartItems")) || [];
-    const exists = existingCart.find((item) => item.id === product.id);
+  // Fetch wishlist from backend on mount
+  useEffect(() => {
+    const fetchWishlist = async () => {
+      if (!token) return;
+      try {
+        const data = await getWishlist(token);
+        // If API returns { results: [...] }
+        const items = Array.isArray(data) ? data : data.results || [];
+        // Assuming each item has a .product field (id or object)
+        setWishlistProductIds(items.map(item => item.product?.id || item.product || item.id));
+      } catch (err) {
+        setWishlistProductIds([]);
+      }
+    };
+    fetchWishlist();
+  }, [token]);
 
-    let updatedCart;
-    if (exists) {
-      updatedCart = existingCart.map((item) =>
-        item.id === product.id
-          ? { ...item, quantity: item.quantity + 1 }
-          : item
-      );
-    } else {
-      updatedCart = [...existingCart, { ...product, quantity: 1 }];
+  const userId = localStorage.getItem("userId"); // Adjust key if needed
+
+  // Add/remove from wishlist
+  const handleWishlistClick = async (product) => {
+    if (!token) {
+      alert("Please login to use wishlist.");
+      return;
     }
+    if (!userId) {
+      alert("User ID not found.");
+      return;
+    }
+    const isWishlisted = wishlistProductIds.includes(product.id);
+    try {
+      if (isWishlisted) {
+        await removeFromWishlist(product.id, token);
+        setWishlistProductIds(prev => prev.filter(id => id !== product.id));
+      } else {
+        // Always send both customer and product, just like addToCart
+        await addToWishlist({ customer: userId, product: product.id }, token);
+        setWishlistProductIds(prev => [...prev, product.id]);
+      }
+    } catch (err) {
+      // Optionally, show the backend error message for easier debugging
+      if (err.response && err.response.data && err.response.data.detail) {
+        alert("Wishlist action failed: " + err.response.data.detail);
+      } else {
+        alert("Wishlist action failed.");
+      }
+    }
+  };
 
-    localStorage.setItem("cartItems", JSON.stringify(updatedCart));
-    alert("1 item added to cart");
+  const addToCart = async (product, quantity = 1) => {
+    try {
+      // 1. Fetch current cart
+      const cartData = await getCart(token);
+      const cartItems = Array.isArray(cartData) ? cartData : cartData.results || [];
+      const existing = cartItems.find(item => item.product === product.id || item.product.id === product.id);
 
+      if (existing) {
+        // 2. If already in cart, update quantity
+        await updateCart({ product: product.id, quantity: existing.quantity + quantity }, token);
+        alert("Cart updated!");
+      } else {
+        // 3. If not in cart, add new
+        await updateCart({ product: product.id, quantity }, token);
+        alert("Added to cart!");
+      }
+    } catch (err) {
+      console.error("Error adding to cart:", err);
+      alert("Failed to add/update cart");
+    }
   };
 
   return (
@@ -341,11 +394,11 @@ export default function ProductListingPage() {
                     }
                     <button
                       className={`like-btn ${
-                        likedProducts.includes(p.id) ? "liked" : ""
+                        wishlistProductIds.includes(p.id) ? "liked" : ""
                       }`}
                       onClick={(e) => {
                         e.stopPropagation();
-                        toggleLike(p.id);
+                        handleWishlistClick(p);
                       }}
                       aria-label="Like"
                     >
@@ -419,11 +472,11 @@ export default function ProductListingPage() {
                   }
                   <button
                     className={`like-btn ${
-                      likedProducts.includes(p.id) ? "liked" : ""
+                      wishlistProductIds.includes(p.id) ? "liked" : ""
                     }`}
                     onClick={(e) => {
                       e.stopPropagation();
-                      toggleLike(p.id);
+                      handleWishlistClick(p);
                     }}
                     aria-label="Like"
                   >

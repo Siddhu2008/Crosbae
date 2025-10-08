@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { useParams, useLocation,Link } from "react-router-dom";
+import { useParams, useLocation, Link } from "react-router-dom";
 import { useProduct } from "../contexts/ProductContext";
+import { getCart, updateCart } from "../api/cart";
 import "../styles/ProductDetailsPage.css";
 import Seo from "../components/Seo";
 
@@ -44,25 +45,29 @@ const ProductDetail = () => {
     );
   };
 
+  const token = localStorage.getItem("access");
+
   // Add to Cart handler
-  const addToCart = (product, quantity) => {
-    const existingCart = JSON.parse(localStorage.getItem("cartItems")) || [];
-    const exists = existingCart.find((item) => item.id === product.id);
+  const addToCart = async (product, quantity = 1) => {
+    try {
+      // 1. Fetch current cart
+      const cartData = await getCart(token);
+      const cartItems = Array.isArray(cartData) ? cartData : cartData.results || [];
+      const existing = cartItems.find(item => item.product === product.id || item.product.id === product.id);
 
-    let updatedCart;
-    if (exists) {
-      // increase quantity if already exists
-      updatedCart = existingCart.map((item) =>
-        item.id === product.id
-          ? { ...item, quantity: item.quantity + quantity }
-          : item
-      );
-    } else {
-      updatedCart = [...existingCart, { ...product, quantity }];
+      if (existing) {
+        // 2. If already in cart, update quantity
+        await updateCart({ product: product.id, quantity: existing.quantity + quantity }, token);
+        alert("Cart updated!");
+      } else {
+        // 3. If not in cart, add new
+        await updateCart({ product: product.id, quantity }, token);
+        alert("Added to cart!");
+      }
+    } catch (err) {
+      console.error("Error adding to cart:", err);
+      alert("Failed to add/update cart");
     }
-
-    localStorage.setItem("cartItems", JSON.stringify(updatedCart));
-    alert(`${quantity} item(s) added to cart`);
   };
 
   const { state } = useProduct();

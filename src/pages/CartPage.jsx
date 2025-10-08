@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "../styles/CartPage.css";
 import Seo from "../components/Seo";
-import API_URL from "../api/auth"; // 👈 import your base API URL
-import { useAuth } from "../contexts/AuthContext"; // 👈 for authenticated requests
+import API_URL from "../api/auth";
+import { AuthContext } from "../contexts/AuthContext";
+import { getCart, updateCart } from "../api/cart"; // Import your helpers
 
 export default function CartPage() {
   const [cartItems, setCartItems] = useState([]);
@@ -16,19 +17,32 @@ export default function CartPage() {
   const [addresses, setAddresses] = useState([]);
   const [addressError, setAddressError] = useState(null);
 
-  const { token } = useAuth(); // assumes token is exposed from AuthContext
+  const { fetchWithAuth } = useContext(AuthContext);
   const navigate = useNavigate();
 
+  const token = localStorage.getItem("access");
+
   useEffect(() => {
-    const storedCart = JSON.parse(localStorage.getItem("cartItems")) || [];
-    setCartItems(storedCart);
+    fetchCart();
     fetchCoupons();
     fetchAddresses();
   }, []);
 
+  const fetchCart = async () => {
+    try {
+      const data = await getCart(token);
+      // Ensure cartItems is always an array
+      const items = Array.isArray(data) ? data : data.results || [];
+      setCartItems(items);
+    } catch (err) {
+      console.error("Error fetching cart:", err);
+      setCartItems([]); // fallback to empty array on error
+    }
+  };
+
   const fetchCoupons = async () => {
     try {
-      const response = await fetch("/api/coupons/", {
+      const response = await fetch("https://api.crosbae.com/api/coupons/", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -36,7 +50,9 @@ export default function CartPage() {
       });
       if (!response.ok) throw new Error("Failed to fetch coupons");
       const data = await response.json();
-      setAvailableCoupons(data);
+      // Ensure availableCoupons is always an array
+      const coupons = Array.isArray(data) ? data : data.results || [];
+      setAvailableCoupons(coupons);
     } catch (err) {
       console.error("Error fetching coupons:", err);
     }
@@ -44,41 +60,36 @@ export default function CartPage() {
 
   const fetchAddresses = async () => {
     try {
-      const res = await fetch(`${API_URL}/api/auth/addresses/`, {
-        headers: {
-          "Authorization": `Bearer ${token}`,
-        },
-      });
+      const res = await fetchWithAuth("https://api.crosbae.com/api/auth/addresses/");
       if (!res.ok) throw new Error("Failed to fetch addresses");
       const data = await res.json();
-
-      const addrList = Array.isArray(data)
-        ? data
-        : data.results || [];
-
+      const addrList = Array.isArray(data) ? data : data.results || [];
       setAddresses(addrList);
-      // Auto-select default address if available
       const defaultAddress = addrList.find((addr) => addr.is_default);
       if (defaultAddress) setSelectedAddressId(defaultAddress.id);
     } catch (err) {
-      console.error("Error fetching addresses:", err);
       setAddressError("Unable to load addresses.");
+      console.error("Error fetching addresses:", err);
     }
   };
 
-  const updateQuantity = (productId, quantity) => {
+  const updateQuantity = async (productId, quantity) => {
     if (quantity < 1) return;
-    const updated = cartItems.map((item) =>
-      item.id === productId ? { ...item, quantity } : item
-    );
-    setCartItems(updated);
-    localStorage.setItem("cartItems", JSON.stringify(updated));
+    try {
+      const updated = await updateCart({ product: productId, quantity }, token);
+      setCartItems(Array.isArray(updated) ? updated : updated.results || []);
+    } catch (err) {
+      console.error("Error updating cart:", err);
+    }
   };
 
-  const removeFromCart = (productId) => {
-    const updated = cartItems.filter((item) => item.id !== productId);
-    setCartItems(updated);
-    localStorage.setItem("cartItems", JSON.stringify(updated));
+  const removeFromCart = async (productId) => {
+    try {
+      const updated = await updateCart({ product: productId, quantity: 0 }, token);
+      setCartItems(Array.isArray(updated) ? updated : updated.results || []);
+    } catch (err) {
+      console.error("Error removing from cart:", err);
+    }
   };
 
   const calculateSubtotal = () => {
@@ -93,14 +104,31 @@ export default function CartPage() {
       (c) => c.code && c.code.toUpperCase() === code
     );
     if (found) {
+      const subtotal = calculateSubtotal();
+      // Check minimum order amount
+      if (found.min_order_amount && subtotal < Number(found.min_order_amount)) {
+        setDiscount(0);
+        setCouponError(
+          `Minimum order amount for this coupon is ₹${found.min_order_amount}`
+        );
+        return;
+      }
       let disc = 0;
-      if (found.discount_amount != null) {
-        disc = found.discount_amount;
-      } else if (found.discount_percent != null) {
-        disc = (calculateSubtotal() * found.discount_percent) / 100;
+      if (found.discount_type === "fixed_amount") {
+        disc = Number(found.discount_value);
+        // Apply max discount cap if present
+        if (found.max_discount_amount && disc > Number(found.max_discount_amount)) {
+          disc = Number(found.max_discount_amount);
+        }
+      } else if (found.discount_type === "percentage") {
+        disc = (subtotal * Number(found.discount_value)) / 100;
+        // Apply max discount cap if present
+        if (found.max_discount_amount && disc > Number(found.max_discount_amount)) {
+          disc = Number(found.max_discount_amount);
+        }
       }
       setDiscount(disc);
-      setCouponError("");
+      setCouponError(""); // Always clear error if coupon is valid
     } else {
       setDiscount(0);
       setCouponError("Invalid coupon code.");
@@ -259,8 +287,10 @@ export default function CartPage() {
                 <button onClick={applyCoupon}>Apply</button>
               </div>
               {couponError && <p className="coupon-error">{couponError}</p>}
-              {discount > 0 && !couponError && (
-                <p className="coupon-success">Coupon applied! You saved ₹{discount.toFixed(2)}</p>
+              {!couponError && couponCode.trim() && (
+                <p className="coupon-success">
+                  Coupon applied! {discount > 0 ? `You saved ₹${discount.toFixed(2)}` : "No discount for current cart."}
+                </p>
               )}
             </div>
 

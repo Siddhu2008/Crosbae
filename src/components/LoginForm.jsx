@@ -9,7 +9,20 @@ export default function LoginForm({ onLogin }) {
     e.preventDefault();
     try {
       const res = await login({ username, password });
+      console.log("Login response:", res.data);
       onLogin(res.data);
+      localStorage.setItem("access", res.data.access);
+
+      // Try all possible locations for user ID
+      if (res.data.user && res.data.user.id) {
+        localStorage.setItem("userId", res.data.user.id);
+      } else if (res.data.id) {
+        localStorage.setItem("userId", res.data.id);
+      } else if (res.data.customer && res.data.customer.id) {
+        localStorage.setItem("userId", res.data.customer.id);
+      } else {
+        alert("User ID not found in login response.");
+      }
     } catch (err) {
       alert("Invalid credentials");
     }

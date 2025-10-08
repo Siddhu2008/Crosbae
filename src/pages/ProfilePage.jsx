@@ -1,21 +1,18 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import API_URL from "../api/auth"; // Your base API URL
-import { AuthContext } from "../contexts/AuthContext";
+import { getUserProfile, getUserAddresses } from "../api/user";
 import "../styles/ProfilePage.css";
 
 export default function ProfilePage() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { fetchWithAuth } = useContext(AuthContext);
 
-  const [customerInfo, setCustomerInfo] = useState(null);
+  const [user, setUser] = useState(null);
   const [addresses, setAddresses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   const token = localStorage.getItem("access");
-  const loggedInEmail = localStorage.getItem("userEmail");
 
   useEffect(() => {
     if (!token) {
@@ -26,58 +23,30 @@ export default function ProfilePage() {
 
     const fetchData = async () => {
       try {
-        // Fetch customer data
-        const customerRes = await fetchWithAuth(`${API_URL}/api/auth/customers/`);
-        if (!customerRes.ok) throw new Error("Failed to fetch customer info");
-        const customersData = await customerRes.json();
-        console.log("Customer API response:", customersData);
-
-        let currentCustomer = null;
-        if (
-          typeof customersData === "object" &&
-          customersData !== null &&
-          "results" in customersData &&
-          Array.isArray(customersData.results)
-        ) {
-          currentCustomer = customersData.results.find(
-            (cust) => cust.user && cust.user.email === loggedInEmail
-          );
-        }
-        if (!currentCustomer && Array.isArray(customersData)) {
-          currentCustomer = customersData.find(
-            (cust) => cust.user && cust.user.email === loggedInEmail
-          );
-        }
-        if (!currentCustomer) {
-          throw new Error(`Logged in customer with email ${loggedInEmail} not found`);
-        }
-        setCustomerInfo(currentCustomer.user ? currentCustomer.user : currentCustomer);
+        // Fetch user profile
+        const userData = await getUserProfile(token);
+        setUser(userData);
 
         // Fetch addresses
         let addressData = [];
         try {
-          const addressRes = await fetchWithAuth(`${API_URL}/api/auth/addresses/`);
-          if (addressRes.ok) {
-            const rawAddressData = await addressRes.json();
-            if (Array.isArray(rawAddressData)) {
-              addressData = rawAddressData;
-            } else if (
-              typeof rawAddressData === "object" &&
-              rawAddressData !== null &&
-              "results" in rawAddressData &&
-              Array.isArray(rawAddressData.results)
-            ) {
-              addressData = rawAddressData.results;
-            } else {
-              const arrProp = Object.values(rawAddressData).find(Array.isArray);
-              addressData = arrProp || [];
-            }
-            console.log("Processed addresses data:", addressData);
+          const rawAddressData = await getUserAddresses(token);
+          if (Array.isArray(rawAddressData)) {
+            addressData = rawAddressData;
+          } else if (
+            typeof rawAddressData === "object" &&
+            rawAddressData !== null &&
+            "results" in rawAddressData &&
+            Array.isArray(rawAddressData.results)
+          ) {
+            addressData = rawAddressData.results;
+          } else {
+            const arrProp = Object.values(rawAddressData).find(Array.isArray);
+            addressData = arrProp || [];
           }
         } catch (e) {
           // Ignore address fetch errors
         }
-
         setAddresses(Array.isArray(addressData) ? addressData : []);
       } catch (err) {
         setError(err.message || "Failed to load profile data");
@@ -87,15 +56,19 @@ export default function ProfilePage() {
     };
 
     fetchData();
-  }, [token, loggedInEmail, location.key]);
+  }, [token, location.key]);
 
-  // ✅ Delete address handler (must be outside return!)
   const handleDeleteAddress = async (addressId) => {
     if (!window.confirm("Are you sure you want to delete this address?")) return;
     try {
-      const res = await fetchWithAuth(`${API_URL}/api/auth/addresses/${addressId}/`, {
-        method: "DELETE",
-      });
+      // You may want to move this to api/user.js as well
+      const res = await fetch(
+        `https://api.crosbae.com/api/auth/addresses/${addressId}/`,
+        {
+          method: "DELETE",
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
       if (res.ok) {
         setAddresses((prev) => prev.filter((addr) => addr.id !== addressId));
       } else {
@@ -128,35 +101,28 @@ export default function ProfilePage() {
         {/* Profile Picture */}
         <div className="profile-avatar">
           <img
-            src="https://i.pravatar.cc/160?img=47"
+            src={user?.profile_pic || "https://i.pravatar.cc/160?img=47"}
             alt="User Avatar"
             className="avatar-img"
           />
         </div>
 
         {/* User Info */}
-        <h2 className="profile-name">{customerInfo?.name ?? "Unnamed User"}</h2>
-        <p className="profile-email">{customerInfo?.email ?? "No email available"}</p>
+        <h2 className="profile-name">
+          {(user?.first_name || "") + " " + (user?.last_name || "")}
+        </h2>
+        <p className="profile-email">{user?.email || "No email available"}</p>
 
         {/* Stats */}
         <div className="profile-stats">
           <div>
-            <strong>Age:</strong> {customerInfo?.age ?? "N/A"}
+            <strong>Username:</strong> {user?.username || "N/A"}
           </div>
           <div>
-            <strong>Member Since:</strong> {customerInfo?.member_since ?? "N/A"}
+            <strong>Gender:</strong> {user?.gender || "N/A"}
           </div>
           <div>
-            <strong>Loyalty Tier:</strong> {customerInfo?.loyalty_tier ?? "N/A"}
-          </div>
-          <div>
-            <strong>Total Orders:</strong> {customerInfo?.total_orders ?? 0}
-          </div>
-          <div>
-            <strong>Total Spent:</strong> ₹
-            {customerInfo?.total_spent
-              ? customerInfo.total_spent.toLocaleString()
-              : "0"}
+            <strong>Date of Birth:</strong> {user?.dob || "N/A"}
           </div>
         </div>
 

@@ -1,46 +1,52 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-
-import { useProduct } from "../contexts/ProductContext";
+import { getWishlist, removeFromWishlist } from "../api/wishlist";
 import Seo from "./Seo";
-import "../styles/WishlistPage.css"; // new stylesheet
+import "../styles/WishlistPage.css";
+import { updateCart } from "../api/cart";
 
 export default function WishlistPage() {
-  const [likedProducts, setLikedProducts] = useState([]);
-  const { state } = useProduct();
-  const productsList = state?.products || [];
+  const [wishlistItems, setWishlistItems] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const token = localStorage.getItem("access");
 
   useEffect(() => {
-    const storedLikes = JSON.parse(localStorage.getItem("likedProducts")) || [];
-    setLikedProducts(storedLikes);
-  }, []);
+    const fetchWishlist = async () => {
+      try {
+        const data = await getWishlist(token);
+        setWishlistItems(data.results || data);
+      } catch (err) {
+        setWishlistItems([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchWishlist();
+  }, [token]);
 
-  const removeFromWishlist = (id) => {
-    const updatedLikes = likedProducts.filter((pid) => pid !== id);
-    setLikedProducts(updatedLikes);
-    localStorage.setItem("likedProducts", JSON.stringify(updatedLikes));
-  };
-
-  const wishlistItems = productsList.filter((product) =>
-    likedProducts.includes(String(product.id)) || likedProducts.includes(product.id)
-  );
-
-  const addToCart = (product) => {
-    const existingCart = JSON.parse(localStorage.getItem("cartItems")) || [];
-    const exists = existingCart.find((item) => item.id === product.id);
-
-    let updatedCart;
-    if (exists) {
-      updatedCart = existingCart.map((item) =>
-        item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
+  const handleRemove = async (productId) => {
+    try {
+      await removeFromWishlist(productId, token);
+      setWishlistItems((prev) =>
+        prev.filter(
+          (item) => item.product.id !== productId && item.id !== productId
+        )
       );
-    } else {
-      updatedCart = [...existingCart, { ...product, quantity: 1 }];
+    } catch (err) {
+      alert("Failed to remove from wishlist");
     }
-
-    localStorage.setItem("cartItems", JSON.stringify(updatedCart));
-    alert("1 item added to cart");
   };
+
+  const handleAddToCart = async (productId, quantity = 1) => {
+    try {
+      await updateCart({ product: productId, quantity }, token);
+      alert("1 item added to cart");
+    } catch (err) {
+      console.error("Error adding to cart:", err);
+    }
+  };
+
+  if (loading) return <div>Loading...</div>;
 
   return (
     <div className="wishlist-page ">
@@ -60,31 +66,37 @@ export default function WishlistPage() {
         </div>
       ) : (
         <div className="wishlist-grid">
-          {wishlistItems.map((item) => (
-            <div className="wishlist-card" key={item.id}>
-              <img
-                src={item.images?.[0]}
-                alt={item.productName}
-                className="wishlist-img"
-              />
-              <div className="wishlist-info">
-                <h5>{item.productName}</h5>
-                <p className="wishlist-desc">{item.description}</p>
-                <p className="wishlist-price">₹ {item.price}</p>
-                <div className="wishlist-actions">
-                  <button
-                    className="btn-remove"
-                    onClick={() => removeFromWishlist(item.id)}
-                  >
-                    Remove
-                  </button>
-                  <button className="btn-cart" onClick={() => addToCart(item)}>
-                    Add to Cart
-                  </button>
+          {wishlistItems.map((item) => {
+            const product = item.product || item;
+            return (
+              <div className="wishlist-card" key={product.id}>
+                <img
+                  src={product.images?.[0]}
+                  alt={product.productName}
+                  className="wishlist-img"
+                />
+                <div className="wishlist-info">
+                  <h5>{product.productName}</h5>
+                  <p className="wishlist-desc">{product.description}</p>
+                  <p className="wishlist-price">₹ {product.price}</p>
+                  <div className="wishlist-actions">
+                    <button
+                      className="btn-remove"
+                      onClick={() => handleRemove(product.id)}
+                    >
+                      Remove
+                    </button>
+                    <button
+                      className="btn-cart"
+                      onClick={() => handleAddToCart(product.id)}
+                    >
+                      Add to Cart
+                    </button>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       )}
     </div>
