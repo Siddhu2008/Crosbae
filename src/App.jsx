@@ -34,6 +34,7 @@ import OrderDetailsPage from "./pages/OrderDetailsPage";
 import { CheckoutPage } from "./pages/CheckoutPage";
 import PlaceOrderPage from "./pages/PlaceOrderPage";
 import AddAddress from "./components/AddAddress";
+import EditAddress from "./components/EditAddress";
 const App = () => {
   useEffect(() => {
     AOS.init({
@@ -78,6 +79,7 @@ const App = () => {
             <Route path="/checkout" element={<CheckoutPage />} />
             <Route path="/place-order" element={<PlaceOrderPage />} />
             <Route path="/add-address" element={<AddAddress />} />
+            <Route path="/edit-address/:id" element={<EditAddress />} />
           </Routes>
           <Footer />
         </div>

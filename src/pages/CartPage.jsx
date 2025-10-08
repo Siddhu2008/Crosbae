@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "../styles/CartPage.css";
 import Seo from "../components/Seo";
+import API_URL from "../api/auth"; // 👈 import your base API URL
+import { useAuth } from "../contexts/AuthContext"; // 👈 for authenticated requests
 
 export default function CartPage() {
   const [cartItems, setCartItems] = useState([]);
@@ -11,38 +13,17 @@ export default function CartPage() {
   const [showAddressSection, setShowAddressSection] = useState(false);
   const [selectedAddressId, setSelectedAddressId] = useState(null);
   const [availableCoupons, setAvailableCoupons] = useState([]);
-  const navigate = useNavigate();
+  const [addresses, setAddresses] = useState([]);
+  const [addressError, setAddressError] = useState(null);
 
-  // Static addresses (for now)
-  const addresses = [
-    {
-      id: 1,
-      title: "Home",
-      address_line1: "123 Elegant Residency",
-      address_line2: "MG Road",
-      street: "Main Street",
-      city: "Mumbai",
-      state: "Maharashtra",
-      pincode: "400001",
-      is_default: true,
-    },
-    {
-      id: 2,
-      title: "Work",
-      address_line1: "456 Corporate Tower",
-      address_line2: "",
-      street: "Link Road",
-      city: "Mumbai",
-      state: "Maharashtra",
-      pincode: "400002",
-      is_default: false,
-    },
-  ];
+  const { token } = useAuth(); // assumes token is exposed from AuthContext
+  const navigate = useNavigate();
 
   useEffect(() => {
     const storedCart = JSON.parse(localStorage.getItem("cartItems")) || [];
     setCartItems(storedCart);
     fetchCoupons();
+    fetchAddresses();
   }, []);
 
   const fetchCoupons = async () => {
@@ -53,13 +34,35 @@ export default function CartPage() {
           "Content-Type": "application/json",
         },
       });
-      if (!response.ok) {
-        throw new Error("Failed to fetch coupons");
-      }
+      if (!response.ok) throw new Error("Failed to fetch coupons");
       const data = await response.json();
       setAvailableCoupons(data);
     } catch (err) {
       console.error("Error fetching coupons:", err);
+    }
+  };
+
+  const fetchAddresses = async () => {
+    try {
+      const res = await fetch(`${API_URL}/api/auth/addresses/`, {
+        headers: {
+          "Authorization": `Bearer ${token}`,
+        },
+      });
+      if (!res.ok) throw new Error("Failed to fetch addresses");
+      const data = await res.json();
+
+      const addrList = Array.isArray(data)
+        ? data
+        : data.results || [];
+
+      setAddresses(addrList);
+      // Auto-select default address if available
+      const defaultAddress = addrList.find((addr) => addr.is_default);
+      if (defaultAddress) setSelectedAddressId(defaultAddress.id);
+    } catch (err) {
+      console.error("Error fetching addresses:", err);
+      setAddressError("Unable to load addresses.");
     }
   };
 
@@ -108,12 +111,8 @@ export default function CartPage() {
     return new Promise((resolve) => {
       const script = document.createElement("script");
       script.src = "https://checkout.razorpay.com/v1/checkout.js";
-      script.onload = () => {
-        resolve(true);
-      };
-      script.onerror = () => {
-        resolve(false);
-      };
+      script.onload = () => resolve(true);
+      script.onerror = () => resolve(false);
       document.body.appendChild(script);
     });
   };
@@ -139,6 +138,7 @@ export default function CartPage() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
         },
         body: JSON.stringify({
           amount: Math.round((calculateSubtotal() - discount + shipping) * 100),
@@ -147,26 +147,24 @@ export default function CartPage() {
         }),
       });
 
-      if (!orderRes.ok) {
-        throw new Error("Failed to create order");
-      }
+      if (!orderRes.ok) throw new Error("Failed to create order");
 
       const orderData = await orderRes.json();
       const { id: order_id, amount, currency, key } = orderData;
 
       const options = {
-        key: key,
+        key,
         amount: amount.toString(),
-        currency: currency,
+        currency,
         name: "Cros Bae",
         description: "Jewellery Purchase",
-        order_id: order_id,
+        order_id,
         handler: async function (response) {
-          // After payment success
           const verifyRes = await fetch("/api/verify-payment/", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
+              "Authorization": `Bearer ${token}`,
             },
             body: JSON.stringify({
               razorpay_order_id: response.razorpay_order_id,
@@ -248,6 +246,7 @@ export default function CartPage() {
           </div>
 
           <div className="cart-sidebar">
+            {/* Coupon Box */}
             <div className="coupon-box">
               <div className="coupon-header">🎁 Have a coupon?</div>
               <div className="coupon-input-group">
@@ -265,25 +264,14 @@ export default function CartPage() {
               )}
             </div>
 
+            {/* Order Summary */}
             <div className="order-summary">
               <h3>Order Summary</h3>
-              <div className="summary-line">
-                <span>Subtotal</span>
-                <span>₹{calculateSubtotal().toFixed(2)}</span>
-              </div>
-              <div className="summary-line discount">
-                <span>Discount</span>
-                <span>-₹{discount.toFixed(2)}</span>
-              </div>
-              <div className="summary-line">
-                <span>Shipping</span>
-                <span>{shipping === 0 ? "Free" : `₹${shipping}`}</span>
-              </div>
+              <div className="summary-line"><span>Subtotal</span><span>₹{calculateSubtotal().toFixed(2)}</span></div>
+              <div className="summary-line discount"><span>Discount</span><span>-₹{discount.toFixed(2)}</span></div>
+              <div className="summary-line"><span>Shipping</span><span>{shipping === 0 ? "Free" : `₹${shipping}`}</span></div>
               <hr />
-              <div className="summary-line total">
-                <span>Total</span>
-                <span>₹{(calculateSubtotal() - discount + shipping).toFixed(2)}</span>
-              </div>
+              <div className="summary-line total"><span>Total</span><span>₹{(calculateSubtotal() - discount + shipping).toFixed(2)}</span></div>
 
               {!showAddressSection && (
                 <button className="btn checkout-btn" onClick={handleProceedToCheckout}>
@@ -292,25 +280,32 @@ export default function CartPage() {
               )}
             </div>
 
+            {/* Address Section */}
             {showAddressSection && (
               <div className="address-section mt-4">
                 <h4>Select Shipping Address</h4>
-                {addresses.map((addr) => (
-                  <div key={addr.id} className="address-option">
-                    <label>
-                      <input
-                        type="radio"
-                        name="selectedAddress"
-                        value={addr.id}
-                        checked={selectedAddressId === addr.id}
-                        onChange={() => setSelectedAddressId(addr.id)}
-                      />
-                      <span>
-                        <strong>{addr.title}</strong>: {addr.address_line1}, {addr.city}, {addr.state} - {addr.pincode}
-                      </span>
-                    </label>
-                  </div>
-                ))}
+                {addressError ? (
+                  <p className="text-danger">{addressError}</p>
+                ) : addresses.length === 0 ? (
+                  <p>No saved addresses found.</p>
+                ) : (
+                  addresses.map((addr) => (
+                    <div key={addr.id} className="address-option">
+                      <label>
+                        <input
+                          type="radio"
+                          name="selectedAddress"
+                          value={addr.id}
+                          checked={selectedAddressId === addr.id}
+                          onChange={() => setSelectedAddressId(addr.id)}
+                        />
+                        <span>
+                          <strong>{addr.title}</strong>: {addr.address_line1}, {addr.city}, {addr.state} - {addr.pincode}
+                        </span>
+                      </label>
+                    </div>
+                  ))
+                )}
                 <button
                   className="btn btn-secondary mt-2 m-2"
                   onClick={() => navigate("/add-address")}
@@ -320,6 +315,7 @@ export default function CartPage() {
                 <button
                   className="btn btn-primary mt-3 m-2"
                   onClick={handlePlaceOrder}
+                  disabled={!selectedAddressId}
                 >
                   Place Order
                 </button>

@@ -3,7 +3,7 @@ import { createContext, useContext, useState } from "react";
 import axios from "axios";
 import API_URL from "../api/auth";
 
-const AuthContext = createContext();
+export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
@@ -16,6 +16,9 @@ export const AuthProvider = ({ children }) => {
 
       localStorage.setItem("access", res.data.access);
       localStorage.setItem("refresh", res.data.refresh);
+      if (res.data.user_data && res.data.user_data.email) {
+        localStorage.setItem("userEmail", res.data.user_data.email);
+      }
       setUser(res.data.user_data);
       return res.data;
     } catch (err) {

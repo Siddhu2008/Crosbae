@@ -1,19 +1,21 @@
-import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState, useContext } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import API_URL from "../api/auth"; // Your base API URL
+import { AuthContext } from "../contexts/AuthContext";
 import "../styles/ProfilePage.css";
 
 export default function ProfilePage() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const { fetchWithAuth } = useContext(AuthContext);
 
   const [customerInfo, setCustomerInfo] = useState(null);
   const [addresses, setAddresses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Assuming email is saved in localStorage at login
   const token = localStorage.getItem("access");
-  const loggedInEmail = localStorage.getItem("userEmail"); // Adjust according to your auth flow
+  const loggedInEmail = localStorage.getItem("userEmail");
 
   useEffect(() => {
     if (!token) {
@@ -24,63 +26,57 @@ export default function ProfilePage() {
 
     const fetchData = async () => {
       try {
-        // Fetch customers data
-        const customerRes = await fetch(`${API_URL}/api/auth/customers/`, {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
-        if (!customerRes.ok) {
-          throw new Error("Failed to fetch customer info");
-        }
-
+        // Fetch customer data
+        const customerRes = await fetchWithAuth(`${API_URL}/api/auth/customers/`);
+        if (!customerRes.ok) throw new Error("Failed to fetch customer info");
         const customersData = await customerRes.json();
-
-        console.log("Customer API response:", customersData); // Debug to see response
+        console.log("Customer API response:", customersData);
 
         let currentCustomer = null;
-
         if (
           typeof customersData === "object" &&
           customersData !== null &&
           "results" in customersData &&
           Array.isArray(customersData.results)
         ) {
-          // The customer list is inside results
           currentCustomer = customersData.results.find(
-            (cust) => cust.email === loggedInEmail
+            (cust) => cust.user && cust.user.email === loggedInEmail
           );
-        } else if (Array.isArray(customersData)) {
-          // If the response is just an array
-          currentCustomer = customersData.find(
-            (cust) => cust.email === loggedInEmail
-          );
-        } else {
-          // If it's a single customer object
-          currentCustomer = customersData;
         }
-
+        if (!currentCustomer && Array.isArray(customersData)) {
+          currentCustomer = customersData.find(
+            (cust) => cust.user && cust.user.email === loggedInEmail
+          );
+        }
         if (!currentCustomer) {
           throw new Error(`Logged in customer with email ${loggedInEmail} not found`);
         }
+        setCustomerInfo(currentCustomer.user ? currentCustomer.user : currentCustomer);
 
-        setCustomerInfo(currentCustomer);
-
-        // Fetch addresses (assuming addresses endpoint returns addresses for logged in customer)
-        const addressRes = await fetch(`${API_URL}/api/auth/addresses/`, {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
-        if (!addressRes.ok) {
-          throw new Error("Failed to fetch addresses");
+        // Fetch addresses
+        let addressData = [];
+        try {
+          const addressRes = await fetchWithAuth(`${API_URL}/api/auth/addresses/`);
+          if (addressRes.ok) {
+            const rawAddressData = await addressRes.json();
+            if (Array.isArray(rawAddressData)) {
+              addressData = rawAddressData;
+            } else if (
+              typeof rawAddressData === "object" &&
+              rawAddressData !== null &&
+              "results" in rawAddressData &&
+              Array.isArray(rawAddressData.results)
+            ) {
+              addressData = rawAddressData.results;
+            } else {
+              const arrProp = Object.values(rawAddressData).find(Array.isArray);
+              addressData = arrProp || [];
+            }
+            console.log("Processed addresses data:", addressData);
+          }
+        } catch (e) {
+          // Ignore address fetch errors
         }
-
-        const addressData = await addressRes.json();
 
         setAddresses(Array.isArray(addressData) ? addressData : []);
       } catch (err) {
@@ -91,29 +87,24 @@ export default function ProfilePage() {
     };
 
     fetchData();
-  }, [token, loggedInEmail]);
+  }, [token, loggedInEmail, location.key]);
 
-  const formatFullAddress = (addr) => (
-    <>
-      <p>
-        <strong>{addr.name || customerInfo?.name || "No Name"}</strong> | 📞{" "}
-        {addr.phone || "No Phone"}
-      </p>
-      <p>{addr.address_line1 || ""}</p>
-      {addr.address_line2 && <p>{addr.address_line2}</p>}
-      <p>
-        {addr.city || ""}, {addr.state || ""} - {addr.pincode || ""}
-      </p>
-      <p>{addr.country || "India"}</p>
-    </>
-  );
-
-  const formatSummaryAddress = (addr) => (
-    <p>
-      <strong>{addr.name || customerInfo?.name || "No Name"}</strong> —{" "}
-      {addr.city || ""}, {addr.state || ""}
-    </p>
-  );
+  // ✅ Delete address handler (must be outside return!)
+  const handleDeleteAddress = async (addressId) => {
+    if (!window.confirm("Are you sure you want to delete this address?")) return;
+    try {
+      const res = await fetchWithAuth(`${API_URL}/api/auth/addresses/${addressId}/`, {
+        method: "DELETE",
+      });
+      if (res.ok) {
+        setAddresses((prev) => prev.filter((addr) => addr.id !== addressId));
+      } else {
+        alert("Failed to delete address.");
+      }
+    } catch (err) {
+      alert("Error deleting address.");
+    }
+  };
 
   if (loading) {
     return (
@@ -144,8 +135,8 @@ export default function ProfilePage() {
         </div>
 
         {/* User Info */}
-        <h2 className="profile-name">{customerInfo?.name || "User"}</h2>
-        <p className="profile-email">{customerInfo?.email || "Email not available"}</p>
+        <h2 className="profile-name">{customerInfo?.name ?? "Unnamed User"}</h2>
+        <p className="profile-email">{customerInfo?.email ?? "No email available"}</p>
 
         {/* Stats */}
         <div className="profile-stats">
@@ -159,22 +150,20 @@ export default function ProfilePage() {
             <strong>Loyalty Tier:</strong> {customerInfo?.loyalty_tier ?? "N/A"}
           </div>
           <div>
-            <strong>Total Orders:</strong> {customerInfo?.total_orders ?? "N/A"}
+            <strong>Total Orders:</strong> {customerInfo?.total_orders ?? 0}
           </div>
           <div>
-            <strong>Total Spent:</strong>{" "}
-            ₹
+            <strong>Total Spent:</strong> ₹
             {customerInfo?.total_spent
               ? customerInfo.total_spent.toLocaleString()
-              : "N/A"}
+              : "0"}
           </div>
         </div>
 
         {/* Address Section */}
         <div className="address-section">
           <h3>📍 Shipping Address</h3>
-
-          {addresses.length === 0 && (
+          {addresses.length === 0 ? (
             <div>
               <p>No address on file.</p>
               <button
@@ -184,39 +173,27 @@ export default function ProfilePage() {
                 ➕ Add Address
               </button>
             </div>
-          )}
-
-          {addresses.length === 1 && (
-            <div className="address-box">
-              {formatFullAddress(addresses[0])}
-              <div className="address-buttons">
-                <button
-                  className="profile-btn edit"
-                  onClick={() => navigate("/add-address")}
-                >
-                  ✏️ Edit Address
-                </button>
-                <button
-                  className="profile-btn secondary"
-                  onClick={() => navigate("/add-address")}
-                >
-                  ➕ Add New Address
-                </button>
-              </div>
-            </div>
-          )}
-
-          {addresses.length > 1 && (
-            <div className="multiple-address-box">
+          ) : (
+            <>
               {addresses.map((addr, index) => (
                 <div key={index} className="address-summary">
-                  {formatSummaryAddress(addr)}
-                  <button
-                    className="profile-btn small"
-                    onClick={() => navigate("/add-address")}
-                  >
-                    ✏️ Edit
-                  </button>
+                  <strong>{addr.title || "No Label"}</strong> —{" "}
+                  {addr.address_line1 || ""}
+                  {addr.address_line2 ? ", " + addr.address_line2 : ""}, {addr.city || ""}, {addr.state || ""} {addr.pincode ? "- " + addr.pincode : ""}, {addr.country || "India"}
+                  <div className="address-actions">
+                    <button
+                      className="profile-btn small"
+                      onClick={() => navigate(`/edit-address/${addr.id}`)}
+                    >
+                      ✏️ Edit
+                    </button>
+                    <button
+                      className="profile-btn small delete"
+                      onClick={() => handleDeleteAddress(addr.id)}
+                    >
+                      🗑️ Delete
+                    </button>
+                  </div>
                 </div>
               ))}
               <button
@@ -225,7 +202,7 @@ export default function ProfilePage() {
               >
                 ➕ Add New Address
               </button>
-            </div>
+            </>
           )}
         </div>
 
