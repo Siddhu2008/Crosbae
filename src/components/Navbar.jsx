@@ -205,9 +205,9 @@ const Navbar = () => {
               <Link to="/track-order"  onClick={toggleMenu}>
                 Track Order
               </Link>
-              <button className=" btn btn-link text-start" onClick={() => { toggleMenu(); handleLogout(); }}>
+              <Link onClick={() => { toggleMenu(); handleLogout(); }}>
                 Logout
-              </button>
+              </Link>
             </>
           ) : (
             <>
