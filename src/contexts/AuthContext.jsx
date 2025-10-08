@@ -10,7 +10,6 @@ export const AuthProvider = ({ children }) => {
 
   const loginWithGoogle = async (googleToken) => {
     try {
-      // const res = await axios.post("http://127.0.0.1:8000/api/auth/google/", {
       const res = await axios.post(API_URL + "/api/auth/google/", {
         token: googleToken,
       });
@@ -18,7 +17,6 @@ export const AuthProvider = ({ children }) => {
       localStorage.setItem("access", res.data.access);
       localStorage.setItem("refresh", res.data.refresh);
       setUser(res.data.user_data);
-      // return full response data so callers can act on tokens/user
       return res.data;
     } catch (err) {
       console.error("Google auth failed:", err);
@@ -27,15 +25,66 @@ export const AuthProvider = ({ children }) => {
   };
 
   const logout = () => {
-    // Clear tokens and user state
     localStorage.removeItem("access");
     localStorage.removeItem("refresh");
     setUser(null);
-    // Optionally: navigate or trigger other cleanup in callers
+  };
+
+  const refreshAccessToken = async () => {
+    const refreshToken = localStorage.getItem("refresh");
+    if (!refreshToken) throw new Error("No refresh token found");
+
+    const response = await fetch(API_URL + "/api/auth/token/refresh/", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ refresh: refreshToken }),
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to refresh token");
+    }
+
+    const data = await response.json();
+    localStorage.setItem("access", data.access);
+    return data.access;
+  };
+
+  const fetchWithAuth = async (url, options = {}) => {
+    let accessToken = localStorage.getItem("access");
+
+    options.headers = {
+      ...(options.headers || {}),
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${accessToken}`,
+    };
+
+    let response = await fetch(url, options);
+
+    if (response.status === 401) {
+      // Token expired, try refresh
+      try {
+        accessToken = await refreshAccessToken();
+        options.headers.Authorization = `Bearer ${accessToken}`;
+        response = await fetch(url, options);
+      } catch (err) {
+        logout();
+        throw new Error("Authentication failed. Please login again.");
+      }
+    }
+
+    return response;
   };
 
   return (
-    <AuthContext.Provider value={{ user, setUser, loginWithGoogle, logout }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        setUser,
+        loginWithGoogle,
+        logout,
+        fetchWithAuth,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );

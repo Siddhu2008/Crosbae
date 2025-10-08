@@ -107,3 +107,27 @@
 @media (min-width: 1024px) {
   .profile-card { max-width: 500px; }
 }
+.multiple-address-box {
+  background: #fffaf5;
+  border: 1px solid #ddd;
+  padding: 1rem;
+  border-radius: 10px;
+}
+
+.address-summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.6rem 0;
+  border-bottom: 1px solid #eee;
+}
+
+.address-summary:last-child {
+  border-bottom: none;
+}
+
+.profile-btn.small {
+  padding: 0.3rem 0.6rem;
+  font-size: 0.85rem;
+  border-radius: 6px;
+}

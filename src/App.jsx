@@ -33,6 +33,7 @@ import ResetPasswordPage from "./pages/ResetPasswordPage";
 import OrderDetailsPage from "./pages/OrderDetailsPage";
 import { CheckoutPage } from "./pages/CheckoutPage";
 import PlaceOrderPage from "./pages/PlaceOrderPage";
+import AddAddress from "./components/AddAddress";
 const App = () => {
   useEffect(() => {
     AOS.init({
@@ -76,6 +77,7 @@ const App = () => {
             <Route path="/reset-password" element={<ResetPasswordPage />} />
             <Route path="/checkout" element={<CheckoutPage />} />
             <Route path="/place-order" element={<PlaceOrderPage />} />
+            <Route path="/add-address" element={<AddAddress />} />
           </Routes>
           <Footer />
         </div>
