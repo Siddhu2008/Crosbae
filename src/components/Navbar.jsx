@@ -196,13 +196,13 @@ const Navbar = () => {
           {/* Mobile auth links depend on login state */}
           {isLoggedIn ? (
             <>
-              <Link to="/profile" className="dropdown-item" onClick={toggleMenu}>
+              <Link to="/profile"  onClick={toggleMenu}>
                 Profile
               </Link>
-              <Link to="/orders" className="dropdown-item" onClick={toggleMenu}>
+              <Link to="/orders"  onClick={toggleMenu}>
                 Order History
               </Link>
-              <Link to="/track-order" className="dropdown-item" onClick={toggleMenu}>
+              <Link to="/track-order"  onClick={toggleMenu}>
                 Track Order
               </Link>
               <button className="dropdown-item btn btn-link text-start" onClick={() => { toggleMenu(); handleLogout(); }}>
@@ -211,10 +211,10 @@ const Navbar = () => {
             </>
           ) : (
             <>
-              <Link to="/login" className="dropdown-item" onClick={toggleMenu}>
+              <Link to="/login"  onClick={toggleMenu}>
                 Login
               </Link>
-              <Link to="/register" className="dropdown-item" onClick={toggleMenu}>
+              <Link to="/register"  onClick={toggleMenu}>
                 Register
               </Link>
             </>
