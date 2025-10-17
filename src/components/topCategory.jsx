@@ -55,6 +55,8 @@ export default function TopCategory() {
 
     // attach products to result categories from precomputed map
     const top = sorted.slice(0, 12);
+    // if (top.length<1)
+    //   top = categories;
     return top.map((c) => ({ ...c, products: (categoriesWithProducts.find((cc) => String(cc.id) === String(c.id)) || {}).products || [] }));
   }, [products, categories, productLoading, categoryLoading]);
 

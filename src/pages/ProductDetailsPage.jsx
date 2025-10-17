@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useLocation, Link } from "react-router-dom";
 import { useProduct } from "../contexts/ProductContext";
-import { getCart, updateCart } from "../api/cart";
+import { getCart, updateCartItem as updateCart  } from "../api/cart";
 import "../styles/ProductDetailsPage.css";
 import Seo from "../components/Seo";
 
@@ -134,7 +134,7 @@ const ProductDetail = () => {
             product.images.map((img, idx) => (
               <img
                 key={idx}
-                src={img}
+                src={img.url_full}
                 alt={`Thumbnail ${idx + 1}`}
                 className={`thumbnail ${selectedImage === img ? "active" : ""}`}
                 onClick={() => setSelectedImage(img)}
@@ -150,7 +150,7 @@ const ProductDetail = () => {
           {selectedImage ? (
             <img
               className="main-image"
-              src={selectedImage}
+              src={selectedImage.url_full}
               alt={product.productName || "Product Image"}
             />
           ) : (
@@ -160,10 +160,10 @@ const ProductDetail = () => {
 
         {/* Product Info */}
         <div className="product-info">
-          <h2 className="product-title">{product.productName || "Unnamed Product"}</h2>
+          <h2 className="product-title">{product.name || "Unnamed Product"}</h2>
           <div className="rating-orders">
-            <span className="star">⭐ {product.rating ?? "N/A"}</span>
-            <span className="orders">({product.orders ?? 0} orders)</span>
+            <span className="star">⭐ {product.average_rating>0 ? product.average_rating: "N/A"}</span>
+            {/* <span className="orders">({product.orders ?? 0} orders)</span> */}
           </div>
 
           <ul className="product-meta">

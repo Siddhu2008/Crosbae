@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { getUserProfile, getUserAddresses } from "../api/user";
 import "../styles/ProfilePage.css";
-
+import API_URL from "../api/auth";
 export default function ProfilePage() {
   const navigate = useNavigate();
   const location = useLocation();
@@ -63,7 +63,7 @@ export default function ProfilePage() {
     try {
       // You may want to move this to api/user.js as well
       const res = await fetch(
-        `https://api.crosbae.com/api/auth/addresses/${addressId}/`,
+        API_URL+`/api/auth/addresses/${addressId}/`,
         {
           method: "DELETE",
           headers: { Authorization: `Bearer ${token}` },

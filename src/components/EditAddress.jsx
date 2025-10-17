@@ -26,35 +26,53 @@ export default function EditAddress({ onSave, onCancel }) {
 
   // ✅ Load address data when component mounts
   useEffect(() => {
-    const fetchAddress = async () => {
+  const fetchAddressAndPhone = async () => {
+    try {
+      if (!token) throw new Error("Not authenticated");
+
+      const headers = { 'Authorization': `Bearer ${token}` };
+
+      // 1️⃣ Fetch Address
+      const res = await fetch(`${API_URL}/api/auth/addresses/${id}/`, { headers });
+      if (!res.ok) throw new Error("Failed to load address");
+      const addressData = await res.json();
+
+      // 2️⃣ Fetch Customer Phone Number (with fail-safe)
+      let phoneNumber = "";
       try {
-        if (!token) throw new Error("Not authenticated");
-
-        const headers = {
-          'Authorization': `Bearer ${token}`
-        };
-
-        const res = await fetch(`${API_URL}/api/auth/addresses/${id}/`, { headers });
-        if (!res.ok) throw new Error("Failed to load address");
-
-        const data = await res.json();
-
-        setForm((prev) => ({
-          ...prev,
-          ...data,
-          phone_number: "", // Or fetch separately if needed
-        }));
-
-        setLoading(false);
-      } catch (err) {
-        console.error(err);
-        alert(err.message || "Error loading address.");
-        setLoading(false);
+        const phoneRes = await fetch(`${API_URL}/api/auth/customer-phones/`, { headers });
+        if (phoneRes.ok) {
+          const phoneData = await phoneRes.json();
+          if (Array.isArray(phoneData) && phoneData.length > 0) {
+            const primary = phoneData.find(p => p.is_primary) || phoneData[0];
+            phoneNumber = primary.phone_number;
+          } else if (phoneData.phone_number) {
+            phoneNumber = phoneData.phone_number;
+          }
+        } else {
+          console.warn("⚠️ Phone API failed:", phoneRes.status);
+        }
+      } catch (phoneErr) {
+        console.warn("⚠️ Failed to load phone number", phoneErr);
       }
-    };
 
-    fetchAddress();
-  }, [id, token]);
+      // 3️⃣ Merge both into form state
+      setForm((prev) => ({
+        ...prev,
+        ...addressData,
+        phone_number: phoneNumber || "",
+      }));
+
+      setLoading(false);
+    } catch (err) {
+      console.error(err);
+      alert(err.message || "Error loading address.");
+      setLoading(false);
+    }
+  };
+
+  fetchAddressAndPhone();
+}, [id, token]);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;

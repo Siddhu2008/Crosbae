@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "../styles/AdminDashboard.css";
+import API_URL from "../api/auth";
 
 export default function EditProfile() {
   const navigate = useNavigate();
@@ -23,7 +24,7 @@ export default function EditProfile() {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const res = await axios.get("https://api.crosbae.com/api/auth/user", {
+        const res = await axios.get(API_URL+"/api/auth/me", {
           headers: { Authorization: `Bearer ${token}` },
         });
         setUser({
@@ -77,7 +78,7 @@ export default function EditProfile() {
       if (user.profilePicFile) {
         formData.append("profile_pic", user.profilePicFile);
       }
-      await axios.patch("https://api.crosbae.com/api/auth/user", formData, {
+      await axios.patch(API_URL+"/api/auth/user", formData, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "multipart/form-data",

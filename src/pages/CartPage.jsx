@@ -4,7 +4,9 @@ import "../styles/CartPage.css";
 import Seo from "../components/Seo";
 import API_URL from "../api/auth";
 import { AuthContext } from "../contexts/AuthContext";
-import { getCart, updateCart } from "../api/cart"; // Import your helpers
+import ProductContext from "../contexts/ProductContext";
+import { getCart, addToCart, updateCartItem, deleteCartItem } from "../api/cart";
+
 
 export default function CartPage() {
   const [cartItems, setCartItems] = useState([]);
@@ -18,22 +20,37 @@ export default function CartPage() {
   const [addressError, setAddressError] = useState(null);
 
   const { fetchWithAuth } = useContext(AuthContext);
+  const { state } = useContext(ProductContext);
+  const { products } = state;
+  console.log(products);
+
   const navigate = useNavigate();
 
   const token = localStorage.getItem("access");
 
   useEffect(() => {
-    fetchCart();
+    console.log(products)
+    if (products ? products.length > 0 : false) {
+      fetchCart();
+    }
     fetchCoupons();
     fetchAddresses();
-  }, []);
+  }, [products]);
+
 
   const fetchCart = async () => {
     try {
       const data = await getCart(token);
       // Ensure cartItems is always an array
       const items = Array.isArray(data) ? data : data.results || [];
-      setCartItems(items);
+      const enriched = items.map(item => {
+        const productDetail = products.find(p => p.id === item.product);
+        return {
+          ...item,
+          product: productDetail || { id: item.product }, // fallback if not found
+        };
+      });
+      setCartItems(enriched);
     } catch (err) {
       console.error("Error fetching cart:", err);
       setCartItems([]); // fallback to empty array on error
@@ -42,7 +59,7 @@ export default function CartPage() {
 
   const fetchCoupons = async () => {
     try {
-      const response = await fetch("https://api.crosbae.com/api/coupons/", {
+      const response = await fetch(API_URL + "/api/coupons/", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -60,7 +77,7 @@ export default function CartPage() {
 
   const fetchAddresses = async () => {
     try {
-      const res = await fetchWithAuth("https://api.crosbae.com/api/auth/addresses/");
+      const res = await fetchWithAuth(API_URL + "/api/auth/addresses/");
       if (!res.ok) throw new Error("Failed to fetch addresses");
       const data = await res.json();
       const addrList = Array.isArray(data) ? data : data.results || [];
@@ -72,29 +89,71 @@ export default function CartPage() {
       console.error("Error fetching addresses:", err);
     }
   };
-
-  const updateQuantity = async (productId, quantity) => {
-    if (quantity < 1) return;
+  const handleDeleteAddress = async (addressId) => {
+    if (!window.confirm("Are you sure you want to delete this address?")) return;
     try {
-      const updated = await updateCart({ product: productId, quantity }, token);
-      setCartItems(Array.isArray(updated) ? updated : updated.results || []);
+      const res = await fetch(`${API_URL}/api/auth/addresses/${addressId}/`, {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (res.ok) {
+        setAddresses((prev) => prev.filter((addr) => addr.id !== addressId));
+        if (selectedAddressId === addressId) {
+          setSelectedAddressId(null);
+        }
+      } else {
+        alert("Failed to delete address.");
+      }
     } catch (err) {
-      console.error("Error updating cart:", err);
+      console.error("Error deleting address:", err);
+      alert("Error deleting address.");
     }
   };
 
-  const removeFromCart = async (productId) => {
-    try {
-      const updated = await updateCart({ product: productId, quantity: 0 }, token);
-      setCartItems(Array.isArray(updated) ? updated : updated.results || []);
-    } catch (err) {
-      console.error("Error removing from cart:", err);
-    }
-  };
+  const updateQuantity = async (cartItemId, newQuantity) => {
+  if (newQuantity < 1) return;
+  try {
+    await updateCartItem(cartItemId, { quantity: newQuantity }, token);
+    const updatedCart = await getCart(token);
+
+    const items = Array.isArray(updatedCart) ? updatedCart : updatedCart.results || [];
+    const enriched = items.map(item => {
+      const productDetail = products.find(p => p.id === item.product);
+      return { ...item, product: productDetail || { id: item.product } };
+    });
+
+    setCartItems(enriched);
+  } catch (err) {
+    console.error("Error updating cart:", err);
+    alert("Failed to update cart quantity");
+  }
+};
+
+
+
+const removeFromCart = async (cartItemId) => {
+  try {
+    await deleteCartItem(cartItemId, token);
+    const updated = await getCart(token);
+    const items = Array.isArray(updated) ? updated : updated.results || [];
+    const enriched = items.map(item => {
+      const productDetail = products.find(p => p.id === item.product);
+      return { ...item, product: productDetail || { id: item.product } };
+    });
+    setCartItems(enriched);
+  } catch (err) {
+    console.error("Error removing from cart:", err);
+    alert("Failed to remove item from cart");
+  }
+};
+
+
+
 
   const calculateSubtotal = () => {
-    return cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
-  };
+  return cartItems.reduce((sum, item) => sum + (item.product?.price || 0) * item.quantity, 0);
+};
+
 
   const shipping = 0;
 
@@ -249,15 +308,15 @@ export default function CartPage() {
         <div className="cart-layout">
           <div className="cart-items">
             {cartItems.map((item, idx) => (
+
               <div className="cart-item" key={`${item.id}-${idx}`}>
                 <div className="cart-left">
-                  <img src={item.images?.[0]} alt={item.productName} className="cart-img" />
+                  <img src={item.product.images[0].url_full} alt={item.product.name} className="cart-img" />
                   <div className="cart-info">
-                    <h4 className="cart-name">{item.productName}</h4>
-                    <p className="cart-sku">SKU: {item.sku}</p>
+                    <h4 className="cart-name">{item.product?.name || "Product not found"}</h4>
+                    <p className="cart-sku">SKU: {item.product?.SKU_ProductID || "N/A"}</p>
                     <p className="cart-price">
-                      ₹{item.price}{" "}
-                      {item.oldPrice && <span className="cart-oldprice">₹{item.oldPrice}</span>}
+                      ₹{item.product?.price || 0}
                     </p>
                   </div>
                 </div>
@@ -265,8 +324,10 @@ export default function CartPage() {
                   <button className="qty-btn" onClick={() => updateQuantity(item.id, item.quantity - 1)}>−</button>
                   <span className="qty-value">{item.quantity}</span>
                   <button className="qty-btn" onClick={() => updateQuantity(item.id, item.quantity + 1)}>+</button>
-                  <button className="delete-btn" onClick={() => removeFromCart(item.id)}>
-                    <i className="bi bi-trash-fill"></i>
+                  <button className="delete-btn" onClick={() => {
+                    removeFromCart(item.id)
+                  }}>
+                    <i className="bi bi-trash-fill" ></i>
                   </button>
                 </div>
               </div>
@@ -311,6 +372,7 @@ export default function CartPage() {
             </div>
 
             {/* Address Section */}
+            {/* Address Section */}
             {showAddressSection && (
               <div className="address-section mt-4">
                 <h4>Select Shipping Address</h4>
@@ -320,28 +382,47 @@ export default function CartPage() {
                   <p>No saved addresses found.</p>
                 ) : (
                   addresses.map((addr) => (
-                    <div key={addr.id} className="address-option">
-                      <label>
+                    <div key={addr.id} className="address-option" style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                      <label style={{ flex: 1 }}>
                         <input
                           type="radio"
                           name="selectedAddress"
                           value={addr.id}
                           checked={selectedAddressId === addr.id}
                           onChange={() => setSelectedAddressId(addr.id)}
+                          style={{ marginRight: "10px" }}
                         />
                         <span>
                           <strong>{addr.title}</strong>: {addr.address_line1}, {addr.city}, {addr.state} - {addr.pincode}
                         </span>
                       </label>
+
+                      <div className="address-actions">
+                        <button
+                          className="profile-btn small"
+                          onClick={() => navigate(`/edit-address/${addr.id}?redirectTo=cart`)}
+                          style={{ marginRight: "8px" }}
+                        >
+                          ✏️
+                        </button>
+
+                        <button
+                          className="profile-btn small delete"
+                          onClick={() => handleDeleteAddress(addr.id)}
+                        >
+                          🗑️
+                        </button>
+                      </div>
                     </div>
                   ))
                 )}
                 <button
                   className="btn btn-secondary mt-2 m-2"
-                  onClick={() => navigate("/add-address")}
+                  onClick={() => navigate("/add-address?redirectTo=cart")}
                 >
                   ➕ Add New Address
                 </button>
+
                 <button
                   className="btn btn-primary mt-3 m-2"
                   onClick={handlePlaceOrder}
@@ -351,6 +432,7 @@ export default function CartPage() {
                 </button>
               </div>
             )}
+
           </div>
         </div>
       )}

@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { getWishlist, removeFromWishlist } from "../api/wishlist";
+import { addToCart } from "../api/cart";
 import Seo from "./Seo";
 import "../styles/WishlistPage.css";
-import { updateCart } from "../api/cart";
 
 export default function WishlistPage() {
   const [wishlistItems, setWishlistItems] = useState([]);
@@ -16,6 +16,7 @@ export default function WishlistPage() {
         const data = await getWishlist(token);
         setWishlistItems(data.results || data);
       } catch (err) {
+        console.error("Failed to fetch wishlist", err);
         setWishlistItems([]);
       } finally {
         setLoading(false);
@@ -24,35 +25,33 @@ export default function WishlistPage() {
     fetchWishlist();
   }, [token]);
 
-  const handleRemove = async (productId) => {
+  const handleRemove = async (wishlistId) => {
     try {
-      await removeFromWishlist(productId, token);
-      setWishlistItems((prev) =>
-        prev.filter(
-          (item) => item.product.id !== productId && item.id !== productId
-        )
-      );
+      await removeFromWishlist(wishlistId, token);
+      setWishlistItems(prev => prev.filter(item => item.id !== wishlistId));
     } catch (err) {
       alert("Failed to remove from wishlist");
     }
   };
 
-  const handleAddToCart = async (productId, quantity = 1) => {
+  const handleAddToCart = async (productId, wishlistId, quantity = 1) => {
     try {
-      await updateCart({ product: productId, quantity }, token);
-      alert("1 item added to cart");
+      await addToCart({ product: productId, quantity }, token);
+      await handleRemove(wishlistId);
+      alert("Item moved to cart");
     } catch (err) {
       console.error("Error adding to cart:", err);
+      alert("Failed to add item to cart");
     }
   };
 
   if (loading) return <div>Loading...</div>;
 
   return (
-    <div className="wishlist-page ">
+    <div className="wishlist-page">
       <Seo
         title="My Wishlist"
-        description="View and manage your wishlist at Cros Bae. Save your favorite imitation jewellery pieces and shop them later."
+        description="View and manage your wishlist at Cros Bae."
         keywords="wishlist, my wishlist, favorite jewellery, saved items"
       />
       <h2 className="wishlist-title">My Wishlist</h2>
@@ -69,26 +68,26 @@ export default function WishlistPage() {
           {wishlistItems.map((item) => {
             const product = item.product || item;
             return (
-              <div className="wishlist-card" key={product.id}>
+              <div className="wishlist-card" key={item.id}>
                 <img
-                  src={product.images?.[0]}
-                  alt={product.productName}
+                  src={product.images?.[0]?.url_full || "/fallback-image.jpg"}
+                  alt={product.productName || product.name}
                   className="wishlist-img"
                 />
                 <div className="wishlist-info">
-                  <h5>{product.productName}</h5>
+                  <h5>{product.productName || product.name}</h5>
                   <p className="wishlist-desc">{product.description}</p>
                   <p className="wishlist-price">₹ {product.price}</p>
                   <div className="wishlist-actions">
                     <button
                       className="btn-remove"
-                      onClick={() => handleRemove(product.id)}
+                      onClick={() => handleRemove(item.id)}
                     >
                       Remove
                     </button>
                     <button
                       className="btn-cart"
-                      onClick={() => handleAddToCart(product.id)}
+                      onClick={() => handleAddToCart(product.id, item.id)}
                     >
                       Add to Cart
                     </button>
