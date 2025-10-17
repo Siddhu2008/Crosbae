@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { getUserProfile, getUserAddresses } from "../api/user";
 import "../styles/ProfilePage.css";
 import API_URL from "../api/auth";
+
 export default function ProfilePage() {
   const navigate = useNavigate();
   const location = useLocation();
@@ -23,19 +24,21 @@ export default function ProfilePage() {
 
     const fetchData = async () => {
       try {
-        // Fetch user profile
+        // ✅ Fetch user profile
         const userData = await getUserProfile(token);
         setUser(userData);
 
-        // Fetch addresses
+        // ✅ Fetch addresses
         let addressData = [];
         try {
           const rawAddressData = await getUserAddresses(token);
+
+          // Normalize different possible formats
           if (Array.isArray(rawAddressData)) {
             addressData = rawAddressData;
           } else if (
+            rawAddressData &&
             typeof rawAddressData === "object" &&
-            rawAddressData !== null &&
             "results" in rawAddressData &&
             Array.isArray(rawAddressData.results)
           ) {
@@ -45,9 +48,20 @@ export default function ProfilePage() {
             addressData = arrProp || [];
           }
         } catch (e) {
-          // Ignore address fetch errors
+          console.warn("Failed to fetch addresses:", e);
         }
-        setAddresses(Array.isArray(addressData) ? addressData : []);
+
+        // ✅ Filter only addresses belonging to the logged-in user
+        const filteredAddresses = Array.isArray(addressData)
+          ? addressData.filter(
+              (addr) =>
+                addr.customer === userData.id ||
+                addr.user === userData.id || // in case API uses user instead of customer
+                addr.customer_id === userData.id
+            )
+          : [];
+
+        setAddresses(filteredAddresses);
       } catch (err) {
         setError(err.message || "Failed to load profile data");
       } finally {
@@ -61,20 +75,17 @@ export default function ProfilePage() {
   const handleDeleteAddress = async (addressId) => {
     if (!window.confirm("Are you sure you want to delete this address?")) return;
     try {
-      // You may want to move this to api/user.js as well
-      const res = await fetch(
-        API_URL+`/api/auth/addresses/${addressId}/`,
-        {
-          method: "DELETE",
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
+      const res = await fetch(`${API_URL}/api/auth/addresses/${addressId}/`, {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${token}` },
+      });
       if (res.ok) {
         setAddresses((prev) => prev.filter((addr) => addr.id !== addressId));
       } else {
         alert("Failed to delete address.");
       }
     } catch (err) {
+      console.error("Error deleting address:", err);
       alert("Error deleting address.");
     }
   };
@@ -141,11 +152,14 @@ export default function ProfilePage() {
             </div>
           ) : (
             <>
-              {addresses.map((addr, index) => (
-                <div key={index} className="address-summary">
+              {addresses.map((addr) => (
+                <div key={addr.id} className="address-summary">
                   <strong>{addr.title || "No Label"}</strong> —{" "}
                   {addr.address_line1 || ""}
-                  {addr.address_line2 ? ", " + addr.address_line2 : ""}, {addr.city || ""}, {addr.state || ""} {addr.pincode ? "- " + addr.pincode : ""}, {addr.country || "India"}
+                  {addr.address_line2 ? ", " + addr.address_line2 : ""},{" "}
+                  {addr.city || ""}, {addr.state || ""}{" "}
+                  {addr.pincode ? "- " + addr.pincode : ""},{" "}
+                  {addr.country || "India"}
                   <div className="address-actions">
                     <button
                       className="profile-btn small"
@@ -176,7 +190,7 @@ export default function ProfilePage() {
         <div className="profile-actions">
           <button
             onClick={() => navigate("/edit-profile")}
-            className="profile-btn edit"
+            className="profile-btn secondary"
           >
             ✏️ Edit Profile
           </button>
@@ -186,12 +200,7 @@ export default function ProfilePage() {
           >
             🧾 Order History
           </button>
-          <button
-            onClick={() => navigate("/track-order")}
-            className="profile-btn secondary"
-          >
-            🚚 Track My Order
-          </button>
+          
         </div>
       </div>
     </div>

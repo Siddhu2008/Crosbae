@@ -10,15 +10,20 @@ export const getWishlist = async (token) => {
   return res.data;
 };
 
-// ✅ ADD to wishlist
+// ✅ ADD to wishlist — now includes `customer`
 export const addToWishlist = async (payload, token) => {
-  const res = await axios.post(API_URL, payload, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
-    },
-  });
-  return res.data;
+  try {
+    const res = await axios.post(API_URL, payload, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+    return res.data;
+  } catch (err) {
+    console.error("🛑 Wishlist Add Error:", err.response?.data || err.message);
+    throw err;
+  }
 };
 
 // ✅ REMOVE from wishlist

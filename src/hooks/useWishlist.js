@@ -47,7 +47,8 @@ export default function useWishlist(token) {
           return updated;
         });
       } else {
-        const newItem = await addToWishlist({ product: product.id }, token);
+       const newItem = await addToWishlist({ product: product.id }, token);
+
         if (newItem && newItem.id) {
           setWishlistProductIds(prev => ({
             ...prev,

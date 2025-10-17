@@ -5,8 +5,12 @@ import Seo from "../components/Seo";
 import API_URL from "../api/auth";
 import { AuthContext } from "../contexts/AuthContext";
 import ProductContext from "../contexts/ProductContext";
-import { getCart, addToCart, updateCartItem, deleteCartItem } from "../api/cart";
-
+import {
+  getCart,
+  addToCart,
+  updateCartItem,
+  deleteCartItem,
+} from "../api/cart";
 
 export default function CartPage() {
   const [cartItems, setCartItems] = useState([]);
@@ -18,56 +22,59 @@ export default function CartPage() {
   const [availableCoupons, setAvailableCoupons] = useState([]);
   const [addresses, setAddresses] = useState([]);
   const [addressError, setAddressError] = useState(null);
+  const [currentUser, setCurrentUser] = useState(null);
 
   const { fetchWithAuth } = useContext(AuthContext);
   const { state } = useContext(ProductContext);
   const { products } = state;
-  console.log(products);
 
   const navigate = useNavigate();
-
   const token = localStorage.getItem("access");
 
+  // Fetch logged-in user info
   useEffect(() => {
-    console.log(products)
-    if (products ? products.length > 0 : false) {
-      fetchCart();
-    }
-    fetchCoupons();
-    fetchAddresses();
-  }, [products]);
+    const fetchUser = async () => {
+      try {
+        const res = await fetch(`${API_URL}/api/auth/me/`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        if (!res.ok) throw new Error("Failed to fetch user");
+        const data = await res.json();
+        setCurrentUser(data);
+      } catch (err) {
+        console.error("Error fetching user:", err);
+      }
+    };
+    if (token) fetchUser();
+  }, [token]);
 
+  // Load cart, coupons, addresses
+  useEffect(() => {
+    if (products?.length > 0) fetchCart();
+    fetchCoupons();
+    if (token) fetchAddresses();
+  }, [products, currentUser]);
 
   const fetchCart = async () => {
     try {
       const data = await getCart(token);
-      // Ensure cartItems is always an array
       const items = Array.isArray(data) ? data : data.results || [];
-      const enriched = items.map(item => {
-        const productDetail = products.find(p => p.id === item.product);
-        return {
-          ...item,
-          product: productDetail || { id: item.product }, // fallback if not found
-        };
+      const enriched = items.map((item) => {
+        const productDetail = products.find((p) => p.id === item.product);
+        return { ...item, product: productDetail || { id: item.product } };
       });
       setCartItems(enriched);
     } catch (err) {
       console.error("Error fetching cart:", err);
-      setCartItems([]); // fallback to empty array on error
+      setCartItems([]);
     }
   };
 
   const fetchCoupons = async () => {
     try {
-      const response = await fetch(API_URL + "/api/coupons/", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      const response = await fetch(API_URL + "/api/coupons/");
       if (!response.ok) throw new Error("Failed to fetch coupons");
       const data = await response.json();
-      // Ensure availableCoupons is always an array
       const coupons = Array.isArray(data) ? data : data.results || [];
       setAvailableCoupons(coupons);
     } catch (err) {
@@ -81,14 +88,21 @@ export default function CartPage() {
       if (!res.ok) throw new Error("Failed to fetch addresses");
       const data = await res.json();
       const addrList = Array.isArray(data) ? data : data.results || [];
-      setAddresses(addrList);
-      const defaultAddress = addrList.find((addr) => addr.is_default);
+
+      // ✅ Filter addresses to show only the logged-in user's
+      const filtered = currentUser
+        ? addrList.filter((addr) => addr.customer === currentUser.id)
+        : addrList;
+
+      setAddresses(filtered);
+      const defaultAddress = filtered.find((addr) => addr.is_default);
       if (defaultAddress) setSelectedAddressId(defaultAddress.id);
     } catch (err) {
       setAddressError("Unable to load addresses.");
       console.error("Error fetching addresses:", err);
     }
   };
+
   const handleDeleteAddress = async (addressId) => {
     if (!window.confirm("Are you sure you want to delete this address?")) return;
     try {
@@ -98,9 +112,7 @@ export default function CartPage() {
       });
       if (res.ok) {
         setAddresses((prev) => prev.filter((addr) => addr.id !== addressId));
-        if (selectedAddressId === addressId) {
-          setSelectedAddressId(null);
-        }
+        if (selectedAddressId === addressId) setSelectedAddressId(null);
       } else {
         alert("Failed to delete address.");
       }
@@ -111,49 +123,31 @@ export default function CartPage() {
   };
 
   const updateQuantity = async (cartItemId, newQuantity) => {
-  if (newQuantity < 1) return;
-  try {
-    await updateCartItem(cartItemId, { quantity: newQuantity }, token);
-    const updatedCart = await getCart(token);
+    if (newQuantity < 1) return;
+    try {
+      await updateCartItem(cartItemId, { quantity: newQuantity }, token);
+      fetchCart();
+    } catch (err) {
+      console.error("Error updating cart:", err);
+      alert("Failed to update cart quantity");
+    }
+  };
 
-    const items = Array.isArray(updatedCart) ? updatedCart : updatedCart.results || [];
-    const enriched = items.map(item => {
-      const productDetail = products.find(p => p.id === item.product);
-      return { ...item, product: productDetail || { id: item.product } };
-    });
+  const removeFromCart = async (cartItemId) => {
+    try {
+      await deleteCartItem(cartItemId, token);
+      fetchCart();
+    } catch (err) {
+      console.error("Error removing from cart:", err);
+      alert("Failed to remove item from cart");
+    }
+  };
 
-    setCartItems(enriched);
-  } catch (err) {
-    console.error("Error updating cart:", err);
-    alert("Failed to update cart quantity");
-  }
-};
-
-
-
-const removeFromCart = async (cartItemId) => {
-  try {
-    await deleteCartItem(cartItemId, token);
-    const updated = await getCart(token);
-    const items = Array.isArray(updated) ? updated : updated.results || [];
-    const enriched = items.map(item => {
-      const productDetail = products.find(p => p.id === item.product);
-      return { ...item, product: productDetail || { id: item.product } };
-    });
-    setCartItems(enriched);
-  } catch (err) {
-    console.error("Error removing from cart:", err);
-    alert("Failed to remove item from cart");
-  }
-};
-
-
-
-
-  const calculateSubtotal = () => {
-  return cartItems.reduce((sum, item) => sum + (item.product?.price || 0) * item.quantity, 0);
-};
-
+  const calculateSubtotal = () =>
+    cartItems.reduce(
+      (sum, item) => sum + (item.product?.price || 0) * item.quantity,
+      0
+    );
 
   const shipping = 0;
 
@@ -164,7 +158,6 @@ const removeFromCart = async (cartItemId) => {
     );
     if (found) {
       const subtotal = calculateSubtotal();
-      // Check minimum order amount
       if (found.min_order_amount && subtotal < Number(found.min_order_amount)) {
         setDiscount(0);
         setCouponError(
@@ -175,19 +168,23 @@ const removeFromCart = async (cartItemId) => {
       let disc = 0;
       if (found.discount_type === "fixed_amount") {
         disc = Number(found.discount_value);
-        // Apply max discount cap if present
-        if (found.max_discount_amount && disc > Number(found.max_discount_amount)) {
+        if (
+          found.max_discount_amount &&
+          disc > Number(found.max_discount_amount)
+        ) {
           disc = Number(found.max_discount_amount);
         }
       } else if (found.discount_type === "percentage") {
         disc = (subtotal * Number(found.discount_value)) / 100;
-        // Apply max discount cap if present
-        if (found.max_discount_amount && disc > Number(found.max_discount_amount)) {
+        if (
+          found.max_discount_amount &&
+          disc > Number(found.max_discount_amount)
+        ) {
           disc = Number(found.max_discount_amount);
         }
       }
       setDiscount(disc);
-      setCouponError(""); // Always clear error if coupon is valid
+      setCouponError("");
     } else {
       setDiscount(0);
       setCouponError("Invalid coupon code.");
@@ -225,7 +222,7 @@ const removeFromCart = async (cartItemId) => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`,
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
           amount: Math.round((calculateSubtotal() - discount + shipping) * 100),
@@ -251,7 +248,7 @@ const removeFromCart = async (cartItemId) => {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
-              "Authorization": `Bearer ${token}`,
+              Authorization: `Bearer ${token}`,
             },
             body: JSON.stringify({
               razorpay_order_id: response.razorpay_order_id,
@@ -270,13 +267,10 @@ const removeFromCart = async (cartItemId) => {
           navigate("/order-success");
         },
         prefill: {
-          name: "Customer Name",
-          email: "customer@example.com",
-          contact: "9999999999",
+          name: currentUser?.username || "Customer",
+          email: currentUser?.email || "",
         },
-        theme: {
-          color: "#d1a054",
-        },
+        theme: { color: "#d1a054" },
       };
 
       const rzp = new window.Razorpay(options);
@@ -297,37 +291,57 @@ const removeFromCart = async (cartItemId) => {
       <Seo title="Shopping Cart" description="View your Cros Bae cart" />
 
       <h2 className="cart-title text-center my-3">Shopping Cart</h2>
-      <p className="cart-subtitle text-center">{cartItems.length} items in your cart</p>
+      <p className="cart-subtitle text-center">
+        {cartItems.length} items in your cart
+      </p>
 
       {cartItems.length === 0 ? (
         <div className="cart-empty text-center">
           <p>Your cart is empty.</p>
-          <Link to="/shop" className="btn btn-outline-primary">Browse Jewellery</Link>
+          <Link to="/shop" className="btn btn-outline-primary">
+            Browse Jewellery
+          </Link>
         </div>
       ) : (
         <div className="cart-layout">
           <div className="cart-items">
-            {cartItems.map((item, idx) => (
-
-              <div className="cart-item" key={`${item.id}-${idx}`}>
+            {cartItems.map((item) => (
+              <div className="cart-item" key={item.id}>
                 <div className="cart-left">
-                  <img src={item.product.images[0].url_full} alt={item.product.name} className="cart-img" />
+                  <img
+                    src={item.product.images?.[0]?.url_full || "/fallback-image.jpg"}
+                    alt={item.product.name}
+                    className="cart-img"
+                  />
                   <div className="cart-info">
-                    <h4 className="cart-name">{item.product?.name || "Product not found"}</h4>
-                    <p className="cart-sku">SKU: {item.product?.SKU_ProductID || "N/A"}</p>
-                    <p className="cart-price">
-                      ₹{item.product?.price || 0}
-                    </p>
+                    <h4>{item.product?.name || "Product not found"}</h4>
+                    <p>SKU: {item.product?.SKU_ProductID || "N/A"}</p>
+                    <p>₹{item.product?.price || 0}</p>
                   </div>
                 </div>
                 <div className="cart-right">
-                  <button className="qty-btn" onClick={() => updateQuantity(item.id, item.quantity - 1)}>−</button>
+                  <button
+                    className="qty-btn"
+                    onClick={() =>
+                      updateQuantity(item.id, item.quantity - 1)
+                    }
+                  >
+                    −
+                  </button>
                   <span className="qty-value">{item.quantity}</span>
-                  <button className="qty-btn" onClick={() => updateQuantity(item.id, item.quantity + 1)}>+</button>
-                  <button className="delete-btn" onClick={() => {
-                    removeFromCart(item.id)
-                  }}>
-                    <i className="bi bi-trash-fill" ></i>
+                  <button
+                    className="qty-btn"
+                    onClick={() =>
+                      updateQuantity(item.id, item.quantity + 1)
+                    }
+                  >
+                    +
+                  </button>
+                  <button
+                    className="delete-btn"
+                    onClick={() => removeFromCart(item.id)}
+                  >
+                    <i className="bi bi-trash-fill"></i>
                   </button>
                 </div>
               </div>
@@ -335,7 +349,7 @@ const removeFromCart = async (cartItemId) => {
           </div>
 
           <div className="cart-sidebar">
-            {/* Coupon Box */}
+            {/* Coupon Section */}
             <div className="coupon-box">
               <div className="coupon-header">🎁 Have a coupon?</div>
               <div className="coupon-input-group">
@@ -347,10 +361,12 @@ const removeFromCart = async (cartItemId) => {
                 />
                 <button onClick={applyCoupon}>Apply</button>
               </div>
-              {couponError && <p className="coupon-error">{couponError}</p>}
+              {couponError && (
+                <p className="coupon-error">{couponError}</p>
+              )}
               {!couponError && couponCode.trim() && (
                 <p className="coupon-success">
-                  Coupon applied! {discount > 0 ? `You saved ₹${discount.toFixed(2)}` : "No discount for current cart."}
+                  Coupon applied! You saved ₹{discount.toFixed(2)}
                 </p>
               )}
             </div>
@@ -358,20 +374,35 @@ const removeFromCart = async (cartItemId) => {
             {/* Order Summary */}
             <div className="order-summary">
               <h3>Order Summary</h3>
-              <div className="summary-line"><span>Subtotal</span><span>₹{calculateSubtotal().toFixed(2)}</span></div>
-              <div className="summary-line discount"><span>Discount</span><span>-₹{discount.toFixed(2)}</span></div>
-              <div className="summary-line"><span>Shipping</span><span>{shipping === 0 ? "Free" : `₹${shipping}`}</span></div>
+              <div className="summary-line">
+                <span>Subtotal</span>
+                <span>₹{calculateSubtotal().toFixed(2)}</span>
+              </div>
+              <div className="summary-line discount">
+                <span>Discount</span>
+                <span>-₹{discount.toFixed(2)}</span>
+              </div>
+              <div className="summary-line">
+                <span>Shipping</span>
+                <span>{shipping === 0 ? "Free" : `₹${shipping}`}</span>
+              </div>
               <hr />
-              <div className="summary-line total"><span>Total</span><span>₹{(calculateSubtotal() - discount + shipping).toFixed(2)}</span></div>
-
+              <div className="summary-line total">
+                <span>Total</span>
+                <span>
+                  ₹{(calculateSubtotal() - discount + shipping).toFixed(2)}
+                </span>
+              </div>
               {!showAddressSection && (
-                <button className="btn checkout-btn" onClick={handleProceedToCheckout}>
+                <button
+                  className="btn checkout-btn"
+                  onClick={handleProceedToCheckout}
+                >
                   Proceed to Checkout
                 </button>
               )}
             </div>
 
-            {/* Address Section */}
             {/* Address Section */}
             {showAddressSection && (
               <div className="address-section mt-4">
@@ -382,7 +413,15 @@ const removeFromCart = async (cartItemId) => {
                   <p>No saved addresses found.</p>
                 ) : (
                   addresses.map((addr) => (
-                    <div key={addr.id} className="address-option" style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                    <div
+                      key={addr.id}
+                      className="address-option"
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                      }}
+                    >
                       <label style={{ flex: 1 }}>
                         <input
                           type="radio"
@@ -393,19 +432,20 @@ const removeFromCart = async (cartItemId) => {
                           style={{ marginRight: "10px" }}
                         />
                         <span>
-                          <strong>{addr.title}</strong>: {addr.address_line1}, {addr.city}, {addr.state} - {addr.pincode}
+                          <strong>{addr.title}</strong>: {addr.address_line1},{" "}
+                          {addr.city}, {addr.state} - {addr.pincode}
                         </span>
                       </label>
-
                       <div className="address-actions">
                         <button
                           className="profile-btn small"
-                          onClick={() => navigate(`/edit-address/${addr.id}?redirectTo=cart`)}
+                          onClick={() =>
+                            navigate(`/edit-address/${addr.id}?redirectTo=cart`)
+                          }
                           style={{ marginRight: "8px" }}
                         >
                           ✏️
                         </button>
-
                         <button
                           className="profile-btn small delete"
                           onClick={() => handleDeleteAddress(addr.id)}
@@ -422,7 +462,6 @@ const removeFromCart = async (cartItemId) => {
                 >
                   ➕ Add New Address
                 </button>
-
                 <button
                   className="btn btn-primary mt-3 m-2"
                   onClick={handlePlaceOrder}
@@ -432,7 +471,6 @@ const removeFromCart = async (cartItemId) => {
                 </button>
               </div>
             )}
-
           </div>
         </div>
       )}

@@ -72,7 +72,7 @@ const App = () => {
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/orders" element={<OrderHistoryPage />} />
             <Route path="/orders/:id" element={<OrderDetailsPage />} />
-            <Route path="/track-order" element={<OrderTracking />} />
+            <Route path="/orders/:id/tracking" element={<OrderTracking />} />
             <Route path="/edit-profile" element={<EditProfile />} />
             <Route path="/forgot-password" element={<ForgotPasswordPage />} />
             <Route path="/reset-password" element={<ResetPasswordPage />} />

@@ -11,10 +11,17 @@ export default function WishlistPage() {
   const token = localStorage.getItem("access");
 
   useEffect(() => {
+    if (!token) {
+      setWishlistItems([]);
+      setLoading(false);
+      return;
+    }
+
     const fetchWishlist = async () => {
       try {
         const data = await getWishlist(token);
-        setWishlistItems(data.results || data);
+        // Handle paginated or direct array response
+        setWishlistItems(data.results || data || []);
       } catch (err) {
         console.error("Failed to fetch wishlist", err);
         setWishlistItems([]);
@@ -28,7 +35,7 @@ export default function WishlistPage() {
   const handleRemove = async (wishlistId) => {
     try {
       await removeFromWishlist(wishlistId, token);
-      setWishlistItems(prev => prev.filter(item => item.id !== wishlistId));
+      setWishlistItems((prev) => prev.filter((item) => item.id !== wishlistId));
     } catch (err) {
       alert("Failed to remove from wishlist");
     }
@@ -66,29 +73,36 @@ export default function WishlistPage() {
       ) : (
         <div className="wishlist-grid">
           {wishlistItems.map((item) => {
+            // The item.product might be an object or just the product itself based on API
             const product = item.product || item;
+
+            // Extract image URL safely
+            // Check if product.images is array and has at least one object with url_full or url
+            const imgUrl =
+              product.images && product.images.length > 0
+                ? product.images[0].url_full || product.images[0].url || "/fallback-image.jpg"
+                : "/fallback-image.jpg";
+
             return (
               <div className="wishlist-card" key={item.id}>
                 <img
-                  src={product.images?.[0]?.url_full || "/fallback-image.jpg"}
-                  alt={product.productName || product.name}
+                  src={imgUrl}
+                  alt={product.productName || product.name || "Wishlist product"}
                   className="wishlist-img"
+                  onError={(e) => {
+                    e.target.onerror = null;
+                    e.target.src = "/fallback-image.jpg";
+                  }}
                 />
                 <div className="wishlist-info">
-                  <h5>{product.productName || product.name}</h5>
-                  <p className="wishlist-desc">{product.description}</p>
-                  <p className="wishlist-price">₹ {product.price}</p>
+                  <h5>{product.productName || product.name || "Unnamed Product"}</h5>
+                  <p className="wishlist-desc">{product.description || "No description available."}</p>
+                  <p className="wishlist-price">₹ {product.price?.toLocaleString() || "N/A"}</p>
                   <div className="wishlist-actions">
-                    <button
-                      className="btn-remove"
-                      onClick={() => handleRemove(item.id)}
-                    >
+                    <button className="btn-remove" onClick={() => handleRemove(item.id)}>
                       Remove
                     </button>
-                    <button
-                      className="btn-cart"
-                      onClick={() => handleAddToCart(product.id, item.id)}
-                    >
+                    <button className="btn-cart" onClick={() => handleAddToCart(product.id, item.id)}>
                       Add to Cart
                     </button>
                   </div>

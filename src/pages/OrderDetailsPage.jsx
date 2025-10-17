@@ -1,123 +1,57 @@
+// src/pages/OrderDetailsPage.jsx
 import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import "../styles/OrderDetails.css";
-
-// We can reuse the same dummyOrders from history page or fetch from API
-const dummyOrders = [
-  {
-    id: "ORD123",
-    date: "2025-08-20",
-    total: 3099,
-    status: "Delivered",
-    cancelStage: null,
-    address: {
-      name: "Siddhu Kumar",
-      line1: "123 Gold Street",
-      city: "Mumbai",
-      pincode: "400001",
-      phone: "9876543210",
-    },
-    items: [
-      {
-        name: "Elegant Gold Necklace",
-        price: 2499,
-        qty: 1,
-        image:
-          "https://i.pinimg.com/736x/11/82/fa/1182fa5e7e9827d208ec3344fbae7ab5.jpg",
-      },
-      {
-        name: "Diamond Earrings",
-        price: 600,
-        qty: 1,
-        image: "https://d2ma7w4w9grdob.cloudfront.net/media/45100-IND_2930.JPG",
-      },
-    ],
-  },
-  {
-    id: "ORD122",
-    date: "2025-07-15",
-    total: 1899,
-    status: "Cancelled",
-    cancelStage: 1, // 0 placed, 1 shipped
-    address: {
-      name: "Siddhu Kumar",
-      line1: "123 Gold Street",
-      city: "Mumbai",
-      pincode: "400001",
-      phone: "9876543210",
-    },
-    items: [
-      {
-        name: "Rose Gold Ring",
-        price: 1899,
-        qty: 1,
-        image:
-          "https://www.orra.co.in/media/catalog/product/o/r/org22019_1_m2xicjnhbgtdbr3r.jpg",
-      },
-    ],
-  },
-];
+import API_URL from "../api/auth";
 
 export default function OrderDetailsPage() {
   const { id } = useParams();
   const [order, setOrder] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const token = localStorage.getItem("access");
 
   useEffect(() => {
-    // Simulate fetching order by id
-    const found = dummyOrders.find((o) => o.id === id);
-    setOrder(found);
-  }, [id]);
+    const fetchOrder = async () => {
+      try {
+        const res = await fetch(`${API_URL}/api/orders/${id}/`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        if (!res.ok) throw new Error("Failed to fetch order");
+        const data = await res.json();
+        setOrder(data);
+      } catch (err) {
+        console.error("Error fetching order:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchOrder();
+  }, [id, token]);
 
-  if (!order) {
-    return (
-      <div className="order-details container">
-        <p>Loading order details...</p>
-      </div>
-    );
-  }
+  if (loading) return <div className="order-details container"><p>Loading order...</p></div>;
+  if (!order) return <div className="order-details container"><p>Order not found.</p></div>;
 
   return (
     <div className="order-details container">
       <header className="od-header">
-        <Link to="/orders" className="od-back">
-          ← Back to Orders
-        </Link>
-        <h1 className="od-title">Order {order.id}</h1>
+        <Link to="/orders" className="od-back">← Back to Orders</Link>
+        <h1 className="od-title">Order {order.uuid}</h1>
         <div className="od-meta">
-          <span>
-            <strong>Date:</strong> {order.date}
-          </span>
-          <span className={`od-badge ${order.status.toLowerCase()}`}>
-            {order.status}
-          </span>
-          <span>
-            <strong>Total:</strong> ₹{order.total}
-          </span>
+          <span><strong>Date:</strong> {new Date(order.order_on).toLocaleDateString()}</span>
+          <span className={`od-badge ${order.status.toLowerCase()}`}>{order.status}</span>
+          <span><strong>Total:</strong> ₹{order.total}</span>
         </div>
       </header>
 
-      {/* Progress */}
       <div className="od-progress">
         <div
           className={`od-progress-bar ${
-            order.status === "Delivered"
+            order.status === "delivered"
               ? "delivered"
-              : order.status === "Cancelled"
+              : order.status === "cancelled"
               ? "cancelled"
               : "inprogress"
           }`}
-          style={
-            order.status === "Cancelled"
-              ? {
-                  "--cancel-width":
-                    order.cancelStage === 0
-                      ? "33%"
-                      : order.cancelStage === 1
-                      ? "66%"
-                      : "100%",
-                }
-              : {}
-          }
         />
         <div className="od-progress-steps">
           <span>Placed</span>
@@ -126,30 +60,29 @@ export default function OrderDetailsPage() {
         </div>
       </div>
 
-      {/* Shipping */}
       <section className="od-section">
         <h2 className="od-subtitle">Shipping Address</h2>
         <div className="od-address">
-          <p>{order.address.name}</p>
-          <p>{order.address.line1}</p>
-          <p>
-            {order.address.city} - {order.address.pincode}
-          </p>
-          <p>Phone: {order.address.phone}</p>
+          <p>{order.shipping_address?.title}</p>
+          <p>{order.shipping_address?.address_line1}</p>
+          <p>{order.shipping_address?.city} - {order.shipping_address?.pincode}</p>
         </div>
       </section>
 
-      {/* Items */}
       <section className="od-section">
         <h2 className="od-subtitle">Items</h2>
         <div className="od-items">
-          {order.items.map((item, i) => (
+          {order.details.map((item, i) => (
             <div key={i} className="od-item">
-              <img src={item.image} alt={item.name} className="od-thumb" />
+              <img
+                src={item.product?.images?.[0]?.url_full || ""}
+                alt={item.product?.name}
+                className="od-thumb"
+              />
               <div className="od-item-info">
-                <p className="od-item-name">{item.name}</p>
+                <p className="od-item-name">{item.product?.name}</p>
                 <p className="od-item-meta">
-                  Qty: {item.qty} • ₹{item.price}
+                  Qty: {item.quantity} • ₹{item.price}
                 </p>
               </div>
             </div>
@@ -157,7 +90,6 @@ export default function OrderDetailsPage() {
         </div>
       </section>
 
-      {/* Actions */}
       <footer className="od-footer">
         <button className="od-btn outline">Download Invoice</button>
         <button className="od-btn">Buy Again</button>

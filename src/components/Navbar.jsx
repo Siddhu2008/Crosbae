@@ -113,11 +113,6 @@ const Navbar = () => {
                   </Link>
                 </li>
                 <li>
-                  <Link to="/track-order" className="dropdown-item">
-                    Track Order
-                  </Link>
-                </li>
-                <li>
                   <button className="dropdown-item btn btn-link text-start" onClick={handleLogout}>
                     Logout
                   </button>
