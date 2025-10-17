@@ -197,9 +197,7 @@ const Navbar = () => {
               <Link to="/orders"  onClick={toggleMenu}>
                 Order History
               </Link>
-              <Link to="/track-order"  onClick={toggleMenu}>
-                Track Order
-              </Link>
+              
               <Link onClick={() => { toggleMenu(); handleLogout(); }}>
                 Logout
               </Link>
