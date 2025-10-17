@@ -1,3 +1,4 @@
+// src/pages/ProductListingPage.jsx
 import React, { useState, useMemo, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useProduct } from "../contexts/ProductContext";
@@ -60,42 +61,41 @@ export default function ProductListingPage() {
     }
   };
 
-  // New state to hold products with images
+  // 🖼️ New state to hold products with images
   const [productsWithImages, setProductsWithImages] = useState([]);
 
-  // Fetch images for each product and add to product object
-useEffect(() => {
+  // 🖼️ Fetch images for each product and add to product object
+  useEffect(() => {
   async function fetchProductImages() {
-    const baseUrl = "https://your-backend-domain.com"; // replace with actual base URL if needed
+    const baseUrl = "https://api.crosbae.com"; // ✅ backend base URL
     try {
       const updatedProducts = await Promise.all(
         productsList.map(async (product) => {
           try {
-            const baseUrl = "https://api.crosbae.com"; // your backend API URL
             const res = await fetch(`${baseUrl}/v1/inventory/products/${product.id}/images/`);
 
+            // ✅ If no images found — use fallback
+            if (res.status === 404) {
+              return { ...product, images: ["/fallback-image.jpg"] };
+            }
+
             if (!res.ok) throw new Error("Failed to fetch images");
+
             const data = await res.json();
-            console.log(`Images for product ${product.id}:`, data);
 
             let images = [];
 
-            // Case 1: data is an array
             if (Array.isArray(data)) {
               images = data.map((img) => {
                 let imgUrl = img.url || img.url_full || "";
                 if (imgUrl && !imgUrl.startsWith("http")) imgUrl = baseUrl + imgUrl;
                 return imgUrl;
               });
-            }
-            // Case 2: data is a single object with url property
-            else if (data && typeof data === "object" && data.url) {
+            } else if (data && typeof data === "object" && data.url) {
               let imgUrl = data.url;
               if (imgUrl && !imgUrl.startsWith("http")) imgUrl = baseUrl + imgUrl;
               images = [imgUrl];
-            }
-            // Case 3: data has images property with object or array
-            else if (data && data.images) {
+            } else if (data && data.images) {
               if (Array.isArray(data.images)) {
                 images = data.images.map((img) => {
                   let imgUrl = img.url || img;
@@ -110,29 +110,30 @@ useEffect(() => {
               }
             }
 
-            return { ...product, images };
+            return { ...product, images: images.length ? images : ["/fallback-image.jpg"] };
           } catch (error) {
             console.error(`Error fetching images for product ${product.id}:`, error);
-            return { ...product, images: [] };
+            return { ...product, images: ["/fallback-image.jpg"] };
           }
         })
       );
       setProductsWithImages(updatedProducts);
     } catch (error) {
       console.error("Error fetching product images:", error);
-      setProductsWithImages(productsList); // fallback
+      setProductsWithImages(
+        productsList.map((p) => ({ ...p, images: ["/fallback-image.jpg"] }))
+      );
     }
   }
 
   if (productsList.length > 0) {
     fetchProductImages();
   } else {
-    setProductsWithImages([]); // clear when no products
+    setProductsWithImages([]);
   }
 }, [productsList]);
 
-
-  // Filter products based on filters and sort option
+  // 🧮 Filter products
   const filteredProducts = useMemo(() => {
     let result = [...productsWithImages];
     if (filters.search)
@@ -151,14 +152,15 @@ useEffect(() => {
       result = result.filter(
         (p) => p.stone_type && filters.stoneType.includes(String(p.stone_type))
       );
-    if (filters.occasion.length) result = result.filter((p) => filters.occasion.includes(p.occasion));
+    if (filters.occasion.length)
+      result = result.filter((p) => filters.occasion.includes(p.occasion));
     if (sortOption === "priceLowHigh") result.sort((a, b) => a.price - b.price);
     else if (sortOption === "priceHighLow") result.sort((a, b) => b.price - a.price);
     else if (sortOption === "newest") result.sort((a, b) => new Date(b.date) - new Date(a.date));
     return result;
   }, [filters, sortOption, productsWithImages]);
 
-  // Separate matched and other products based on category query
+  // 🪄 Separate matched and other products
   const { matchedProducts, otherProducts } = useMemo(() => {
     if (!categoryQuery) return { matchedProducts: [], otherProducts: filteredProducts };
     const matched = filteredProducts.filter((p) => String(p.category) === String(categoryQuery));
@@ -166,7 +168,7 @@ useEffect(() => {
     return { matchedProducts: matched, otherProducts: others };
   }, [filteredProducts, categoryQuery]);
 
-  // Pagination for otherProducts
+  // 📃 Pagination
   const paginatedProducts = useMemo(() => {
     const startIndex = (currentPage - 1) * itemsPerPage;
     return otherProducts.slice(startIndex, startIndex + itemsPerPage);
@@ -194,7 +196,7 @@ useEffect(() => {
         keywords="shop jewellery, rings, necklaces, artificial jewellery"
       />
 
-      {/* Sidebar Toggle + Sort */}
+      {/* Filter + Sort */}
       <div className="d-flex justify-content-between align-items-center mb-3">
         <button className="btn btn-outline-secondary filter" onClick={toggleFilterSidebar}>
           <i className="bi bi-funnel-fill"></i> Filters
@@ -240,7 +242,11 @@ useEffect(() => {
                 </button>
                 <Link to={`/product/${p.id}`} className="product-image-link">
                   <img
-                    src={p.images && p.images.length > 0 ? p.images[0] : "/fallback-image.jpg"}
+                    src={
+                      p.images && p.images.length > 0
+                        ? p.images[0]
+                        : "/fallback-image.jpg"
+                    }
                     alt={p.name || p.productName}
                     className="product-image"
                   />
@@ -250,10 +256,7 @@ useEffect(() => {
                 <Link to={`/product/${p.id}`} className="text-decoration-none">
                   <h6 className="product-cart-title">{p.productName || p.name}</h6>
                   <p className="product-desc">
-                    {(p.description || "")
-                      .split(" ")
-                      .slice(0, 8)
-                      .join(" ")}
+                    {(p.description || "").split(" ").slice(0, 8).join(" ")}
                     {(p.description || "").split(" ").length > 8 ? "..." : ""}
                   </p>
                   <span className="product-price">₹ {p.price}</span>
