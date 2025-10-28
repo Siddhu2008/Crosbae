@@ -1,0 +1,318 @@
+:root {
+    --gold: #bfa34a;
+    /* a warm gold */
+    --light-bg: #faf9f7;
+    /* soft creamy white */
+    --light-bg-light: #f5f3ef;
+    /* slightly darker for inputs */
+    --dark-text: #3a3a3a;
+    /* deep gray for text */
+    --shadow-gold: rgba(191, 163, 74, 0.4);
+    --shadow-dark: rgba(0, 0, 0, 0.1);
+    --font-family: 'Georgia', serif;
+}
+
+body {
+    font-family: var(--font-family);
+    background-color: var(--light-bg);
+    color: var(--dark-text);
+}
+
+.navbar.royal-navbar {
+    backdrop-filter: blur(16px) saturate(180%);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
+    /* border: 1px solid rgba(255, 255, 255, 0.125); */
+    /* border: 0.5px solid #e2e3e2; */
+
+    /* background-color: var(--light-bg); */
+    padding: 0.8rem 2rem;
+    box-shadow: 0 3px 12px var(--shadow-dark);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+}
+
+.navbar-container {
+    max-width: 1500px;
+    margin: auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    /* flex-wrap: wrap; */
+}
+
+.logo img {
+    height: 50px;
+    filter: drop-shadow(0 0 5px var(--gold));
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    margin-right: 2.8rem;
+}
+
+.logo img:hover {
+    transform: scale(1.1);
+}
+
+.nav-links {
+    display: flex;
+    gap: 2rem;
+}
+
+.nav-link {
+    color: var(--gold);
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 1rem;
+    letter-spacing: 1.5px;
+    position: relative;
+    padding-bottom: 5px;
+    transition: color 0.3s ease;
+    text-decoration: none;
+}
+
+.nav-link::after {
+    content: "";
+    position: absolute;
+    width: 0;
+    height: 2px;
+    background: var(--gold);
+    bottom: 0;
+    left: 0;
+    transition: width 0.3s ease;
+}
+
+.nav-link:hover,
+.nav-link:focus {
+    color: #000;
+}
+
+.nav-link:hover::after,
+.nav-link:focus::after {
+    width: 100%;
+}
+
+.search-bar {
+    position: relative;
+    padding-left: 2rem;
+    margin-right: 2rem;
+    width: 300px;
+}
+
+.search-bar input {
+    width: 100%;
+    padding: 6px 10px;
+    border-radius: 20px;
+    border: 1.5px solid var(--gold);
+    background-color: var(--light-bg-light);
+    color: var(--dark-text);
+    font-family: var(--font-family);
+    transition: border-color 0.3s ease;
+}
+
+.search-bar input::placeholder {
+    color: #a79054;
+    font-style: italic;
+}
+
+.search-bar input:focus {
+    outline: none;
+    border-color: #000;
+}
+
+.search-icon {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--gold);
+    pointer-events: none;
+    font-size: 14px;
+}
+
+.nav-icons {
+    display: flex;
+    /* margin-left: 1rem; */
+    align-items: center;
+    gap: 0.6rem;
+}
+
+.icon-link {
+    position: relative;
+    color: var(--gold);
+    font-size: 1.3rem;
+    cursor: pointer;
+    transition: color 0.3s ease, text-shadow 0.3s ease;
+}
+
+.icon-link:hover,
+.icon-link:focus {
+    color: #000;
+    text-shadow: 0 0 5px var(--gold);
+}
+
+.cart-badge {
+    position: absolute;
+    top: -7px;
+    right: -8px;
+    background-color: var(--gold);
+    color: var(--light-bg);
+    font-weight: 700;
+    font-size: 0.7rem;
+    border-radius: 50%;
+    padding: 2px 6px;
+    box-shadow: 0 0 6px var(--gold);
+}
+
+.user-btn {
+    background: transparent;
+    border: none;
+    color: var(--gold);
+    font-size: 1.3rem;
+    cursor: pointer;
+    position: relative;
+    padding: 0;
+    transition: color 0.3s ease, text-shadow 0.3s ease;
+}
+
+.user-btn:hover,
+.user-btn:focus {
+    color: #000;
+    text-shadow: 0 0 5px var(--gold);
+}
+
+.dropdown-menu {
+    position: absolute;
+    background: var(--light-bg-light);
+    border: 1px solid var(--gold);
+    border-radius: 8px;
+    box-shadow: 0 4px 12px var(--shadow-gold);
+    margin-top: 8px;
+    min-width: 140px;
+    right: 0;
+    z-index: 2000;
+    list-style: none;
+    padding: 0.5rem 0;
+}
+
+.dropdown-item {
+    display: block;
+    padding: 0.5rem 1rem;
+    color: var(--gold);
+    text-decoration: none;
+    font-weight: 600;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    font-family: var(--font-family);
+}
+
+.dropdown-item:hover,
+.dropdown-item:focus {
+    background-color: var(--gold);
+    color: var(--light-bg);
+    outline: none;
+}
+
+.menu-toggle {
+    background: transparent;
+    border: none;
+    color: var(--gold);
+    font-size: 1.6rem;
+    cursor: pointer;
+    display: none;
+    transition: color 0.3s ease;
+}
+
+.menu-toggle:hover,
+.menu-toggle:focus {
+    color: #000;
+    text-shadow: 0 0 5px var(--gold);
+}
+
+.mobile-menu {
+    background-color: var(--light-bg-light);
+    padding: 2rem 2rem;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 1rem;
+    border-top: 1.5px solid var(--gold);
+    border-bottom: 2.5px solid var(--gold);
+    box-shadow: 0 6px 12px var(--shadow-gold);
+    z-index: 999;
+    align-items: center;
+    border-radius: 20px;
+}
+
+.mobile-menu input.mobile-search {
+    padding: 8px 12px;
+    border-radius: 25px;
+
+    border: 1.5px solid var(--gold);
+    background-color: var(--light-bg);
+    color: var(--dark-text);
+    font-family: var(--font-family);
+    font-size: 1rem;
+}
+
+.mobile-menu a {
+    color: var(--gold);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    font-size: 1.1rem;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+.mobile-logout{
+    color: var(--gold);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    font-size: 1.1rem;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+.mobile-menu a:hover,
+.mobile-menu a:focus {
+    color: #000;
+}
+
+@media (max-width: 992px) {
+    .nav-links {
+        display: none;
+    }
+
+    .menu-toggle {
+        display: block;
+    }
+}
+
+@media (min-width: 992px) and (max-width: 1050px) {
+    .search-bar {
+        width: 500px;
+    }
+
+    .nav-links {
+        display: none;
+    }
+
+    .menu-toggle {
+        display: block;
+    }
+
+}
+
+@media (max-width: 768px) {
+    .search-bar {
+        display: none;
+    }
+}
+
+@media (min-width: 768px) {
+    .mobile-search {
+        display: none;
+    }
+}

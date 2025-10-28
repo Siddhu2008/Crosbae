@@ -1,0 +1,80 @@
+.edit-profile-container {
+  max-width: 500px;
+  margin: auto;
+  padding: 30px 20px;
+  background-color: #fff8f0;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  font-family: "Poppins", sans-serif;
+}
+
+.edit-profile-title {
+  text-align: center;
+  font-size: 24px;
+  font-weight: 700;
+  color: #8e44ad;
+  margin-bottom: 25px;
+}
+
+.edit-profile-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.edit-profile-form label {
+  font-weight: 500;
+  color: #333;
+  font-size: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.edit-profile-form input,
+.edit-profile-form select {
+  padding: 10px 14px;
+  font-size: 15px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  background-color: #fff;
+  transition: border 0.3s;
+}
+
+.edit-profile-form input:focus,
+.edit-profile-form select:focus {
+  border-color: #d4af37;
+  outline: none;
+}
+
+.save-btn {
+  margin-top: 10px;
+  padding: 12px;
+  background: linear-gradient(to right, #d4af37, #b68d2d);
+  color: white;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.save-btn:hover {
+  background: linear-gradient(to right, #b68d2d, #d4af37);
+}
+
+/* Responsive: Mobile First */
+@media (max-width: 480px) {
+  .edit-profile-container {
+    padding: 20px 15px;
+  }
+
+  .edit-profile-title {
+    font-size: 20px;
+  }
+
+  .edit-profile-form input,
+  .edit-profile-form select {
+    font-size: 14px;
+  }
+}

@@ -1,0 +1,58 @@
+/* Container adjustments */
+.container {
+    max-width: 1200px;
+    margin: auto;
+}
+
+/* Card styling */
+.card {
+    background: white;
+    border: none;
+    border-radius: 15px;
+    padding: 20px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+/* Avatar styling */
+.card img {
+    border: 3px solid #f8f9fa;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+}
+
+/* Testimonial text */
+.card p {
+    font-style: italic;
+    font-size: 0.95rem;
+    color: #555;
+}
+
+/* Heading */
+h2 {
+    font-weight: 700;
+    font-size: 2rem;
+    color: #333;
+}
+
+/* Responsive Grid Fix — ensures correct 2/3 card layout */
+.row {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+}
+
+@media (min-width: 992px) {
+    .row {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 576px) {
+    .row {
+        grid-template-columns: repeat(1, 1fr);
+    }
+}

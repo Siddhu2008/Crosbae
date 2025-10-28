@@ -1,0 +1,138 @@
+.customer-reviews-section {
+  padding: 30px 20px;
+  border-radius: 20px;
+  position: relative;
+}
+
+.reviews-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+/* Scroll buttons */
+.scroll-btn {
+  background: gold;
+  border: none;
+  font-size: 2rem;
+  padding: 10px 15px;
+  border-radius: 50%;
+  cursor: pointer;
+  color: white;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  z-index: 10;
+}
+
+.scroll-btn.left {
+  position: absolute;
+  left: -10px;
+}
+
+.scroll-btn.right {
+  position: absolute;
+  right: -10px;
+}
+
+.scroll-btn:hover {
+  background: darkgoldenrod;
+}
+
+/* Reviews container */
+.reviews-container {
+  display: flex;
+  gap: 20px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  padding: 20px 40px;
+}
+
+.reviews-container::-webkit-scrollbar {
+  display: none;
+}
+
+/* Testimonial card */
+.testimonial-card {
+  flex: 0 0 90%;
+  max-width: 20%;
+  background: white;
+  border-radius: 16px;
+  border: 1px solid #f1c40f;
+  box-shadow: 0 4px 10px rgba(241, 196, 15, 0.3);
+  scroll-snap-align: start;
+  padding: 20px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.testimonial-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 18px rgba(241, 196, 15, 0.5);
+}
+
+/* Profile + product images */
+.profile-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 15px;
+}
+
+.profile-img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid gold;
+}
+
+.product-img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 12px;
+  border: 3px solid gold;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+/* Content */
+.testimonial-content {
+  text-align: center;
+}
+
+.star {
+  color: gold;
+  font-size: 1.2rem;
+}
+
+.review-text {
+  font-style: italic;
+  color: #444;
+  margin: 10px 0;
+}
+
+.review-author {
+  font-weight: bold;
+  color: #333;
+  margin: 5px 0;
+}
+
+.product-name {
+  font-size: 0.9rem;
+  color: #b8860b;
+}
+
+/* Tablet: 2 cards */
+@media (min-width: 768px) {
+  .testimonial-card {
+    flex: 0 0 45%;
+    max-width: 90%;
+  }
+}
+
+/* Desktop: 3 cards */
+@media (min-width: 1024px) {
+  .testimonial-card {
+    flex: 0 0 30%;
+    max-width: 90%;
+  }
+}

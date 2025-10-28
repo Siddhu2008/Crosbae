@@ -1,0 +1,152 @@
+/* Mobile-first base styles */
+.top-category {
+    padding-top: 100px;
+}
+
+.category-wrapper {
+    overflow: hidden;
+    padding: 15px;
+    user-select: none;
+    cursor: grab;
+    /* background: #f8f7f7; */
+    /* box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08); */
+    border-radius: 10px;
+    margin: 0px;
+    max-width: 100%;
+}
+
+.scroll-track {
+    display: flex;
+    gap: 1rem;
+    /* Mobile: less spacing */
+    transition: transform 0.3s ease;
+    padding: 0 1rem;
+}
+
+.category-item {
+    flex-shrink: 0;
+    min-width: 80px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.category-item img {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 2px solid #353935;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.category-item:hover img {
+    transform: scale(1.08);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    border-color: #c0c0c0;
+}
+
+.category-name {
+    font-size: 12px;
+    margin-top: 8px;
+    color: #555;
+    font-weight: 500;
+    letter-spacing: 0.3px;
+}
+
+/* Scroll dots */
+.scroll-dots {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin: 10px 0;
+}
+
+.scroll-dots span {
+    width: 8px;
+    height: 8px;
+    background-color: #ddd;
+    border-radius: 50%;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    cursor: pointer;
+}
+
+.scroll-dots span.active {
+    background-color: #777;
+    transform: scale(1.2);
+}
+
+/* Hide scrollbar for Webkit */
+.scroll-track::-webkit-scrollbar {
+    display: none;
+}
+
+.category-wrapper:active {
+    cursor: grabbing;
+}
+
+/* Tablet - min-width: 768px */
+@media (min-width: 768px) {
+    .scroll-track {
+        gap: 2rem;
+        padding: 0 2rem;
+    }
+
+    .category-item img {
+        width: 70px;
+        height: 70px;
+    }
+
+    .category-name {
+        font-size: 13px;
+    }
+}
+
+/* Laptop - min-width: 1024px */
+@media (min-width: 1024px) {
+    .top-category {
+        padding-top: 90px;
+    }
+
+    .scroll-track {
+        gap: 2.5rem;
+        padding: 0 2.5rem;
+    }
+
+    .category-item {
+        min-width: 100px;
+    }
+
+    .category-item img {
+        width: 85px;
+        height: 85px;
+    }
+
+    .category-name {
+        font-size: 14px;
+    }
+}
+
+/* Desktop - min-width: 1280px */
+@media (min-width: 1280px) {
+    .top-category {
+        padding-top: 90px;
+    }
+
+    .scroll-track {
+        gap: 3rem;
+        padding: 0 3rem;
+    }
+
+    .category-item img {
+        width: 100px;
+        height: 100px;
+    }
+
+    .category-name {
+        font-size: 15px;
+    }
+}

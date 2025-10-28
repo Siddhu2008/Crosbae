@@ -1,0 +1,212 @@
+/* ========== Header Background ========== */
+.header-section {
+    background-color: #f3dfa0;
+    
+}
+
+/* ========== Button ========== */
+.btn-gradient-new {
+    background: linear-gradient(135deg, #c5a880, #b6994f);
+    color: #fff;
+    font-weight: 500;
+    border: none;
+    padding: 0.4rem 1rem;
+    border-radius: 30px;
+    width: 300px;
+    transition: background 0.3s ease;
+}
+
+.btn-gradient-new:hover {
+    background: linear-gradient(135deg, #df9d2c, #0f0c06);
+    color: #fff;
+}
+
+/* ========== Section Grid ========== */
+.new-arrivals-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ========== Left Side ========== */
+.arrivals-left {
+    text-align: center;
+    max-width: 600px;
+}
+
+.arrivals-left h2 {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #2c2c2c;
+    margin-bottom: 0.5rem;
+}
+
+.arrivals-left h5 {
+    font-size: 1rem;
+    color: #5a5a5a;
+    font-weight: 400;
+    margin-top: 0.8rem;
+}
+
+.new-items-badge {
+    background-color: #c5a880;
+    border: none;
+    color: white;
+    padding: 0.4rem 1rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    margin-left: 10px;
+    vertical-align: middle;
+}
+
+
+/* ========== Right Side Video ========== */
+.arrivals-right {
+    width: 100%;
+    max-width: 600px;
+}
+
+.tv-wrapper {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    border-radius: 16px;
+   
+}
+
+.video-overlay {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.video1 {
+    position: absolute;
+    top: 20%;
+    left: 22%;
+    width: 55%;
+    height: 56%;
+    object-fit: cover;
+    z-index: 1;
+}
+
+.imgtv {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    z-index: 2;
+    pointer-events: none;
+}
+
+.mute-btn {
+    position: absolute;
+    bottom: 200px;
+    right: 152px;
+    z-index: 3;
+    background: rgba(255, 255, 255, 0.85);
+    border: none;
+    border-radius: 50%;
+    padding: 0.5rem;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.mute-btn:hover {
+    background: white;
+}
+
+/* ========== Responsive Desktop Layout ========== */
+@media (min-width: 768px) {
+    .new-arrivals-grid {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        padding: 4rem 3rem;
+    }
+
+    .arrivals-left {
+        flex: 1;
+        text-align: left;
+        padding-right: 3rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .arrivals-right {
+        flex: 1;
+    }
+
+    .arrivals-left h2 {
+        font-size: 2.8rem;
+        line-height: 1.2;
+    }
+
+    .arrivals-left h5 {
+        font-size: 1.2rem;
+    }
+
+    .new-items-badge {
+        font-size: 1rem;
+    }
+}
+@media (max-width:1500px) {
+    .mute-btn {
+        bottom: 200px;
+        right: 150px;
+    }
+}
+@media (max-width:1300px) {
+    .mute-btn {
+        bottom: 180px;
+        right: 150px;
+    }
+}
+@media (max-width:1000px) {
+    .mute-btn {
+        bottom: 110px;
+        right: 100px;
+    }
+}
+@media (max-width:900px ) {
+    .mute-btn {
+        bottom: 90px;
+        right: 80px;
+        padding: 0;
+    }
+}
+@media (max-width: 757px) {
+    .mute-btn {
+            bottom: 180px;
+            right: 140px;
+            padding: 0.5rem;
+        }
+
+    .arrivals-left {
+        padding-top: 30px;
+    }
+
+    .btn-gradient-new {
+        margin-top: 0;
+        margin-left: 0;
+    }
+}
+@media (max-width:500px) {
+    .mute-btn {
+        bottom: 130px;
+        right: 100px;
+    }
+}
+@media (max-width:400px) {
+    .mute-btn {
+        bottom: 110px;
+        right: 100px;
+    }
+}

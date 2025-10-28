@@ -1,0 +1,141 @@
+.collection-container {
+  padding: 2rem 0.7rem;
+  background: #fff;
+  min-height: 80vh;
+  font-family: 'Playfair Display', serif;
+}
+
+/* Mobile-first grid: 2 columns */
+.collections-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.2rem;
+}
+
+/* Card Styling */
+.royal-card {
+  background: #fcf8ee;
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 2px 12px rgba(212, 175, 55, 0.10), 0 8px 24px rgba(0,0,0,0.07);
+  transition: transform 0.3s, box-shadow 0.3s;
+  cursor: pointer;
+  color: #2e1a47;
+  border: 1px solid #f3e5c2;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  position: relative;
+}
+
+.royal-card:hover {
+  transform: translateY(-6px) scale(1.02);
+  box-shadow: 0 4px 18px rgba(212,175,55,0.18), 0 16px 40px rgba(0,0,0,0.13);
+}
+
+/* Image Wrapper */
+.img-wrapper {
+  width: 100%;
+  height: 120px;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  position: relative;
+}
+
+.img-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s;
+}
+
+.royal-card:hover .img-wrapper img {
+  transform: scale(1.04);
+}
+
+/* Overlay Button */
+.overlay {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  z-index: 2;
+}
+
+.btn-expo {
+  background: #fff;
+  color: #a88c5f;
+  border: 2px solid #a88c5f;
+  border-radius: 20px;
+  padding: 0.3rem 1.1rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(191,161,127,0.08);
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
+}
+
+.btn-expo:hover {
+  background: #a88c5f;
+  color: #fff;
+  border-color: #a88c5f;
+}
+
+/* Card Title & Description */
+.card-body {
+  background: #fcf8ee;
+  padding: 0.8rem 0.5rem 1rem 0.5rem;
+  text-align: center;
+}
+
+.card-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #2e1a47;
+  font-family: 'Playfair Display', serif;
+  margin: 0 0 0.3rem 0;
+  letter-spacing: 0.02em;
+  font-style: italic;
+}
+
+.card-desc {
+  font-size: 0.85rem;
+  color: #6c4e23;
+  margin: 0;
+  font-family: 'Georgia', serif;
+}
+
+/* Tablet styles */
+@media (min-width: 600px) {
+  .collection-container {
+    padding: 3rem 2rem;
+  }
+  .collections-grid {
+    gap: 1.5rem;
+  }
+  .img-wrapper {
+    height: 160px;
+  }
+  .card-title {
+    font-size: 1.15rem;
+  }
+  .card-desc {
+    font-size: 1rem;
+  }
+}
+
+/* Desktop styles */
+@media (min-width: 992px) {
+  .collections-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+  }
+  .img-wrapper {
+    height: 200px;
+  }
+  .card-title {
+    font-size: 1.2rem;
+  }
+}

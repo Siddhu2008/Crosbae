@@ -1,0 +1,395 @@
+/* ================= BASE STYLES ================== */
+body {
+  margin: 0;
+  font-family: "Georgia", serif;
+  background: #f7f3eb;
+  color: #2b2a4d;
+}
+
+/* Container */
+.admin-dashboard {
+  background: linear-gradient(135deg, #ffffff, #f7f3eb);
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  max-width: 100%;
+  margin: 0 auto;
+  min-height: 100vh;
+}
+
+/* ================= HEADER ================== */
+.admin-dashboard .header h1 {
+  font-size: 2rem;
+  color: #bfa14a;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  text-align: center;
+  text-shadow: 1px 1px 8px rgba(191, 161, 74, 0.3);
+  margin-bottom: 0;
+}
+
+.admin-dashboard .header p {
+  text-align: center;
+  font-style: italic;
+  color: #5a4f3c;
+  margin: 6px 0 20px;
+}
+
+/* ================= BUTTONS ================== */
+.add-product-btn,
+.action-btn,
+.save-btn,
+.cancel-btn,
+.edit-btn,
+.delete-btn {
+  font-weight: 700;
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 1rem;
+}
+
+/* Add / Action Buttons */
+.add-product-btn,
+.action-btn {
+  background: linear-gradient(45deg, #d4af37, #bfa14a);
+  color: white;
+  padding: 10px 20px;
+  width: 100%;
+  box-shadow: 0 5px 15px rgba(191, 161, 74, 0.6);
+}
+
+.add-product-btn:hover,
+.action-btn:hover {
+  background: linear-gradient(45deg, #bfa14a, #d4af37);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(191, 161, 74, 0.9);
+}
+
+/* Save / Cancel Buttons */
+.save-btn {
+  background-color: #28a745;
+  color: #fff;
+  padding: 12px;
+}
+
+.save-btn:hover {
+  background-color: #218838;
+}
+
+.cancel-btn {
+  background-color: #dc3545;
+  color: #fff;
+  padding: 12px;
+}
+
+.cancel-btn:hover {
+  background-color: #c82333;
+}
+
+/* Table Action Buttons */
+.edit-btn,
+.delete-btn {
+  padding: 6px 12px;
+  font-size: 0.9rem;
+  margin: 0 4px;
+  border: 2px solid #bfa14a;
+  color: #bfa14a;
+  background: transparent;
+}
+
+.edit-btn:hover {
+  background: #d4af37;
+  color: white;
+  box-shadow: 0 0 12px #d4af37;
+}
+
+.delete-btn:hover {
+  background: #e63946;
+  border-color: #e63946;
+  color: white;
+  box-shadow: 0 0 12px #e63946;
+}
+
+/* ================= TABS ================== */
+.tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.tab {
+  padding: 10px 16px;
+  background: rgba(191, 161, 74, 0.1);
+  border-radius: 30px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #2b2a4d;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+  
+}
+
+.tab:hover {
+  background: rgba(191, 161, 74, 0.2);
+}
+
+.tab.active {
+  background: #d4af37;
+  color: white;
+  border-color: #bfa14a;
+}
+
+/* ================= STATS ================== */
+.stats-section {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-bottom: 30px;
+}
+
+.stat-card {
+  background: rgba(191, 161, 74, 0.08);
+  padding: 20px;
+  border-radius: 15px;
+  text-align: center;
+  box-shadow: 0 0 20px rgba(18, 14, 1, 0.15);
+  transition: transform 0.3s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 0 30px rgba(191, 161, 74, 0.3);
+}
+
+.stat-card h4 {
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 8px;
+  font-size: 1rem;
+  color: #bfa14a;
+}
+
+.count {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #2b2a4d;
+}
+
+.growth {
+  font-size: 0.9rem;
+  color: #5a4f3c;
+}
+
+.growth.green {
+  color: #4caf50;
+  font-weight: 600;
+}
+
+/* ================= FORM ================== */
+.form-card {
+  background-color: #fffaf5;
+  padding: 30px 25px;
+  max-width: 480px;
+  width: 100%;
+  border-radius: 12px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.form-card input,
+.form-card select,
+.form-card textarea {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+  background-color: #fff;
+  transition: border-color 0.3s ease;
+}
+
+.form-card input:focus,
+.form-card select:focus,
+.form-card textarea:focus {
+  border-color: #bfa14a;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(191, 161, 74, 0.2);
+}
+
+.form-card .save-btn,
+.form-card .cancel-btn {
+  width: 100%;
+  padding: 12px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
+
+.form-card .save-btn {
+  background: linear-gradient(45deg, #d4af37, #bfa14a);
+  color: #fff;
+}
+
+.form-card .save-btn:hover {
+  background: linear-gradient(45deg, #bfa14a, #d4af37);
+}
+
+.form-card .cancel-btn {
+  background: #f5f5f5;
+  color: #444;
+  border: 1px solid red;
+}
+
+.form-card .cancel-btn:hover {
+  background: #f13c3c;
+}
+
+
+/* ================= TABLE ================== */
+.products-tab {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.data-table {
+  border-collapse: collapse;
+  width: 100%;
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+  font-size: 0.9rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.data-table thead {
+  background: #d4af37;
+  color: white;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.data-table th,
+.data-table td {
+  padding: 12px 16px;
+  border-bottom: 1px solid #eee;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.data-table tbody tr:hover {
+  background: rgba(191, 161, 74, 0.1);
+  cursor: pointer;
+}
+
+.data-table img {
+  max-width: 60px;
+  border-radius: 4px;
+}
+
+/* Responsive table wrapper */
+.table-responsive {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* ================= BADGES ================== */
+.badge.completed {
+  background: linear-gradient(45deg, #ffd700, #ffcc33);
+  color: #3a2f63;
+  padding: 6px 12px;
+  border-radius: 25px;
+  font-weight: 700;
+  font-size: 0.8rem;
+  box-shadow: 0 0 12px rgba(255, 215, 0, 0.8);
+}
+
+/* ================= MEDIA QUERIES ================== */
+@media (min-width: 768px) {
+  .stats-section {
+    flex-direction: row;
+    justify-content: space-around;
+  }
+
+  .actions {
+    flex-direction: row;
+    justify-content: center;
+  }
+
+  .form-actions {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  .add-product-btn {
+    width: auto;
+  }
+
+  .admin-dashboard .header h1 {
+    font-size: 2.8rem;
+  }
+
+  .count {
+    font-size: 2.6rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .data-table {
+    min-width: 700px;
+  }
+}
+.quick-actions {
+  margin-top: 40px;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.6);
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(191, 161, 74, 0.15);
+}
+
+.quick-actions h2 {
+  color: #2b2a4d;
+  font-size: 1.8rem;
+  text-align: center;
+  margin-bottom: 25px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  align-items: center;
+}
+
+.action-btn {
+  background: linear-gradient(45deg, #d4af37, #bfa14a);
+  color: #fff;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 30px;
+  font-weight: 600;
+  font-size: 1rem;
+  width: 90%;
+  max-width: 300px;
+  text-align: center;
+  transition: all 0.3s ease;
+  box-shadow: 0 6px 20px rgba(191, 161, 74, 0.3);
+}
+
+.action-btn:hover {
+  background: linear-gradient(45deg, #bfa14a, #d4af37);
+  transform: translateY(-3px);
+}

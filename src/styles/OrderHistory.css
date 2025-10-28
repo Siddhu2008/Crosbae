@@ -1,0 +1,406 @@
+/* Mobile-first premium layout without changing your color palette (neutrals only) */
+
+:root {
+  --oh-radius: 16px;
+  --oh-radius-lg: 20px;
+  --oh-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  --oh-shadow-soft: 0 2px 10px rgba(0, 0, 0, 0.06);
+  --oh-border: #e9e9e9;
+  --oh-muted: #777;
+  --oh-text: #222;
+  --oh-bg: #fff;
+  --oh-bg-soft: #f9f9f9;
+}
+
+/* Container */
+.order-history {
+  font-family: "Poppins", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  margin: 96px auto 64px;
+  padding: 0 16px;
+  max-width: 1100px;
+  color: var(--oh-text);
+}
+
+/* Header */
+.oh-header {
+  text-align: center;
+  margin-bottom: 18px;
+}
+
+.oh-title {
+  font-size: 24px;
+  letter-spacing: 1px;
+  margin: 0 0 6px;
+  text-transform: uppercase;
+}
+
+.oh-subtitle {
+  margin: 0;
+  font-size: 13px;
+  color: var(--oh-muted);
+}
+
+/* Empty state */
+.oh-empty {
+  background: var(--oh-bg);
+  border: 1px solid var(--oh-border);
+  border-radius: var(--oh-radius-lg);
+  box-shadow: var(--oh-shadow);
+  padding: 28px 20px;
+  text-align: center;
+}
+
+.oh-empty-icon {
+  font-size: 40px;
+  margin-bottom: 8px;
+}
+
+.oh-empty-text {
+  margin: 0 0 12px;
+  color: var(--oh-muted);
+}
+
+.oh-cta {
+  border: 1px solid var(--oh-border);
+  background: var(--oh-bg);
+  border-radius: 999px;
+  padding: 10px 18px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: transform .12s ease, box-shadow .12s ease;
+}
+
+.oh-cta:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--oh-shadow-soft);
+}
+
+/* List */
+.oh-list {
+  display: grid;
+  gap: 16px;
+}
+
+/* Card */
+.oh-card {
+  background: var(--oh-bg);
+  border: 1px solid var(--oh-border);
+  border-radius: var(--oh-radius-lg);
+  box-shadow: var(--oh-shadow);
+  overflow: hidden;
+}
+
+/* Card Head */
+.oh-card-head {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px 14px;
+  padding: 16px;
+  background: var(--oh-bg-soft);
+  border-bottom: 1px solid var(--oh-border);
+}
+
+.oh-label {
+  display: block;
+  font-size: 11px;
+  color: var(--oh-muted);
+  margin-bottom: 4px;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+}
+
+.oh-value {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+}
+
+/* Status badge */
+.oh-badge {
+  display: inline-block;
+  font-size: 12px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--oh-border);
+  background: var(--oh-bg);
+  font-weight: 600;
+  letter-spacing: .3px;
+}
+
+/* Neutral styling per status without adding new colors */
+.oh-badge.delivered {
+  opacity: 0.95;
+}
+
+.oh-badge.cancelled {
+  opacity: 0.7;
+}
+
+.oh-badge.shipped {
+  opacity: 0.9;
+}
+
+/* Progress / Timeline */
+.oh-progress {
+  padding: 14px 16px 8px;
+}
+
+.oh-progress-bar {
+  height: 6px;
+  width: 100%;
+  background: #eee;
+  border-radius: 999px;
+  overflow: hidden;
+  position: relative;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, .05);
+}
+
+.oh-progress-bar::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  width: 40%;
+  background: #ddd;
+  border-radius: 999px;
+  transition: width .25s ease;
+}
+
+.oh-progress-bar.level-2::after {
+  width: 66%;
+}
+
+.oh-progress-bar.level-3::after {
+  width: 100%;
+}
+
+.oh-progress-bar.level-cancelled::after {
+  width: 0%;
+}
+
+.oh-progress-steps {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: var(--oh-muted);
+  margin-top: 8px;
+}
+
+/* Items */
+.oh-items {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+  padding: 14px 16px;
+}
+
+.oh-item {
+  display: grid;
+  grid-template-columns: 64px 1fr auto;
+  gap: 12px;
+  align-items: center;
+  border: 1px solid var(--oh-border);
+  border-radius: var(--oh-radius);
+  padding: 10px;
+  background: var(--oh-bg);
+  transition: transform .12s ease, box-shadow .12s ease;
+}
+
+.oh-item:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--oh-shadow-soft);
+}
+
+.oh-thumb {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid #eee;
+}
+
+.oh-item-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.oh-item-name {
+  margin: 0;
+  font-weight: 600;
+  font-size: 14px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.oh-item-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--oh-muted);
+}
+
+.oh-item-meta .dot {
+  opacity: .6;
+}
+
+.oh-item-actions {
+  display: flex;
+  align-items: center;
+}
+
+.oh-link {
+  background: transparent;
+  border: none;
+  font-size: 13px;
+  text-decoration: underline;
+  cursor: pointer;
+  padding: 6px 8px;
+}
+
+/* Card Foot */
+.oh-card-foot {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  padding: 12px 16px 16px;
+  border-top: 1px dashed var(--oh-border);
+  background: var(--oh-bg);
+}
+
+.oh-btn {
+  border: 1px solid var(--oh-border);
+  background: var(--oh-bg);
+  border-radius: 999px;
+  padding: 10px 16px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: transform .12s ease, box-shadow .12s ease;
+}
+
+.oh-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--oh-shadow-soft);
+}
+
+.oh-btn.outline {
+  background: var(--oh-bg-soft);
+}
+
+/* ------- Responsive ------- */
+
+/* >= 480px */
+@media (min-width: 480px) {
+  .oh-card-head {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .oh-items {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* >= 768px (Tablet) */
+@media (min-width: 768px) {
+  .order-history {
+    padding: 0 24px;
+  }
+
+  .oh-title {
+    font-size: 28px;
+    letter-spacing: 1.5px;
+  }
+
+  .oh-card-head {
+    grid-template-columns: repeat(4, 1fr);
+    align-items: end;
+  }
+
+  .oh-items {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* >= 1024px (Desktop) */
+@media (min-width: 1024px) {
+  .oh-list {
+    gap: 20px;
+  }
+
+  .oh-items {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+/* Status badge colours */
+.oh-badge.delivered {
+  background: #e6f8ec;
+  /* soft green background */
+  border-color: #c2e8cd;
+  color: #1b7c3f;
+  /* green text */
+}
+
+.oh-badge.cancelled {
+  background: #fce8e6;
+  /* soft red background */
+  border-color: #f5c2c0;
+  color: #b0231c;
+  /* red text */
+}
+
+/* (Optional) for shipped/in-progress keep neutral */
+.oh-badge.shipped {
+  background: #f6f6f6;
+  border-color: #ddd;
+  color: #555;
+}
+.oh-progress-bar {
+  position: relative;
+  height: 6px;
+  width: 100%;
+  background: #eee;
+  border-radius: 999px;
+  overflow: hidden;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, .05);
+}
+
+/* the filling bar */
+.oh-progress-bar::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 40%;
+  /* default */
+  background: #ddd;
+  /* default grey fill */
+  border-radius: inherit;
+  transition: width .3s ease, background .3s ease;
+}
+
+/* Delivered full green */
+.oh-progress-bar.delivered::after {
+  width: 100%;
+  background: #4CAF50;
+  /* green fill */
+}
+
+/* Cancelled: fill red until cancel stage */
+.oh-progress-bar.cancelled::after {
+  width: 66%;
+  /* adjust to where it got cancelled (demo = after shipped) */
+  background: #E53935;
+  /* red fill */
+}
+
+/* In progress (neutral grey) */
+.oh-progress-bar.inprogress::after {
+  width: 50%;
+  background: #bbb;
+}

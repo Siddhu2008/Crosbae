@@ -1,0 +1,133 @@
+/* Overall container */
+.profile-container {
+  display: flex;
+  justify-content: center;
+  padding: 40px 20px;
+  background: linear-gradient(to right, #fbf7f3, #f0ebe5);
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+/* Card styling */
+.profile-card {
+  background: #fff;
+  padding: 30px 20px;
+  border-radius: 16px;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+  width: 100%;
+  max-width: 420px;
+  text-align: center;
+  border: 1px solid #e3dcd3;
+  transition: transform 0.3s ease;
+}
+.profile-card:hover {
+  transform: translateY(-6px);
+}
+
+/* Avatar styling */
+.profile-avatar {
+  margin-bottom: 22px;
+}
+.avatar-img {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  border: 4px solid #d4b483;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+/* User Info */
+.profile-name {
+  font-size: 26px;
+  font-weight: 700;
+  color: #2e2e2e;
+  margin-bottom: 6px;
+}
+.profile-email {
+  font-size: 15px;
+  color: #888;
+  margin-bottom: 22px;
+}
+
+/* Stats section */
+.profile-stats {
+  text-align: left;
+  margin: 0 20px 24px;
+  font-size: 15px;
+  color: #4a4a4a;
+}
+.profile-stats div {
+  margin-bottom: 8px;
+}
+
+/* Buttons layout */
+.profile-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* Button styles */
+.profile-btn {
+  padding: 14px 18px;
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 17px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.profile-btn.primary {
+  background: linear-gradient(to right, #ba8b47, #a3763c);
+  color: #fff;
+  box-shadow: 0 6px 12px rgba(186, 139, 71, 0.3);
+}
+.profile-btn.primary:hover {
+  background: linear-gradient(to right, #a3763c, #8e6432);
+}
+.profile-btn.secondary {
+  background: linear-gradient(to right, #375bd2, #2e4bb9);
+  color: #fff;
+  box-shadow: 0 6px 12px rgba(55, 91, 210, 0.3);
+}
+.profile-btn.secondary:hover {
+  background: linear-gradient(to right, #2e4bb9, #2741a0);
+}
+
+/* Responsiveness */
+@media (min-width: 768px) {
+  .profile-card {
+    padding: 40px;
+  }
+  .profile-name { font-size: 28px; }
+  .profile-email { font-size: 16px; }
+  .profile-btn { font-size: 18px; }
+}
+
+@media (min-width: 1024px) {
+  .profile-card { max-width: 500px; }
+}
+.multiple-address-box {
+  background: #fffaf5;
+  border: 1px solid #ddd;
+  padding: 1rem;
+  border-radius: 10px;
+}
+
+.address-summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.6rem 0;
+  border-bottom: 1px solid #eee;
+}
+
+.address-summary:last-child {
+  border-bottom: none;
+}
+
+.profile-btn.small {
+  padding: 0.3rem 0.6rem;
+  font-size: 0.85rem;
+  border-radius: 6px;
+}
