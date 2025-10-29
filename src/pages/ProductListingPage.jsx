@@ -39,9 +39,8 @@ export default function ProductListingPage() {
   const location = useLocation();
 
   const { wishlistProductIds, toggleWishlist } = useWishlist();
+
   const { addToCart } = useCart();
-  const [addingMap, setAddingMap] = useState({});
-  const [justAddedMap, setJustAddedMap] = useState({});
 
   const query = useMemo(() => new URLSearchParams(location.search), [location.search]);
   const categoryQuery = query.get("category");
@@ -59,13 +58,6 @@ export default function ProductListingPage() {
       default:
         return { background: "linear-gradient(to right, #bfa17f, #f5e6ca)", color: "#fff" };
     }
-  };
-
-  const truncateTag = (tag) => {
-    if (!tag) return "";
-    const parts = String(tag).trim().split(/\s+/);
-    if (parts.length <= 2) return parts.join(" ");
-    return parts.slice(0, 1).join(" ") + "...";
   };
 
   const [productsWithImages, setProductsWithImages] = useState([]);
@@ -228,7 +220,7 @@ export default function ProductListingPage() {
         {/* Occasion */}
         <div className="mb-4">
           <h6>Occasion</h6>
-          {["Wedding","Party","Festive","Anniversary","Daily Wear","Engagement"].map((occasion) => (
+          {["Wedding", "Party", "Festive", "Anniversary", "Daily Wear", "Engagement"].map((occasion) => (
             <div key={occasion} className="form-check">
               <input
                 className="form-check-input"
@@ -279,27 +271,19 @@ export default function ProductListingPage() {
             {[...matchedProducts, ...paginatedProducts].map((p) => (
               <div className="product-card" key={p.id}>
                 <div className="product-image-section">
-                  {p.tags && (
+                  {p.tags?.length > 0 && (
                     <div className="product-tags">
-                      {(() => {
-                        const tags = Array.isArray(p.tags) ? p.tags : [p.tags];
-                        const firstTag = tags[0];
-                        return (
-                          <span className="product-tag" style={getTagStyle(firstTag)}>
-                            {truncateTag(firstTag)}
-                          </span>
-                        );
-                      })()}
+                      {(Array.isArray(p.tags) ? p.tags : [p.tags]).map((tag, i) => (
+                        <span key={i} className="product-tag" style={getTagStyle(tag)}>
+                          {tag}
+                        </span>
+                      ))}
                     </div>
                   )}
                   <button
                     className={`like-btn ${wishlistProductIds?.[p.id] ? "liked" : ""}`}
                     onClick={(e) => {
                       e.stopPropagation();
-                      if (!toggleWishlist) {
-                        window.location.href = "/login";
-                        return;
-                      }
                       toggleWishlist(p);
                     }}
                   >
@@ -328,43 +312,16 @@ export default function ProductListingPage() {
                   </Link>
                   <div className="product-bottom-row">
                     <button
-                      className={`cart-btn ${justAddedMap[p.id] ? 'added' : ''}`}
-                      onClick={async () => {
+                      className="cart-btn"
+                      onClick={() => {
                         if (!addToCart) {
                           window.location.href = "/login";
                           return;
                         }
-                        try {
-                          setAddingMap((s) => ({ ...s, [p.id]: true }));
-                          await addToCart(p.id);
-                          // show 'Added' state briefly
-                          setJustAddedMap((s) => ({ ...s, [p.id]: true }));
-                          setTimeout(() => {
-                            setJustAddedMap((s) => {
-                              const c = { ...s };
-                              delete c[p.id];
-                              return c;
-                            });
-                          }, 1800);
-                        } catch (e) {
-                          // swallow - CartContext handles errors
-                        } finally {
-                          setAddingMap((s) => {
-                            const c = { ...s };
-                            delete c[p.id];
-                            return c;
-                          });
-                        }
+                        addToCart(p.id);
                       }}
-                      disabled={!!addingMap[p.id]}
                     >
-                      {addingMap[p.id] ? (
-                        <>🔄 <span>Adding...</span></>
-                      ) : justAddedMap[p.id] ? (
-                        <>✅ <span>Added</span></>
-                      ) : (
-                        <>🛒 <span>Add to Cart</span></>
-                      )}
+                      🛒 <span>Add to Cart</span>
                     </button>
                   </div>
                 </div>

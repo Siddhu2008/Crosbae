@@ -274,11 +274,8 @@
   left: 12px;
   z-index: 2;
   display: flex;
-  flex-direction: row; /* show tags inline */
+  flex-direction: column;
   gap: 0.5rem;
-  align-items: center;
-  white-space: nowrap;
-  overflow: hidden;
 }
 
 .product-tag {
@@ -352,19 +349,6 @@
 .cart-btn:hover svg,
 .cart-btn:focus svg {
   stroke: #e6a100;
-}
-
-/* Visual state when item was just added */
-.cart-btn.added {
-  background: #e6ffed;
-  color: #0b6b2f;
-  border-color: #28a745;
-}
-
-/* Disabled state while adding */
-.cart-btn:disabled {
-  opacity: 0.75;
-  cursor: not-allowed;
 }
 
 

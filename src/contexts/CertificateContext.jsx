@@ -1,6 +1,5 @@
 // src/contexts/CertificateContext.js
 import React, { createContext, useContext, useState, useEffect } from "react";
-import api from "../api/api";
 
 const CertificateContext = createContext();
 
@@ -11,9 +10,9 @@ export const CertificateProvider = ({ children }) => {
     // fetch certificates from API
     const fetchCertificates = async () => {
       try {
-        const res = await api.get("/api/v1/inventory/certifications/");
-        const data = res.data;
-        setState({ certificates: data.results || data });
+        const res = await fetch("https://api.crosbae.com/api/v1/inventory/certifications/");
+        const data = await res.json();
+        setState({ certificates: data });
       } catch (err) {
         console.error("Failed to fetch certificates", err);
       }

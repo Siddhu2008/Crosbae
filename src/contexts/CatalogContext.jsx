@@ -1,8 +1,7 @@
 "use client";
 import React, { createContext, useContext, useEffect, useReducer } from "react";
-// import axios from "axios";
-// import API_URL from "../api/auth";
-import api from "../api/api";
+import axios from "axios";
+import API_URL from "../api/auth";
 
 const CatalogContext = createContext();
 
@@ -42,9 +41,9 @@ export const CatalogProvider = ({ children }) => {
         dispatch({ type: "FETCH_START" });
 
         const [brandRes, purityRes, categoryRes] = await Promise.all([
-          api.get("/api/v1/inventory/brands/"),
-          api.get("/api/v1/inventory/purities/"),
-          api.get("/api/v1/inventory/categories/"),
+          axios.get(API_URL + "/v1/inventory/brands/"),
+          axios.get(API_URL + "/v1/inventory/purities/"),
+          axios.get(API_URL + "/v1/inventory/categories/"),
         ]);
 
         dispatch({

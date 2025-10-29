@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useMemo, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { getWishlist, addToWishlist, removeFromWishlist } from "../api/wishlist";
 import { useAuth } from "./AuthContext";
 
@@ -9,7 +9,6 @@ export const WishlistProvider = ({ children }) => {
   const [wishlist, setWishlist] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  // Fetch wishlist if user is logged in
   useEffect(() => {
     if (!user) {
       setWishlist([]);
@@ -32,16 +31,11 @@ export const WishlistProvider = ({ children }) => {
 
   const toggleWishlist = async (product) => {
     if (!user) {
-      window.location.href = "/login"; // redirect if not logged in
+      window.location.href = "/login";
       return;
     }
 
-    const existing = wishlist.find((item) => {
-      if (!item) return false;
-      const itemProduct = typeof item.product === "object" && item.product !== null ? (item.product.id ?? item.product.pk ?? item.product) : item.product;
-      const prodId = product?.id ?? product;
-      return itemProduct == prodId; // loose equality to compare string/number ids
-    });
+    const existing = wishlist.find((item) => item.product === product.id || item.product === product);
     try {
       if (existing) {
         await removeFromWishlist(existing.id);
@@ -55,27 +49,18 @@ export const WishlistProvider = ({ children }) => {
     }
   };
 
-  // Map of productId -> true for quick lookups by UI components
-  const wishlistProductIds = useMemo(() => {
-    const map = {};
-    wishlist.forEach((item) => {
-      if (!item) return;
-      // item.product may be an id or an object
-      let pid = null;
-      if (typeof item.product === "object" && item.product !== null) {
-        pid = item.product.id ?? item.product.pk ?? null;
-      } else {
-        pid = item.product ?? item.product_id ?? null;
-      }
-      if (pid !== null && pid !== undefined) map[pid] = true;
-    });
-    return map;
-  }, [wishlist]);
+  // ✅ Create easy lookup object
+  const wishlistProductIds = wishlist.reduce((acc, item) => {
+    acc[item.product] = true;
+    return acc;
+  }, {});
+
   return (
     <WishlistContext.Provider value={{ wishlist, wishlistProductIds, toggleWishlist, loading }}>
       {children}
     </WishlistContext.Provider>
   );
 };
+
 
 export const useWishlist = () => useContext(WishlistContext);

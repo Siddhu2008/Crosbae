@@ -1,7 +1,6 @@
 import React from "react";
 import "../styles/OccupationSection.css";
 
-// Import images from the local assets folder
 export default function OccupationSection() {
   const occasions = [
     {

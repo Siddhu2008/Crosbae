@@ -2,7 +2,7 @@
 import axios from "axios";
 import API_URL from "./auth";
 
-const BASE_URL = API_URL+"/auth";
+const BASE_URL = API_URL+"/api/auth";
 
 
 
@@ -41,7 +41,7 @@ export const updateUserProfile = async (id, data, token) => {
 
 // ✅ Fetch user addresses (optional)
 export const getUserAddresses = async (token) => {
-  const res = await axios.get(`${BASE_URL}/api/addresses/`, {
+  const res = await axios.get(`${BASE_URL}/addresses/`, {
     headers: { Authorization: `Bearer ${token}` },
   });
   return res.data;

@@ -1,7 +1,6 @@
 import React, { createContext, useReducer, useEffect, useContext } from "react";
-// import axios from "axios";
-// import API_URL from "../api/auth";
-import api from "../api/api";
+import axios from "axios";
+import API_URL from "../api/auth";
 
 const CategoryContext = createContext();
 
@@ -31,7 +30,7 @@ export const CategoryProvider = ({ children }) => {
     const fetchCategories = async () => {
       dispatch({ type: "FETCH_START" });
       try {
-        const response = await api.get("/api/v1/inventory/categories/");
+        const response = await axios.get(API_URL + "/api/v1/inventory/categories/");
         dispatch({
           type: "FETCH_SUCCESS",
           payload: response.data.results || response.data,

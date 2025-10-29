@@ -1,21 +1,18 @@
-import api from './api';
+import axios from 'axios';
+import API_URL from './auth';
 
-export const getAddresses = async () => {
-  const res = await api.get('/api/auth/addresses/');
+const BASE_URL = API_URL+'/api/auth/addresses/';
+
+export const getAddresses = async (token) => {
+  const res = await axios.get(BASE_URL, {
+    headers: { Authorization: `Bearer ${token}` }
+  });
   return res.data;
 };
 
-export const addAddress = async (address) => {
-  const res = await api.post('/api/auth/addresses/', address);
-  return res.data;
-};
-
-export const updateAddress = async (id, patch) => {
-  const res = await api.patch(`/api/auth/addresses/${id}/`, patch);
-  return res.data;
-};
-
-export const deleteAddress = async (id) => {
-  const res = await api.delete(`/api/auth/addresses/${id}/`);
+export const addAddress = async (address, token) => {
+  const res = await axios.post(BASE_URL, address, {
+    headers: { Authorization: `Bearer ${token}` }
+  });
   return res.data;
 };

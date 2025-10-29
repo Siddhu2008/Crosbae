@@ -3,7 +3,7 @@ import { useParams, Link } from "react-router-dom";
 import { useProduct } from "../contexts/ProductContext";
 import { useBrand } from "../contexts/BrandContext";
 import { useCertificate } from "../contexts/CertificateContext";
-import { useCart } from "../contexts/CartContext";
+import useCart from "../hooks/useCart";
 import Seo from "../components/Seo";
 import "../styles/ProductDetailsPage.css";
 
@@ -12,7 +12,8 @@ export default function ProductDetail() {
   const { state: productState } = useProduct();
   const { state: brandState } = useBrand();
   const { state: certificateState } = useCertificate();
-  const { addToCart } = useCart();
+  const token = localStorage.getItem("access");
+  const { addToCart } = useCart(token);
 
   const [product, setProduct] = useState(null);
   const [selectedImage, setSelectedImage] = useState(null);
@@ -21,8 +22,6 @@ export default function ProductDetail() {
   const [loading, setLoading] = useState(true);
   const [relatedProducts, setRelatedProducts] = useState([]);
   const [relatedLoading, setRelatedLoading] = useState(true);
-  const [adding, setAdding] = useState(false);
-  const [justAdded, setJustAdded] = useState(false);
 
   // Load product
   useEffect(() => {
@@ -137,34 +136,8 @@ useEffect(() => {
           </div>
 
           <div className="cta-buttons">
-            <button
-              onClick={async () => {
-                if (!addToCart) {
-                  window.location.href = "/login";
-                  return;
-                }
-                try {
-                  setAdding(true);
-                  // use CartContext's addToCart signature (productId, quantity)
-                  await addToCart(product.id, quantity);
-                  setJustAdded(true);
-                  setTimeout(() => setJustAdded(false), 1800);
-                } catch (e) {
-                  // errors handled by CartContext / addToCart
-                } finally {
-                  setAdding(false);
-                }
-              }}
-              className={`btn-add-cart ${justAdded ? 'added' : ''}`}
-              disabled={adding}
-            >
-              {adding ? (
-                <>🔄 <span>Adding...</span></>
-              ) : justAdded ? (
-                <>✅ <span>Added</span></>
-              ) : (
-                <>🛒 <span>Add to Cart</span></>
-              )}
+            <button onClick={() => addToCart(product, quantity)} className="btn-add-cart">
+              🛒 Add to Cart
             </button>
             <Link to="/checkout" className="btn-buy-now">⚡ Buy Now</Link>
           </div>

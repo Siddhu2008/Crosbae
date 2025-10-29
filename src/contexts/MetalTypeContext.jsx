@@ -1,7 +1,6 @@
 import React, { createContext, useReducer, useEffect, useContext } from "react";
-// import axios from "axios";
-// import API_URL from "../api/auth";
-import api from "../api/api";
+import axios from "axios";
+import API_URL from "../api/auth";
 
 const MetalTypeContext = createContext();
 
@@ -31,7 +30,7 @@ export const MetalTypeProvider = ({ children }) => {
     const fetchMetalTypes = async () => {
       dispatch({ type: "FETCH_START" });
       try {
-        const response = await api.get("/api/v1/inventory/metal-types/");
+        const response = await axios.get(API_URL + "/api/v1/inventory/metal-types/");
         dispatch({ type: "FETCH_SUCCESS", payload: response.data.results || response.data });
       } catch (error) {
         dispatch({ type: "FETCH_ERROR", payload: error.message });

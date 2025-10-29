@@ -1,16 +1,14 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/AddAddress.css';
+import API_URL from "../api/auth";
 import { useAuth } from '../contexts/AuthContext'; // Get user/token from context
-import { useAddresses } from '../contexts/AddressContext';
-import api from '../api/api';
 
 export default function AddAddress({ onSave, onCancel }) {
   const navigate = useNavigate();
   const { user } = useAuth(); // You can also expose token from here
 
-  const token = localStorage.getItem("access"); // kept for compatibility
-  const { addAddress } = useAddresses();
+  const token = localStorage.getItem("access"); // or pass it through AuthContext
 
   const [form, setForm] = useState({
     title: '',
@@ -54,15 +52,40 @@ export default function AddAddress({ onSave, onCancel }) {
     try {
       if (!token) throw new Error('User not authenticated');
 
-      // Use AddressContext to add address (it will update the context state)
-      const created = await addAddress(addressPayload);
+      const headers = {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
+      };
 
-      // create phone if entered
-      if (form.phone_number.trim()) {
-        await api.post('/auth/customer-phones/', phonePayload);
+      // ➤ Create address
+      const addressRes = await fetch(`${API_URL}/api/auth/addresses/`, {
+        method: 'POST',
+        headers,
+        body: JSON.stringify(addressPayload),
+      });
+
+      if (!addressRes.ok) {
+        const errorData = await addressRes.json();
+        throw new Error(errorData.detail || 'Failed to save address');
       }
 
-      onSave?.(created);
+      const addressData = await addressRes.json();
+
+      // ➤ Create phone if entered
+      if (form.phone_number.trim()) {
+        const phoneRes = await fetch(`${API_URL}/api/auth/customer-phones/`, {
+          method: 'POST',
+          headers,
+          body: JSON.stringify(phonePayload),
+        });
+
+        if (!phoneRes.ok) {
+          const phoneError = await phoneRes.json();
+          throw new Error(phoneError.phone?.[0] || 'Failed to save phone number');
+        }
+      }
+
+      onSave?.(addressData);
       navigate(-1);
     } catch (err) {
       console.error(err);

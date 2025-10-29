@@ -8,7 +8,6 @@ import { StoneTypeProvider } from "./StoneTypeContext";
 import { CartProvider } from "./CartContext";
 import { CertificateProvider } from "./CertificateContext";
 import { WishlistProvider } from "./WishlistContext";
-import { AddressProvider } from "./AddressContext";
 
 export default function AppProvider({ children }) {
   return (
@@ -20,9 +19,7 @@ export default function AppProvider({ children }) {
             <CertificateProvider>
               <MetalTypeProvider>
                 <StoneTypeProvider>
-                  <AddressProvider>
-                    <ProductProvider>{children}</ProductProvider>
-                  </AddressProvider>
+                  <ProductProvider>{children}</ProductProvider>
                 </StoneTypeProvider>
               </MetalTypeProvider>
             </CertificateProvider>

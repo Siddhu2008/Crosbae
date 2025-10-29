@@ -1,6 +1,5 @@
-import { createContext, useContext, useReducer, useEffect, useState } from "react";
-// import axios from "axios";
-import api from "../api/api";
+import { createContext, useContext, useReducer, useEffect } from "react";
+import axios from "axios";
 import { useAuth } from "./AuthContext";
 
 const CartContext = createContext();
@@ -27,13 +26,16 @@ function cartReducer(state, action) {
 export const CartProvider = ({ children }) => {
   const [state, dispatch] = useReducer(cartReducer, initialState);
   const { user } = useAuth();
-  const [addingMap, setAddingMap] = useState({});
+  const token = user ? localStorage.getItem("access") : null;
+  const API_URL = "https://api.crosbae.com";
 
   const fetchCart = async () => {
     if (!user) return;
     try {
       dispatch({ type: "FETCH_START" });
-      const res = await api.get("/api/cart/");
+      const res = await axios.get(`${API_URL}/api/cart/`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       const items = Array.isArray(res.data) ? res.data : res.data.results || [];
       dispatch({ type: "FETCH_SUCCESS", payload: items });
     } catch (err) {
@@ -50,54 +52,37 @@ export const CartProvider = ({ children }) => {
       return;
     }
 
-    // prevent concurrent add requests for the same product
-    if (addingMap[String(productId)]) return;
-    setAddingMap((s) => ({ ...s, [String(productId)]: true }));
-
     try {
-      // Fetch latest cart items from server to avoid race creating duplicate entries
-      const res = await api.get("/api/cart/");
-      const items = Array.isArray(res.data) ? res.data : res.data.results || [];
-
-      let existingItem = items.find(
-        (item) => String(item.product) === String(productId) || String(item.product?.id) === String(productId)
+      const existingItem = state.items.find(
+        (item) => item.product === String(productId) || item.product.id === String(productId)
       );
 
       if (existingItem) {
         await updateCartItem(existingItem.id, existingItem.quantity + quantity);
       } else {
-        try {
-          await api.post("/cart/", { product: String(productId), quantity });
-        } catch (err) {
-          // If server rejects because the entry already exists (race), refresh cart instead of failing
-          const status = err.response?.status;
-          if (status === 409 || status === 400) {
-            // likely duplicate unique constraint; fall through to refresh
-          } else {
-            throw err;
-          }
-        }
+        await axios.post(
+          `${API_URL}/api/cart/`,
+          { product: String(productId), quantity },
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
       }
 
-      // refresh cart state after operation
-      fetchCart();
+      fetchCart(); // refresh cart
     } catch (err) {
       dispatch({
         type: "FETCH_ERROR",
         payload: err.response?.data?.detail || err.message || "Failed to add to cart",
-      });
-    } finally {
-      setAddingMap((s) => {
-        const c = { ...s };
-        delete c[String(productId)];
-        return c;
       });
     }
   };
 
   const updateCartItem = async (itemId, quantity) => {
     try {
-      await api.patch(`/cart/${itemId}/`, { quantity });
+      await axios.patch(
+        `${API_URL}/api/cart/${itemId}/`,
+        { quantity },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
       fetchCart();
     } catch (err) {
       dispatch({
@@ -109,7 +94,9 @@ export const CartProvider = ({ children }) => {
 
   const removeFromCart = async (itemId) => {
     try {
-      await api.delete(`/api/cart/${itemId}/`);
+      await axios.delete(`${API_URL}/api/cart/${itemId}/`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       fetchCart();
     } catch (err) {
       dispatch({

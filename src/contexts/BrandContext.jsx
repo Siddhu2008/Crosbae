@@ -1,7 +1,6 @@
 import React, { createContext, useReducer, useEffect } from "react";
-// import axios from "axios";
-// import API_URL from "../api/auth";
-import api from "../api/api";
+import axios from "axios";
+import API_URL from "../api/auth";
 import { useContext } from "react";
 const BrandContext = createContext();
 
@@ -31,7 +30,7 @@ export const BrandProvider = ({ children }) => {
     const fetchBrands = async () => {
       dispatch({ type: "FETCH_START" });
       try {
-        const response = await api.get("/api/v1/inventory/brands/");
+        const response = await axios.get(API_URL + "/api/v1/inventory/brands/");
         dispatch({ type: "FETCH_SUCCESS", payload: response.data.results || response.data });
       } catch (error) {
         dispatch({ type: "FETCH_ERROR", payload: error.message });

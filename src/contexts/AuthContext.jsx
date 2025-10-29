@@ -1,6 +1,6 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import api from "../api/api";
-import { login as loginAPI, googleLogin as googleLoginAPI, logout as logoutAPI, refreshToken as refreshTokenAPI } from "../api/auth";
+import { login as loginAPI, googleLogin as googleLoginAPI, logout as logoutAPI } from "../api/auth";
 
 const AuthContext = createContext();
 
@@ -21,28 +21,6 @@ export const AuthProvider = ({ children }) => {
         setUser(res.data);
       } catch (err) {
         console.error("Failed to fetch user:", err);
-        // If access token expired, try refresh (only if refresh token present)
-        const status = err.response?.status;
-        if (status === 401) {
-          const refresh = localStorage.getItem("refresh");
-          if (refresh) {
-            try {
-              const r = await refreshTokenAPI(refresh);
-              if (r?.data?.access) {
-                localStorage.setItem("access", r.data.access);
-                if (r.data.refresh) localStorage.setItem("refresh", r.data.refresh);
-                // retry fetching user
-                const res2 = await api.get("/api/auth/me/");
-                setUser(res2.data);
-                setLoading(false);
-                return;
-              }
-            } catch (refreshErr) {
-              console.error("Refresh failed:", refreshErr);
-            }
-          }
-        }
-        // fallback: clear auth state
         logout();
       } finally {
         setLoading(false);

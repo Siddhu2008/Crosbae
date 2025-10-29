@@ -12,7 +12,7 @@ export default function OrderHistoryPage() {
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const res = await fetch(`${API_URL}/orders/`, {
+        const res = await fetch(`${API_URL}/api/orders/`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         if (!res.ok) throw new Error("Failed to fetch orders");
@@ -26,40 +26,6 @@ export default function OrderHistoryPage() {
     };
     fetchOrders();
   }, [token]);
-
-  // Helper: resolve product display info safely
-  const resolveProductInfo = (productOrId) => {
-    // If product is missing or falsy
-    if (!productOrId) return { name: "Product", image: "/fallback-image.jpg", id: null };
-
-    // If we only have an id (number or string), show fallback and keep id
-    if (typeof productOrId === "string" || typeof productOrId === "number") {
-      return { name: `Product #${productOrId}`, image: "/fallback-image.jpg", id: productOrId };
-    }
-
-    // It's an object — try to extract name/id
-    const prod = productOrId;
-    const name = prod.productName || prod.name || prod.title || prod.displayName || "Product";
-    const id = prod.id || prod.product_id || null;
-
-    // Resolve image: support array of strings, array of objects, single string, or object with url/url_full
-    let image = "/fallback-image.jpg";
-    if (Array.isArray(prod.images) && prod.images.length) {
-      const first = prod.images[0];
-      if (typeof first === "string") image = first;
-      else if (first && (first.url_full || first.url)) image = first.url_full || first.url;
-    } else if (typeof prod.images === "string" && prod.images) {
-      image = prod.images;
-    } else if (prod.image) {
-      image = prod.image;
-    } else if (prod.image_url) {
-      image = prod.image_url;
-    } else if (prod.thumbnail) {
-      image = prod.thumbnail;
-    }
-
-    return { name, image, id };
-  };
 
   if (loading) {
     return <div className="order-history"><p>Loading orders...</p></div>;
@@ -123,30 +89,23 @@ export default function OrderHistoryPage() {
               </div>
 
               <div className="oh-items">
-                {order.details.slice(0, 2).map((item, idx) => {
-                  const { name, image, id: prodId } = resolveProductInfo(item.product);
-                  const productLink = prodId ? `/product/${prodId}` : undefined;
-                  return (
-                    <div key={idx} className="oh-item">
-                      {productLink ? (
-                        <Link to={productLink} className="oh-thumb-link">
-                          <img className="oh-thumb" src={image} alt={name} />
-                        </Link>
-                      ) : (
-                        <img className="oh-thumb" src={image} alt={name} />
-                      )}
-
-                      <div className="oh-item-info">
-                        <p className="oh-item-name">{name}</p>
-                        <div className="oh-item-meta">
-                          <span>Qty: {item.quantity}</span>
-                          <span className="dot" aria-hidden="true">•</span>
-                          <span>₹{item.price}</span>
-                        </div>
+                {order.details.slice(0, 2).map((item, idx) => (
+                  <div key={idx} className="oh-item">
+                    <img
+                      className="oh-thumb"
+                      src={item.product?.images?.[0]?.url_full || ""}
+                      alt={item.product?.name}
+                    />
+                    <div className="oh-item-info">
+                      <p className="oh-item-name">{item.product?.name}</p>
+                      <div className="oh-item-meta">
+                        <span>Qty: {item.quantity}</span>
+                        <span className="dot" aria-hidden="true">•</span>
+                        <span>₹{item.price}</span>
                       </div>
                     </div>
-                  );
-                })}
+                  </div>
+                ))}
               </div>
 
               <footer className="oh-card-foot">

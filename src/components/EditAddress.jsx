@@ -1,16 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import '../styles/AddAddress.css';
+import API_URL from "../api/auth";
 import { useAuth } from '../contexts/AuthContext';
-import api from '../api/api';
-import { useAddresses } from '../contexts/AddressContext';
 
 export default function EditAddress({ onSave, onCancel }) {
   const navigate = useNavigate();
   const { id } = useParams(); // Get address ID from URL
   const { user } = useAuth();
   const token = localStorage.getItem("access");
-  const { updateAddress } = useAddresses();
 
   const [form, setForm] = useState({
     title: '',
@@ -28,38 +26,53 @@ export default function EditAddress({ onSave, onCancel }) {
 
   // ✅ Load address data when component mounts
   useEffect(() => {
-    const fetchAddressAndPhone = async () => {
+  const fetchAddressAndPhone = async () => {
+    try {
+      if (!token) throw new Error("Not authenticated");
+
+      const headers = { 'Authorization': `Bearer ${token}` };
+
+      // 1️⃣ Fetch Address
+      const res = await fetch(`${API_URL}/api/auth/addresses/${id}/`, { headers });
+      if (!res.ok) throw new Error("Failed to load address");
+      const addressData = await res.json();
+
+      // 2️⃣ Fetch Customer Phone Number (with fail-safe)
+      let phoneNumber = "";
       try {
-        if (!token) throw new Error("Not authenticated");
-
-        const res = await api.get(`/auth/addresses/${id}/`);
-        const addressData = res.data;
-
-        let phoneNumber = "";
-        try {
-          const phoneRes = await api.get('/auth/customer-phones/');
-          const phoneData = phoneRes.data;
+        const phoneRes = await fetch(`${API_URL}/api/auth/customer-phones/`, { headers });
+        if (phoneRes.ok) {
+          const phoneData = await phoneRes.json();
           if (Array.isArray(phoneData) && phoneData.length > 0) {
-            const primary = phoneData.find((p) => p.is_primary) || phoneData[0];
-            phoneNumber = primary.phone || primary.phone_number || "";
-          } else if (phoneData && phoneData.phone_number) {
+            const primary = phoneData.find(p => p.is_primary) || phoneData[0];
+            phoneNumber = primary.phone_number;
+          } else if (phoneData.phone_number) {
             phoneNumber = phoneData.phone_number;
           }
-        } catch (phoneErr) {
-          console.warn("⚠️ Failed to load phone number", phoneErr);
+        } else {
+          console.warn("⚠️ Phone API failed:", phoneRes.status);
         }
-
-        setForm((prev) => ({ ...prev, ...addressData, phone_number: phoneNumber || "" }));
-        setLoading(false);
-      } catch (err) {
-        console.error(err);
-        alert(err.message || "Error loading address.");
-        setLoading(false);
+      } catch (phoneErr) {
+        console.warn("⚠️ Failed to load phone number", phoneErr);
       }
-    };
 
-    fetchAddressAndPhone();
-  }, [id, token]);
+      // 3️⃣ Merge both into form state
+      setForm((prev) => ({
+        ...prev,
+        ...addressData,
+        phone_number: phoneNumber || "",
+      }));
+
+      setLoading(false);
+    } catch (err) {
+      console.error(err);
+      alert(err.message || "Error loading address.");
+      setLoading(false);
+    }
+  };
+
+  fetchAddressAndPhone();
+}, [id, token]);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -86,8 +99,25 @@ export default function EditAddress({ onSave, onCancel }) {
     try {
       if (!token) throw new Error("User not authenticated");
 
-      const updatedAddress = await updateAddress(id, addressPayload);
-      // Optionally update phone number here using api.post/patch
+      const headers = {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
+      };
+
+      const res = await fetch(`${API_URL}/api/auth/addresses/${id}/`, {
+        method: 'PUT',
+        headers,
+        body: JSON.stringify(addressPayload),
+      });
+
+      if (!res.ok) {
+        const errorData = await res.json();
+        throw new Error(errorData.detail || 'Failed to update address');
+      }
+
+      const updatedAddress = await res.json();
+
+      // Optionally update phone number here...
 
       onSave?.(updatedAddress);
       navigate(-1);

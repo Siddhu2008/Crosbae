@@ -660,7 +660,7 @@ export default function EditProfile() {
         </div>
       </div>
 
-  <style>{`
+      <style jsx>{`
         .required::after {
           content: " *";
           color: #dc2626;
@@ -680,7 +680,7 @@ export default function EditProfile() {
           padding: 12px 16px;
           border-radius: 8px;
         }
-  `}</style>
+      `}</style>
     </div>
   );
 }

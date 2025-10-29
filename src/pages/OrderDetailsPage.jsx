@@ -20,7 +20,7 @@ export default function OrderDetailsPage() {
   useEffect(() => {
     const fetchOrder = async () => {
       try {
-        const res = await fetch(`${API_URL}/orders/${id}/`, {
+        const res = await fetch(`${API_URL}/api/orders/${id}/`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         if (!res.ok) throw new Error("Failed to fetch order");
@@ -72,6 +72,26 @@ export default function OrderDetailsPage() {
         </div>
       </section>
 
+      {/* <section className="od-section">
+        <h2 className="od-subtitle">Items</h2>
+        <div className="od-items">
+          {order.details.map((item, i) => (
+            <div key={i} className="od-item">
+              <img
+                src={item.product?.images?.[0]?.url_full || ""}
+                alt={item.product?.name}
+                className="od-thumb"
+              />
+              <div className="od-item-info">
+                <p className="od-item-name">{item.product_name}</p>
+                <p className="od-item-meta">
+                  Qty: {item.quantity} • ₹{item.price}
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section> */}
       <OrderItemsSelection order={order}/>
       <footer className="od-footer">
         <button 
@@ -79,7 +99,7 @@ export default function OrderDetailsPage() {
         onClick={async () => {
           const token = localStorage.getItem("access");
           try {
-            const response = await fetch(`${API_URL}/orders/${id}/invoice/`, {
+            const response = await fetch(`${API_URL}/api/orders/${id}/invoice/`, {
               headers: {
                 'Authorization': `Bearer ${token}`
               }

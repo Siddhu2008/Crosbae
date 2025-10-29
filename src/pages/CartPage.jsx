@@ -3,11 +3,10 @@ import React, { useState, useEffect, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "../styles/CartPage.css";
 import Seo from "../components/Seo";
-import api from "../api/api";
+import API_URL from "../api/auth";
 import { useAuth } from "../contexts/AuthContext";
 import ProductContext from "../contexts/ProductContext";
 import { useCart } from "../contexts/CartContext";
-import { useAddresses } from "../contexts/AddressContext";
 
 export default function CartPage() {
   const [couponCode, setCouponCode] = useState("");
@@ -16,6 +15,7 @@ export default function CartPage() {
   const [showAddressModal, setShowAddressModal] = useState(false);
   const [selectedAddressId, setSelectedAddressId] = useState(null);
   const [availableCoupons, setAvailableCoupons] = useState([]);
+  const [addresses, setAddresses] = useState([]);
   const [addressError, setAddressError] = useState(null);
   const [currentUser, setCurrentUser] = useState(null);
 
@@ -29,28 +29,41 @@ export default function CartPage() {
     fetchCart 
   } = useCart();
 
-  const { fetchWithAuth, user } = useAuth();
+  const { fetchWithAuth } = useAuth();
   const { state } = useContext(ProductContext);
   const { products } = state;
-  const { addresses, loading: addressesLoading, fetchAddresses, deleteAddress } = useAddresses();
 
   const navigate = useNavigate();
-  // useAuth provides `user`
+  const token = localStorage.getItem("access");
+
+  // Fetch logged-in user info
   useEffect(() => {
-    setCurrentUser(user || null);
-  }, [user]);
+    const fetchUser = async () => {
+      try {
+        const res = await fetch(`${API_URL}/api/auth/me/`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        if (!res.ok) throw new Error("Failed to fetch user");
+        const data = await res.json();
+        setCurrentUser(data);
+      } catch (err) {
+        console.error("Error fetching user:", err);
+      }
+    };
+    if (token) fetchUser();
+  }, [token]);
 
   // Load coupons and addresses
   useEffect(() => {
     fetchCoupons();
-    // ensure addresses are loaded from AddressContext
-    if (user) fetchAddresses();
-  }, [currentUser, user]);
+    if (token) fetchAddresses();
+  }, [currentUser]);
 
   const fetchCoupons = async () => {
     try {
-      const response = await api.get("/coupons/");
-      const data = response.data;
+      const response = await fetch(API_URL + "/api/coupons/");
+      if (!response.ok) throw new Error("Failed to fetch coupons");
+      const data = await response.json();
       const coupons = Array.isArray(data) ? data : data.results || [];
       setAvailableCoupons(coupons);
     } catch (err) {
@@ -58,19 +71,40 @@ export default function CartPage() {
     }
   };
 
-  // Address list and CRUD are handled by AddressContext
-  useEffect(() => {
-    if (addresses && addresses.length > 0) {
-      const defaultAddress = addresses.find((a) => a.is_default);
-      if (defaultAddress && !selectedAddressId) setSelectedAddressId(defaultAddress.id);
+  const fetchAddresses = async () => {
+    try {
+      const res = await fetchWithAuth(API_URL + "/api/auth/addresses/");
+      if (!res.ok) throw new Error("Failed to fetch addresses");
+      const data = await res.json();
+      const addrList = Array.isArray(data) ? data : data.results || [];
+
+      // Filter addresses to show only the logged-in user's
+      const filtered = currentUser
+        ? addrList.filter((addr) => addr.customer === currentUser.id)
+        : addrList;
+
+      setAddresses(filtered);
+      const defaultAddress = filtered.find((addr) => addr.is_default);
+      if (defaultAddress) setSelectedAddressId(defaultAddress.id);
+    } catch (err) {
+      setAddressError("Unable to load addresses.");
+      console.error("Error fetching addresses:", err);
     }
-  }, [addresses]);
+  };
 
   const handleDeleteAddress = async (addressId) => {
     if (!window.confirm("Are you sure you want to delete this address?")) return;
     try {
-      await deleteAddress(addressId);
-      if (selectedAddressId === addressId) setSelectedAddressId(null);
+      const res = await fetch(`${API_URL}/api/auth/addresses/${addressId}/`, {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (res.ok) {
+        setAddresses((prev) => prev.filter((addr) => addr.id !== addressId));
+        if (selectedAddressId === addressId) setSelectedAddressId(null);
+      } else {
+        alert("Failed to delete address.");
+      }
     } catch (err) {
       console.error("Error deleting address:", err);
       alert("Error deleting address.");
@@ -177,11 +211,21 @@ export default function CartPage() {
     }
 
     try {
-      const orderResp = await api.post("/checkout/create_order/", {
-        address_id: selectedAddressId,
-        coupon_code: couponCode.trim() || null,
+      const orderRes = await fetch(`${API_URL}/api/checkout/create_order/`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          address_id: selectedAddressId,
+          coupon_code: couponCode.trim() || null,
+        }),
       });
-      const orderData = orderResp.data;
+
+      if (!orderRes.ok) throw new Error("Failed to create order");
+
+      const orderData = await orderRes.json();
       const { razorpay_order_id, amount, currency, razorpay_key, order_uuid } = orderData;
 
       const options = {
@@ -192,13 +236,26 @@ export default function CartPage() {
         description: "Jewellery Purchase",
         order_id: razorpay_order_id,
         handler: async function (response) {
-          const verifyResp = await api.post("/verify-payment/", {
-            razorpay_order_id: response.razorpay_order_id,
-            razorpay_payment_id: response.razorpay_payment_id,
-            razorpay_signature: response.razorpay_signature,
-            order_uuid: order_uuid,
+          const verifyRes = await fetch(`${API_URL}/api/verify-payment/`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({
+              razorpay_order_id: response.razorpay_order_id,
+              razorpay_payment_id: response.razorpay_payment_id,
+              razorpay_signature: response.razorpay_signature,
+              order_uuid: order_uuid,
+            }),
           });
-          const verifyData = verifyResp.data;
+
+          if (!verifyRes.ok) {
+            alert("Payment verification failed");
+            return;
+          }
+
+          const verifyData = await verifyRes.json();
           console.log("Payment verified:", verifyData);
           navigate(`/order/${order_uuid}`);
         },
@@ -462,7 +519,7 @@ export default function CartPage() {
       )}
 
       {/* Add CSS for modal positioning */}
-  <style>{`
+      <style jsx>{`
         .modal-overlay {
           position: fixed;
           top: 0;
@@ -653,7 +710,7 @@ export default function CartPage() {
             justify-content: flex-end;
           }
         }
-  `}</style>
+      `}</style>
     </>
   );
 }

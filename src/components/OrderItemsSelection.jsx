@@ -89,7 +89,7 @@ const OrderItemsSection = ({ order }) => {
       </div>
 
       {/* Add CSS styles */}
-  <style>{`
+      <style jsx>{`
         .od-item {
           display: flex;
           align-items: center;
@@ -170,7 +170,7 @@ const OrderItemsSection = ({ order }) => {
             margin-right: 12px;
           }
         }
-  `}</style>
+      `}</style>
     </section>
   );
 };

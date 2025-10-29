@@ -1,32 +1,89 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { getUserProfile, getUserAddresses } from "../api/user";
 import "../styles/ProfilePage.css";
-import { useAuth } from "../contexts/AuthContext";
-import { useAddresses } from "../contexts/AddressContext";
+import API_URL from "../api/auth";
 
 export default function ProfilePage() {
   const navigate = useNavigate();
+  const location = useLocation();
 
-  const { user } = useAuth();
-  const { addresses, loading: addrLoading, error: addrError, fetchAddresses, deleteAddress } = useAddresses();
-
+  const [user, setUser] = useState(null);
+  const [addresses, setAddresses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  const token = localStorage.getItem("access");
+
   useEffect(() => {
-    if (!user) {
+    if (!token) {
       setError("User not authenticated");
       setLoading(false);
       return;
     }
-    // ensure addresses fresh
-    fetchAddresses().finally(() => setLoading(false));
-  }, [user]);
+
+    const fetchData = async () => {
+      try {
+        // ✅ Fetch user profile
+        const userData = await getUserProfile(token);
+        setUser(userData);
+
+        // ✅ Fetch addresses
+        let addressData = [];
+        try {
+          const rawAddressData = await getUserAddresses(token);
+
+          // Normalize different possible formats
+          if (Array.isArray(rawAddressData)) {
+            addressData = rawAddressData;
+          } else if (
+            rawAddressData &&
+            typeof rawAddressData === "object" &&
+            "results" in rawAddressData &&
+            Array.isArray(rawAddressData.results)
+          ) {
+            addressData = rawAddressData.results;
+          } else {
+            const arrProp = Object.values(rawAddressData).find(Array.isArray);
+            addressData = arrProp || [];
+          }
+        } catch (e) {
+          console.warn("Failed to fetch addresses:", e);
+        }
+
+        // ✅ Filter only addresses belonging to the logged-in user
+        const filteredAddresses = Array.isArray(addressData)
+          ? addressData.filter(
+              (addr) =>
+                addr.customer === userData.id ||
+                addr.user === userData.id || // in case API uses user instead of customer
+                addr.customer_id === userData.id
+            )
+          : [];
+
+        setAddresses(filteredAddresses);
+      } catch (err) {
+        setError(err.message || "Failed to load profile data");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [token, location.key]);
 
   const handleDeleteAddress = async (addressId) => {
     if (!window.confirm("Are you sure you want to delete this address?")) return;
     try {
-      await deleteAddress(addressId);
+      const res = await fetch(`${API_URL}/api/auth/addresses/${addressId}/`, {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (res.ok) {
+        setAddresses((prev) => prev.filter((addr) => addr.id !== addressId));
+      } else {
+        alert("Failed to delete address.");
+      }
     } catch (err) {
       console.error("Error deleting address:", err);
       alert("Error deleting address.");

@@ -7,13 +7,15 @@ import { useCart } from "../contexts/CartContext";
 import { useProduct } from "../contexts/ProductContext";
 
 export default function WishlistPage() {
-  const { wishlistProductIds = {}, toggleWishlist, loading } = useWishlist();
+const { wishlist = [], toggleWishlist, loading } = useWishlist();
 const { addToCart } = useCart();
 const { state: productState } = useProduct();
 const allProducts = productState.products || [];
 
-const wishlistProducts = allProducts.filter((p) => wishlistProductIds[p.id]);
-
+// ✅ Match wishlist products using product ID
+const wishlistProducts = allProducts.filter((p) =>
+  wishlist.some((item) => item.product === p.id)
+);
   // Show loader while fetching wishlist or products
   if (loading || productState.loading) {
     return (
