@@ -31,7 +31,7 @@ export const PurityProvider = ({ children }) => {
     const fetchPurities = async () => {
       dispatch({ type: "FETCH_START" });
       try {
-        const response = await api.get("/v1/inventory/purities/");
+        const response = await api.get("/api/v1/inventory/purities/");
         dispatch({ type: "FETCH_SUCCESS", payload: response.data.results || response.data });
       } catch (error) {
         dispatch({ type: "FETCH_ERROR", payload: error.message });

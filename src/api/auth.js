@@ -22,28 +22,28 @@ instance.interceptors.request.use((config) => {
   return config;
 });
 
-export const register = (userData) => instance.post("/auth/user/", userData);
+export const register = (userData) => instance.post("/api/auth/user/", userData);
 
 export const login = async (userData) => {
-  const res = await instance.post("/auth/login/", userData);
+  const res = await instance.post("/api/auth/login/", userData);
   // persist tokens only if returned in JSON (backend may set HttpOnly cookie instead)
   if (res?.data?.access) localStorage.setItem("access", res.data.access);
   if (res?.data?.refresh) localStorage.setItem("refresh", res.data.refresh);
   return res.data;
 };
 
-export const getCurrentUser = () => instance.get("/auth/me/");
+export const getCurrentUser = () => instance.get("/api/auth/me/");
 
 export const refreshToken = (refresh) => {
   // If refresh value provided send it; else call refresh endpoint relying on cookie
-  if (refresh) return instance.post("/auth/token/refresh/", { refresh });
+  if (refresh) return instance.post("/api/auth/token/refresh/", { refresh });
   return instance.post("/api/auth/token/refresh/");
 };
 
 export const logout = async () => {
   try {
     // best-effort call to backend logout to clear server-side session/cookie
-    await instance.post("/auth/logout/").catch(() => {});
+    await instance.post("/api/auth/logout/").catch(() => {});
   } finally {
     localStorage.removeItem("access");
     localStorage.removeItem("refresh");
@@ -51,7 +51,7 @@ export const logout = async () => {
   }
 };
 
-export const googleLogin = (token) => instance.post("/auth/google/", { token });
-export const getGoogleClientId = () => instance.get("/auth/google-client-id/");
+export const googleLogin = (token) => instance.post("/api/auth/google/", { token });
+export const getGoogleClientId = () => instance.get("/api/auth/google-client-id/");
 
 export default API_BASE;

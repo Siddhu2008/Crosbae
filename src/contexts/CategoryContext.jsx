@@ -31,7 +31,7 @@ export const CategoryProvider = ({ children }) => {
     const fetchCategories = async () => {
       dispatch({ type: "FETCH_START" });
       try {
-        const response = await api.get("/v1/inventory/categories/");
+        const response = await api.get("/api/v1/inventory/categories/");
         dispatch({
           type: "FETCH_SUCCESS",
           payload: response.data.results || response.data,

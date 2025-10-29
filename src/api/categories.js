@@ -1,7 +1,7 @@
 import axios from "axios";
 import API_URL from "./auth";
 
-const BASE_URL = API_URL+"/v1/inventory/"; 
+const BASE_URL = API_URL+"/api/v1/inventory/"; 
 
 export const getCategories = async () => {
   try {

@@ -11,7 +11,7 @@ export const CertificateProvider = ({ children }) => {
     // fetch certificates from API
     const fetchCertificates = async () => {
       try {
-        const res = await api.get("/v1/inventory/certifications/");
+        const res = await api.get("/api/v1/inventory/certifications/");
         const data = res.data;
         setState({ certificates: data.results || data });
       } catch (err) {

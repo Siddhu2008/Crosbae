@@ -71,7 +71,7 @@ api.interceptors.response.use(
 
     // prevent infinite loop for refresh endpoint or already retried requests
     if (originalRequest._retry) return Promise.reject(error);
-    if (originalRequest.url && originalRequest.url.includes("/auth/token/refresh/")) {
+    if (originalRequest.url && originalRequest.url.includes("/api/auth/token/refresh/")) {
       // refresh failed -> clear and redirect to login
       localStorage.removeItem("access");
       localStorage.removeItem("refresh");

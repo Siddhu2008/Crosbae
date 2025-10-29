@@ -19,6 +19,7 @@ const LoginPage = () => {
   useEffect(() => {
     getGoogleClientId()
       .then((res) => {
+        console.debug("fetched Google client id:", res.data.GOOGLE_OAUTH_CLIENT_ID);
         setClientId(res.data.GOOGLE_OAUTH_CLIENT_ID);
       })
       .catch((err) => console.error("Failed to fetch Google client ID:", err));
@@ -44,7 +45,13 @@ const LoginPage = () => {
   // Handle Google login
   const handleGoogleLogin = async (credentialResponse) => {
     setLoading(true);
+    console.debug("google credentialResponse:", credentialResponse);
     try {
+      if (!credentialResponse || !credentialResponse.credential) {
+        console.error("No credential from Google. Ensure origin is authorized and COOP/COEP headers are not blocking.");
+        setLoading(false);
+        return;
+      }
       const data = await googleLogin(credentialResponse.credential);
       localStorage.setItem("access", data.access);
       localStorage.setItem("refresh", data.refresh);

@@ -30,7 +30,7 @@ export const StoneTypeProvider = ({ children }) => {
     const fetchStoneTypes = async () => {
       dispatch({ type: "FETCH_START" });
       try {
-        const response = await api.get("/v1/inventory/stone-types/");
+        const response = await api.get("/api/v1/inventory/stone-types/");
         dispatch({ type: "FETCH_SUCCESS", payload: response.data.results || response.data });
       } catch (error) {
         dispatch({ type: "FETCH_ERROR", payload: error.message });

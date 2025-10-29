@@ -33,7 +33,7 @@ export const CartProvider = ({ children }) => {
     if (!user) return;
     try {
       dispatch({ type: "FETCH_START" });
-      const res = await api.get("/cart/");
+      const res = await api.get("/api/cart/");
       const items = Array.isArray(res.data) ? res.data : res.data.results || [];
       dispatch({ type: "FETCH_SUCCESS", payload: items });
     } catch (err) {
@@ -56,7 +56,7 @@ export const CartProvider = ({ children }) => {
 
     try {
       // Fetch latest cart items from server to avoid race creating duplicate entries
-      const res = await api.get("/cart/");
+      const res = await api.get("/api/cart/");
       const items = Array.isArray(res.data) ? res.data : res.data.results || [];
 
       let existingItem = items.find(
@@ -109,7 +109,7 @@ export const CartProvider = ({ children }) => {
 
   const removeFromCart = async (itemId) => {
     try {
-      await api.delete(`/cart/${itemId}/`);
+      await api.delete(`/api/cart/${itemId}/`);
       fetchCart();
     } catch (err) {
       dispatch({

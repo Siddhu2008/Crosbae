@@ -31,7 +31,7 @@ export const ProductProvider = ({ children }) => {
     const fetchProducts = async () => {
       dispatch({ type: "FETCH_START" });
       try {
-        const response = await api.get("/v1/inventory/products/");
+        const response = await api.get("/api/v1/inventory/products/");
         dispatch({
           type: "FETCH_SUCCESS",
           payload: response.data.results || response.data,

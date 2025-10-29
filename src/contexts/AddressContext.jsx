@@ -51,19 +51,19 @@ export const AddressProvider = ({ children }) => {
   };
 
   const addAddress = async (address) => {
-    const res = await api.post("/auth/addresses/", address);
+    const res = await api.post("/api/auth/addresses/", address);
     dispatch({ type: "ADD_ADDRESS", payload: res.data });
     return res.data;
   };
 
   const updateAddress = async (id, patch) => {
-    const res = await api.patch(`/auth/addresses/${id}/`, patch);
+    const res = await api.patch(`/api/auth/addresses/${id}/`, patch);
     dispatch({ type: "UPDATE_ADDRESS", payload: res.data });
     return res.data;
   };
 
   const deleteAddress = async (id) => {
-    await api.delete(`/auth/addresses/${id}/`);
+    await api.delete(`/api/auth/addresses/${id}/`);
     dispatch({ type: "DELETE_ADDRESS", payload: id });
   };
 

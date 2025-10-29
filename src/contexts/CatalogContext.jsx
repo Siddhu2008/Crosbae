@@ -42,9 +42,9 @@ export const CatalogProvider = ({ children }) => {
         dispatch({ type: "FETCH_START" });
 
         const [brandRes, purityRes, categoryRes] = await Promise.all([
-          api.get("/v1/inventory/brands/"),
-          api.get("/v1/inventory/purities/"),
-          api.get("/v1/inventory/categories/"),
+          api.get("/api/v1/inventory/brands/"),
+          api.get("/api/v1/inventory/purities/"),
+          api.get("/api/v1/inventory/categories/"),
         ]);
 
         dispatch({

@@ -7,7 +7,7 @@ const BASE_URL = API_URL+"/auth";
 
 
 export const getUserProfile = async (token) => {
-  const res = await axios.get(`${API_URL}/auth/me/`, {
+  const res = await axios.get(`${API_URL}/api/auth/me/`, {
     headers: { Authorization: `Bearer ${token}` },
   });
   return res.data;
@@ -27,7 +27,7 @@ export const updateUserProfile = async (id, data, token) => {
   }
 
   try {
-    const res = await axios.patch(`${API_URL}/auth/user/${id}/`, data, {
+    const res = await axios.patch(`${API_URL}/api/auth/user/${id}/`, data, {
       headers,
       // Add timeout to prevent hanging requests
       timeout: 30000,
@@ -41,7 +41,7 @@ export const updateUserProfile = async (id, data, token) => {
 
 // ✅ Fetch user addresses (optional)
 export const getUserAddresses = async (token) => {
-  const res = await axios.get(`${BASE_URL}/addresses/`, {
+  const res = await axios.get(`${BASE_URL}/api/addresses/`, {
     headers: { Authorization: `Bearer ${token}` },
   });
   return res.data;
