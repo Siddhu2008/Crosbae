@@ -12,7 +12,7 @@ export default function OrderHistoryPage() {
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const res = await fetch(`${API_URL}/api/orders/`, {
+        const res = await fetch(`${API_URL}/orders/`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         if (!res.ok) throw new Error("Failed to fetch orders");

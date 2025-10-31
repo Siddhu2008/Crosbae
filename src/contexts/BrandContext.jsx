@@ -1,19 +1,15 @@
-import React, { createContext, useReducer, useEffect } from "react";
+import React, { createContext, useReducer, useEffect, useContext } from "react";
 import axios from "axios";
-import API_URL from "../api/auth";
-import { useContext } from "react";
+import { API_URL } from "../api/api";
+
 const BrandContext = createContext();
 
-const initialState = {
-  brands: [],
-  loading: true,
-  error: null,
-};
+const initialState = { brands: [], loading: true, error: null };
 
 function brandReducer(state, action) {
   switch (action.type) {
     case "FETCH_START":
-      return { ...state, loading: true, error: null };
+      return { ...state, loading: true };
     case "FETCH_SUCCESS":
       return { ...state, loading: false, brands: action.payload };
     case "FETCH_ERROR":
@@ -30,21 +26,16 @@ export const BrandProvider = ({ children }) => {
     const fetchBrands = async () => {
       dispatch({ type: "FETCH_START" });
       try {
-        const response = await axios.get(API_URL + "/api/v1/inventory/brands/");
-        dispatch({ type: "FETCH_SUCCESS", payload: response.data.results || response.data });
-      } catch (error) {
-        dispatch({ type: "FETCH_ERROR", payload: error.message });
+        const res = await axios.get(`${API_URL}/v1/inventory/brands/`);
+        dispatch({ type: "FETCH_SUCCESS", payload: res.data.results || res.data });
+      } catch (err) {
+        dispatch({ type: "FETCH_ERROR", payload: err.message });
       }
     };
-
     fetchBrands();
   }, []);
 
-  return (
-    <BrandContext.Provider value={{ state, dispatch }}>
-      {children}
-    </BrandContext.Provider>
-  );
+  return <BrandContext.Provider value={state}>{children}</BrandContext.Provider>;
 };
 
 export const useBrand = () => useContext(BrandContext);

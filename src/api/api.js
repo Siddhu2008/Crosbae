@@ -1,30 +1,29 @@
-// src/api/api.js
 import axios from "axios";
 import { refreshToken as refreshTokenAPI } from "./auth";
 
-// Use Vite env variable when provided. In dev, fall back to a local proxy path '/api'
-// so the Vite dev-server proxy can forward requests to the real backend and
-// avoid CORS. In production, default to the real API URL.
-const API_URL = import.meta.env.VITE_API_URL ?? (import.meta.env.DEV ? '/api' : 'https://api.crosbae.com');
+// const API_URL = "http://127.0.0.1:8000/api"; // dev
+const API_URL = "https://api.crosbae.com/api"; // prod
+
+export { API_URL };
 
 const api = axios.create({
   baseURL: API_URL,
-  withCredentials: true, // If refresh token is HttpOnly cookie
+  withCredentials: false,
 });
 
-// Request interceptor: attach access token
+// ✅ Request Interceptor
 api.interceptors.request.use(
   (config) => {
     const accessToken = localStorage.getItem("access");
     if (accessToken) {
-      config.headers["Authorization"] = `Bearer ${accessToken}`;
+      config.headers.Authorization = `Bearer ${accessToken}`;
     }
     return config;
   },
   (error) => Promise.reject(error)
 );
 
-// Response interceptor: handle 401 (token expired)
+// ✅ Response Interceptor: Auto-refresh on 401
 api.interceptors.response.use(
   (response) => response,
   async (error) => {
@@ -32,20 +31,22 @@ api.interceptors.response.use(
 
     if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
+
       try {
         const refresh = localStorage.getItem("refresh");
         if (!refresh) throw new Error("No refresh token");
 
         const res = await refreshTokenAPI(refresh);
         const { access } = res.data;
-        localStorage.setItem("access", access);
 
-        originalRequest.headers["Authorization"] = `Bearer ${access}`;
-        return api(originalRequest); // retry original request
+        localStorage.setItem("access", access);
+        originalRequest.headers.Authorization = `Bearer ${access}`;
+
+        return api(originalRequest); // retry
       } catch (err) {
         localStorage.removeItem("access");
         localStorage.removeItem("refresh");
-        window.location.href = "/login"; // redirect to login
+        window.location.href = "/login";
         return Promise.reject(err);
       }
     }

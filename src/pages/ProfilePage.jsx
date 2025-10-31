@@ -75,7 +75,7 @@ export default function ProfilePage() {
   const handleDeleteAddress = async (addressId) => {
     if (!window.confirm("Are you sure you want to delete this address?")) return;
     try {
-      const res = await fetch(`${API_URL}/api/auth/addresses/${addressId}/`, {
+      const res = await fetch(`${API_URL}/auth/addresses/${addressId}/`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` },
       });

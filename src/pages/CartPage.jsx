@@ -7,6 +7,7 @@ import API_URL from "../api/auth";
 import { useAuth } from "../contexts/AuthContext";
 import ProductContext from "../contexts/ProductContext";
 import { useCart } from "../contexts/CartContext";
+import Swal from "sweetalert2";
 
 export default function CartPage() {
   const [couponCode, setCouponCode] = useState("");
@@ -40,7 +41,7 @@ export default function CartPage() {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const res = await fetch(`${API_URL}/api/auth/me/`, {
+        const res = await fetch(`${API_URL}/auth/me/`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         if (!res.ok) throw new Error("Failed to fetch user");
@@ -61,7 +62,7 @@ export default function CartPage() {
 
   const fetchCoupons = async () => {
     try {
-      const response = await fetch(API_URL + "/api/coupons/");
+      const response = await fetch(API_URL + "/coupons/");
       if (!response.ok) throw new Error("Failed to fetch coupons");
       const data = await response.json();
       const coupons = Array.isArray(data) ? data : data.results || [];
@@ -73,7 +74,7 @@ export default function CartPage() {
 
   const fetchAddresses = async () => {
     try {
-      const res = await fetchWithAuth(API_URL + "/api/auth/addresses/");
+      const res = await fetchWithAuth(API_URL + "/auth/addresses/");
       if (!res.ok) throw new Error("Failed to fetch addresses");
       const data = await res.json();
       const addrList = Array.isArray(data) ? data : data.results || [];
@@ -95,7 +96,7 @@ export default function CartPage() {
   const handleDeleteAddress = async (addressId) => {
     if (!window.confirm("Are you sure you want to delete this address?")) return;
     try {
-      const res = await fetch(`${API_URL}/api/auth/addresses/${addressId}/`, {
+      const res = await fetch(`${API_URL}/auth/addresses/${addressId}/`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -121,14 +122,29 @@ export default function CartPage() {
     }
   };
 
+
   const handleRemoveFromCart = async (cartItemId) => {
+    const result = await Swal.fire({
+      title: "Remove item?",
+      text: "Are you sure you want to remove this product from your cart?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Yes, remove it!",
+    });
+
+    if (!result.isConfirmed) return;
+
     try {
       await removeFromCart(cartItemId);
+      Swal.fire("Removed!", "The item has been removed from your cart.", "success");
     } catch (err) {
       console.error("Error removing from cart:", err);
-      alert("Failed to remove item from cart");
+      Swal.fire("Error", "Failed to remove item from cart.", "error");
     }
   };
+
 
   // Enrich cart items with product details
   const enrichedCartItems = cartItems.map((item) => {
@@ -211,7 +227,7 @@ export default function CartPage() {
     }
 
     try {
-      const orderRes = await fetch(`${API_URL}/api/checkout/create_order/`, {
+      const orderRes = await fetch(`${API_URL}/checkout/create_order/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -236,7 +252,7 @@ export default function CartPage() {
         description: "Jewellery Purchase",
         order_id: razorpay_order_id,
         handler: async function (response) {
-          const verifyRes = await fetch(`${API_URL}/api/verify-payment/`, {
+          const verifyRes = await fetch(`${API_URL}/verify-payment/`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",

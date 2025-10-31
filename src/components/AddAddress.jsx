@@ -58,7 +58,7 @@ export default function AddAddress({ onSave, onCancel }) {
       };
 
       // ➤ Create address
-      const addressRes = await fetch(`${API_URL}/api/auth/addresses/`, {
+      const addressRes = await fetch(`${API_URL}/auth/addresses/`, {
         method: 'POST',
         headers,
         body: JSON.stringify(addressPayload),
@@ -73,7 +73,7 @@ export default function AddAddress({ onSave, onCancel }) {
 
       // ➤ Create phone if entered
       if (form.phone_number.trim()) {
-        const phoneRes = await fetch(`${API_URL}/api/auth/customer-phones/`, {
+        const phoneRes = await fetch(`${API_URL}/auth/customer-phones/`, {
           method: 'POST',
           headers,
           body: JSON.stringify(phonePayload),

@@ -13,7 +13,7 @@ const OrderTrackingPage = () => {
 
     const fetchOrder = async () => {
       try {
-        const res = await fetch(`${API_URL}/api/orders/${orderId}/`, {
+        const res = await fetch(`${API_URL}/orders/${orderId}/`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         if (!res.ok) throw new Error("Failed to fetch order");

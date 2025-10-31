@@ -1,8 +1,6 @@
-"use client";
-import React, { createContext, useContext, useEffect, useReducer } from "react";
+import React, { createContext, useContext, useReducer, useEffect } from "react";
 import axios from "axios";
-import API_URL from "../api/auth";
-
+import { API_URL } from "../api/api";
 const CatalogContext = createContext();
 
 const initialState = {
@@ -18,13 +16,7 @@ function catalogReducer(state, action) {
     case "FETCH_START":
       return { ...state, loading: true, error: null };
     case "FETCH_SUCCESS":
-      return {
-        ...state,
-        loading: false,
-        brands: action.payload.brands,
-        purities: action.payload.purities,
-        categories: action.payload.categories,
-      };
+      return { ...state, loading: false, ...action.payload };
     case "FETCH_ERROR":
       return { ...state, loading: false, error: action.payload };
     default:
@@ -36,43 +28,30 @@ export const CatalogProvider = ({ children }) => {
   const [state, dispatch] = useReducer(catalogReducer, initialState);
 
   useEffect(() => {
-    const fetchCatalogData = async () => {
+    const fetchAll = async () => {
       try {
         dispatch({ type: "FETCH_START" });
-
-        const [brandRes, purityRes, categoryRes] = await Promise.all([
-          axios.get(API_URL + "/v1/inventory/brands/"),
-          axios.get(API_URL + "/v1/inventory/purities/"),
-          axios.get(API_URL + "/v1/inventory/categories/"),
+        const [brands, purities, categories] = await Promise.all([
+          axios.get(`${API_URL}/v1/inventory/brands/`),
+          axios.get(`${API_URL}/v1/inventory/purities/`),
+          axios.get(`${API_URL}/v1/inventory/categories/`),
         ]);
-
         dispatch({
           type: "FETCH_SUCCESS",
           payload: {
-            brands: brandRes.data.results || brandRes.data,
-            purities: purityRes.data.results || purityRes.data,
-            categories: categoryRes.data.results || categoryRes.data,
+            brands: brands.data.results || brands.data,
+            purities: purities.data.results || purities.data,
+            categories: categories.data.results || categories.data,
           },
         });
-      } catch (error) {
-        dispatch({
-          type: "FETCH_ERROR",
-          payload:
-            error.response?.data?.detail ||
-            error.message ||
-            "Failed to load catalog data",
-        });
+      } catch (err) {
+        dispatch({ type: "FETCH_ERROR", payload: err.message });
       }
     };
-
-    fetchCatalogData();
+    fetchAll();
   }, []);
 
-  return (
-    <CatalogContext.Provider value={state}>
-      {children}
-    </CatalogContext.Provider>
-  );
+  return <CatalogContext.Provider value={state}>{children}</CatalogContext.Provider>;
 };
 
 export const useCatalog = () => useContext(CatalogContext);

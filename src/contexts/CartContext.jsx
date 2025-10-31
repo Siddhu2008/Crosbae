@@ -3,7 +3,7 @@ import axios from "axios";
 import { useAuth } from "./AuthContext";
 
 const CartContext = createContext();
-
+import { API_URL } from "../api/api";
 const initialState = {
   items: [],
   loading: false,
@@ -26,108 +26,63 @@ function cartReducer(state, action) {
 export const CartProvider = ({ children }) => {
   const [state, dispatch] = useReducer(cartReducer, initialState);
   const { user } = useAuth();
-  const token = user ? localStorage.getItem("access") : null;
-  const API_URL = "https://api.crosbae.com";
+  const token = localStorage.getItem("access");
 
   const fetchCart = async () => {
     if (!user) return;
     try {
       dispatch({ type: "FETCH_START" });
-      const res = await axios.get(`${API_URL}/api/cart/`, {
+      const res = await axios.get(`${API_URL}/cart/`, {
         headers: { Authorization: `Bearer ${token}` },
+        withCredentials: true,
       });
-      const items = Array.isArray(res.data) ? res.data : res.data.results || [];
-      dispatch({ type: "FETCH_SUCCESS", payload: items });
+      dispatch({ type: "FETCH_SUCCESS", payload: res.data.results || res.data });
     } catch (err) {
-      dispatch({
-        type: "FETCH_ERROR",
-        payload: err.response?.data?.detail || err.message || "Failed to load cart",
-      });
+      dispatch({ type: "FETCH_ERROR", payload: err.message });
     }
   };
 
   const addToCart = async (productId, quantity = 1) => {
     if (!user) {
-      window.location.href = "/login"; // redirect if not logged in
+      window.location.href = "/login";
       return;
     }
-
-    try {
-      const existingItem = state.items.find(
-        (item) => item.product === String(productId) || item.product.id === String(productId)
-      );
-
-      if (existingItem) {
-        await updateCartItem(existingItem.id, existingItem.quantity + quantity);
-      } else {
-        await axios.post(
-          `${API_URL}/api/cart/`,
-          { product: String(productId), quantity },
-          { headers: { Authorization: `Bearer ${token}` } }
-        );
-      }
-
-      fetchCart(); // refresh cart
-    } catch (err) {
-      dispatch({
-        type: "FETCH_ERROR",
-        payload: err.response?.data?.detail || err.message || "Failed to add to cart",
-      });
-    }
+    await axios.post(
+      `${API_URL}/cart/`,
+      { product: String(productId), quantity },
+      { headers: { Authorization: `Bearer ${token}` }, withCredentials: true }
+    );
+    fetchCart();
   };
 
   const updateCartItem = async (itemId, quantity) => {
-    try {
-      await axios.patch(
-        `${API_URL}/api/cart/${itemId}/`,
-        { quantity },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      fetchCart();
-    } catch (err) {
-      dispatch({
-        type: "FETCH_ERROR",
-        payload: err.response?.data?.detail || err.message || "Failed to update cart",
-      });
-    }
+    await axios.patch(
+      `${API_URL}/cart/${itemId}/`,
+      { quantity },
+      { headers: { Authorization: `Bearer ${token}` }, withCredentials: true }
+    );
+    fetchCart();
   };
 
   const removeFromCart = async (itemId) => {
-    try {
-      await axios.delete(`${API_URL}/api/cart/${itemId}/`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      fetchCart();
-    } catch (err) {
-      dispatch({
-        type: "FETCH_ERROR",
-        payload: err.response?.data?.detail || err.message || "Failed to remove item",
-      });
-    }
+    await axios.delete(`${API_URL}/cart/${itemId}/`, {
+      headers: { Authorization: `Bearer ${token}` },
+      withCredentials: true,
+    });
+    fetchCart();
   };
-
-  const cartCount = state.items.reduce((acc, item) => acc + (item.quantity || 0), 0);
 
   useEffect(() => {
     if (user) fetchCart();
-    else dispatch({ type: "FETCH_SUCCESS", payload: [] }); // clear cart if logged out
   }, [user]);
 
+  const cartCount = state.items.reduce((acc, item) => acc + (item.quantity || 0), 0);
+
   return (
-    <CartContext.Provider
-      value={{
-        ...state,
-        cartCount,
-        fetchCart,
-        addToCart,
-        updateCartItem,
-        removeFromCart,
-      }}
-    >
+    <CartContext.Provider value={{ ...state, fetchCart, addToCart, updateCartItem, removeFromCart, cartCount }}>
       {children}
     </CartContext.Provider>
   );
 };
 
 export const useCart = () => useContext(CartContext);
-export default CartContext;

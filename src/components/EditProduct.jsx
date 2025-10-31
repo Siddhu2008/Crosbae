@@ -24,7 +24,7 @@ export default function EditProfile() {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const res = await axios.get(API_URL+"/api/auth/me", {
+        const res = await axios.get(API_URL+"/auth/me", {
           headers: { Authorization: `Bearer ${token}` },
         });
         setUser({
@@ -78,7 +78,7 @@ export default function EditProfile() {
       if (user.profilePicFile) {
         formData.append("profile_pic", user.profilePicFile);
       }
-      await axios.patch(API_URL+"/api/auth/user", formData, {
+      await axios.patch(API_URL+"/auth/user", formData, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "multipart/form-data",

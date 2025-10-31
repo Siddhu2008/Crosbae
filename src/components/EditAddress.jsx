@@ -33,14 +33,14 @@ export default function EditAddress({ onSave, onCancel }) {
       const headers = { 'Authorization': `Bearer ${token}` };
 
       // 1️⃣ Fetch Address
-      const res = await fetch(`${API_URL}/api/auth/addresses/${id}/`, { headers });
+      const res = await fetch(`${API_URL}/auth/addresses/${id}/`, { headers });
       if (!res.ok) throw new Error("Failed to load address");
       const addressData = await res.json();
 
       // 2️⃣ Fetch Customer Phone Number (with fail-safe)
       let phoneNumber = "";
       try {
-        const phoneRes = await fetch(`${API_URL}/api/auth/customer-phones/`, { headers });
+        const phoneRes = await fetch(`${API_URL}/auth/customer-phones/`, { headers });
         if (phoneRes.ok) {
           const phoneData = await phoneRes.json();
           if (Array.isArray(phoneData) && phoneData.length > 0) {
@@ -104,7 +104,7 @@ export default function EditAddress({ onSave, onCancel }) {
         'Authorization': `Bearer ${token}`,
       };
 
-      const res = await fetch(`${API_URL}/api/auth/addresses/${id}/`, {
+      const res = await fetch(`${API_URL}/auth/addresses/${id}/`, {
         method: 'PUT',
         headers,
         body: JSON.stringify(addressPayload),

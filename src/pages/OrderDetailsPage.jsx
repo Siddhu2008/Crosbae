@@ -20,7 +20,7 @@ export default function OrderDetailsPage() {
   useEffect(() => {
     const fetchOrder = async () => {
       try {
-        const res = await fetch(`${API_URL}/api/orders/${id}/`, {
+        const res = await fetch(`${API_URL}/orders/${id}/`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         if (!res.ok) throw new Error("Failed to fetch order");
@@ -99,7 +99,7 @@ export default function OrderDetailsPage() {
         onClick={async () => {
           const token = localStorage.getItem("access");
           try {
-            const response = await fetch(`${API_URL}/api/orders/${id}/invoice/`, {
+            const response = await fetch(`${API_URL}/orders/${id}/invoice/`, {
               headers: {
                 'Authorization': `Bearer ${token}`
               }

@@ -1,6 +1,6 @@
+// src/contexts/MetalTypeContext.jsx
 import React, { createContext, useReducer, useEffect, useContext } from "react";
-import axios from "axios";
-import API_URL from "../api/auth";
+import api from "../api/api"; // ✅ unified API instance
 
 const MetalTypeContext = createContext();
 
@@ -30,10 +30,10 @@ export const MetalTypeProvider = ({ children }) => {
     const fetchMetalTypes = async () => {
       dispatch({ type: "FETCH_START" });
       try {
-        const response = await axios.get(API_URL + "/api/v1/inventory/metal-types/");
-        dispatch({ type: "FETCH_SUCCESS", payload: response.data.results || response.data });
-      } catch (error) {
-        dispatch({ type: "FETCH_ERROR", payload: error.message });
+        const res = await api.get("/v1/inventory/metal-types/");
+        dispatch({ type: "FETCH_SUCCESS", payload: res.data.results || res.data });
+      } catch (err) {
+        dispatch({ type: "FETCH_ERROR", payload: err.message });
       }
     };
 
@@ -47,10 +47,10 @@ export const MetalTypeProvider = ({ children }) => {
   );
 };
 
-export default MetalTypeContext;
-
 export const useMetalType = () => {
   const context = useContext(MetalTypeContext);
   if (!context) throw new Error("useMetalType must be used within a MetalTypeProvider");
   return context;
 };
+
+export default MetalTypeContext;

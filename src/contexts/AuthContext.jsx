@@ -1,6 +1,10 @@
 import { createContext, useContext, useState, useEffect } from "react";
-import api from "../api/api";
-import { login as loginAPI, googleLogin as googleLoginAPI, logout as logoutAPI } from "../api/auth";
+import api from "../api/api"; // axios instance with interceptors
+import {
+  login as loginAPI,
+  googleLogin as googleLoginAPI,
+  logout as logoutAPI,
+} from "../api/auth";
 
 const AuthContext = createContext();
 
@@ -8,56 +12,76 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // Initialize user
+  // 🔹 Check and load current user on app start
   useEffect(() => {
     const initUser = async () => {
-      const token = localStorage.getItem("access");
-      if (!token) {
+      const access = localStorage.getItem("access");
+      if (!access) {
         setLoading(false);
         return;
       }
+
       try {
-        const res = await api.get("/api/auth/me/");
+        const res = await api.get("/auth/me/");
         setUser(res.data);
       } catch (err) {
-        console.error("Failed to fetch user:", err);
-        logout();
+        console.error("Auth check failed:", err);
+        handleLogout(); 
       } finally {
         setLoading(false);
       }
     };
+
     initUser();
   }, []);
 
+  // 🔹 Login with credentials
   const login = async (credentials) => {
     setLoading(true);
     try {
       const res = await loginAPI(credentials);
       setUser(res.user_data || null);
       return res;
+    } catch (error) {
+      console.error("Login failed:", error);
+      throw error;
     } finally {
       setLoading(false);
     }
   };
 
+  // 🔹 Google Login
   const loginWithGoogle = async (token) => {
     setLoading(true);
     try {
       const res = await googleLoginAPI(token);
       setUser(res.data.user_data || null);
       return res.data;
+    } catch (error) {
+      console.error("Google login failed:", error);
+      throw error;
     } finally {
       setLoading(false);
     }
   };
 
-  const logout = () => {
-    logoutAPI();
+  // 🔹 Logout
+  const handleLogout = () => {
+    logoutAPI(); // clears tokens + redirects (handled in auth.js)
     setUser(null);
   };
 
   return (
-    <AuthContext.Provider value={{ user, setUser, login, loginWithGoogle, logout, loading }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        setUser,
+        login,
+        loginWithGoogle,
+        logout: handleLogout,
+        loading,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );

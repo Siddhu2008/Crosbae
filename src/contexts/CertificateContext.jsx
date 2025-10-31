@@ -1,20 +1,19 @@
-// src/contexts/CertificateContext.js
+// src/contexts/CertificateContext.jsx
 import React, { createContext, useContext, useState, useEffect } from "react";
+import api from "../api/api"; // ✅ unified API instance
 
 const CertificateContext = createContext();
 
 export const CertificateProvider = ({ children }) => {
-  const [state, setState] = useState({ certificates: [] });
+  const [state, setState] = useState({ certificates: [], loading: true, error: null });
 
   useEffect(() => {
-    // fetch certificates from API
     const fetchCertificates = async () => {
       try {
-        const res = await fetch("https://api.crosbae.com/api/v1/inventory/certifications/");
-        const data = await res.json();
-        setState({ certificates: data });
+        const res = await api.get("/v1/inventory/certifications/");
+        setState({ certificates: res.data.results || res.data, loading: false, error: null });
       } catch (err) {
-        console.error("Failed to fetch certificates", err);
+        setState({ certificates: [], loading: false, error: err.message });
       }
     };
     fetchCertificates();
@@ -28,3 +27,5 @@ export const CertificateProvider = ({ children }) => {
 };
 
 export const useCertificate = () => useContext(CertificateContext);
+
+export default CertificateContext;

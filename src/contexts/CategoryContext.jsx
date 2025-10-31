@@ -30,7 +30,7 @@ export const CategoryProvider = ({ children }) => {
     const fetchCategories = async () => {
       dispatch({ type: "FETCH_START" });
       try {
-        const response = await axios.get(API_URL + "/api/v1/inventory/categories/");
+        const response = await axios.get(API_URL + "/v1/inventory/categories/");
         dispatch({
           type: "FETCH_SUCCESS",
           payload: response.data.results || response.data,

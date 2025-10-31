@@ -1,5 +1,8 @@
 import React, { useRef, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+
+import tvImage from "../assets/images/tv.png";
+import jewelryVideo from "../assets/videos/jewelry.mp4";
 import "../styles/NewArrivals.css"
 
 
