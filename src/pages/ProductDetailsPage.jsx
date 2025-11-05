@@ -10,7 +10,7 @@ import "../styles/ProductDetailsPage.css";
 export default function ProductDetail() {
   const { id } = useParams();
   const { state: productState } = useProduct();
-  const { state: brandState } = useBrand();
+  const brandState = useBrand();
   const { state: certificateState } = useCertificate();
   const token = localStorage.getItem("access");
   const { addToCart } = useCart(token);
@@ -22,6 +22,20 @@ export default function ProductDetail() {
   const [loading, setLoading] = useState(true);
   const [relatedProducts, setRelatedProducts] = useState([]);
   const [relatedLoading, setRelatedLoading] = useState(true);
+
+  // utility to check presence of a value (not null/undefined/empty/'None'/'nan')
+  const isPresent = (v) => {
+    if (v === null || v === undefined) return false;
+    if (typeof v === "string") {
+      const s = v.trim().toLowerCase();
+      if (!s) return false;
+      if (s === "none" || s === "nan") return false;
+      return true;
+    }
+    if (typeof v === "number") return !Number.isNaN(v);
+    if (Array.isArray(v)) return v.length > 0;
+    return true;
+  };
 
   // Load product
   useEffect(() => {
@@ -122,11 +136,11 @@ useEffect(() => {
           </div>
 
           <div className="additional-attributes">
-            {product.weight && <p><b>Weight:</b> {product.weight}</p>}
-            {product.tags && <p><b>Tags:</b> {Array.isArray(product.tags) ? product.tags.join(", ") : product.tags}</p>}
-            {product.certification && <p><b>Certification:</b> {product.certification}</p>}
-            {product.brand && <p><b>Brand:</b> {product.brand}</p>}
-            {product.hsnCode && <p><b>HSN Code:</b> {product.hsnCode}</p>}
+            {isPresent(product.weight) && <p><b>Weight:</b> {product.weight}</p>}
+            {isPresent(product.tags) && <p><b>Tags:</b> {Array.isArray(product.tags) ? product.tags.join(", ") : product.tags}</p>}
+            {isPresent(product.certification) && <p><b>Certification:</b> {product.certification}</p>}
+            {isPresent(product.brand) && <p><b>Brand:</b> {product.brand}</p>}
+            {isPresent(product.hsnCode) && <p><b>HSN Code:</b> {product.hsnCode}</p>}
           </div>
 
           <div className="quantity-section">
@@ -150,43 +164,43 @@ useEffect(() => {
         <table className="product-table">
           <tbody>
             <tr><td><b>Name:</b></td><td>{product.productName || product.name}</td></tr>
-            <tr><td><b>Category:</b></td><td>{product.category || "N/A"}</td></tr>
-            <tr><td><b>Description:</b></td><td>{product.description || "No description available."}</td></tr>
-            <tr><td><b>Metal Type:</b></td><td>{product.metalType || "N/A"}</td></tr>
-            <tr><td><b>Stone Type:</b></td><td>{product.stoneType || "N/A"}</td></tr>
-            <tr><td><b>Weight:</b></td><td>{product.weight || "N/A"}</td></tr>
-            <tr><td><b>Size:</b></td><td>{product.size || "N/A"}</td></tr>
-            {product.certification && <tr><td><b>Certification:</b></td><td>{product.certification}</td></tr>}
-            {product.brand && <tr><td><b>Brand:</b></td><td>{product.brand}</td></tr>}
-            <tr><td><b>GST Rate:</b></td><td>{product.gstRate || "5"}%</td></tr>
-            <tr><td><b>Features:</b></td><td>{Array.isArray(product.features) && product.features.length ? product.features.join(", ") : "None"}</td></tr>
+            {isPresent(product.category) && <tr><td><b>Category:</b></td><td>{product.category}</td></tr>}
+            {isPresent(product.description) && <tr><td><b>Description:</b></td><td>{product.description}</td></tr>}
+            {isPresent(product.metalType) && <tr><td><b>Metal Type:</b></td><td>{product.metalType}</td></tr>}
+            {isPresent(product.stoneType) && <tr><td><b>Stone Type:</b></td><td>{product.stoneType}</td></tr>}
+            {isPresent(product.weight) && <tr><td><b>Weight:</b></td><td>{product.weight}</td></tr>}
+            {isPresent(product.size) && <tr><td><b>Size:</b></td><td>{product.size}</td></tr>}
+            {isPresent(product.certification) && <tr><td><b>Certification:</b></td><td>{product.certification}</td></tr>}
+            {isPresent(product.brand) && <tr><td><b>Brand:</b></td><td>{product.brand}</td></tr>}
+            {isPresent(product.gstRate) && <tr><td><b>GST Rate:</b></td><td>{product.gstRate}%</td></tr>}
+            {isPresent(product.features) && <tr><td><b>Features:</b></td><td>{Array.isArray(product.features) && product.features.length ? product.features.join(", ") : product.features}</td></tr>}
           </tbody>
         </table>
       </div>
 
       {/* Reviews */}
-      <div className="reviews-section">
-        <h2>Customer Reviews</h2>
-        {product.average_rating > 0 && <p><b>Rating review:</b> {product.average_rating.toFixed(1)}</p>}
-        <p><b>Reviews count:</b> {reviews.length}</p>
-        {reviews.length ? reviews.map((rev, i) => (
-          <div key={i} className="review-card">
-            <div className="review-header">
-              <span className="review-name">{rev.name || "Anonymous"}</span>
-              <span className="review-stars">{"⭐".repeat(rev.rating)}</span>
+      {reviews.length > 0 && (
+        <div className="reviews-section">
+          <h2>Customer Reviews</h2>
+          {product.average_rating > 0 && <p><b>Rating review:</b> {product.average_rating.toFixed(1)}</p>}
+          <p><b>Reviews count:</b> {reviews.length}</p>
+          {reviews.map((rev, i) => (
+            <div key={i} className="review-card">
+              <div className="review-header">
+                <span className="review-name">{rev.name || "Anonymous"}</span>
+                <span className="review-stars">{"⭐".repeat(rev.rating)}</span>
+              </div>
+              <p>{rev.comment}</p>
+              <small>{new Date(rev.date || rev.created_at).toLocaleDateString()}</small>
             </div>
-            <p>{rev.comment}</p>
-            <small>{new Date(rev.date || rev.created_at).toLocaleDateString()}</small>
-          </div>
-        )) : <p>No reviews yet.</p>}
-      </div>
+          ))}
+        </div>
+      )}
 
       {/* Related Products */}
-      <div className="related-products-section mt-5">
-        <h2>Related Products</h2>
-        {relatedLoading ? (
-          <div className="loader">Loading Related Products...</div>
-        ) : relatedProducts.length ? (
+      {(!relatedLoading && relatedProducts.length > 0) && (
+        <div className="related-products-section mt-5">
+          <h2>Related Products</h2>
           <div className="related-products-grid d-flex gap-3 overflow-auto">
             {relatedProducts.map((rp) => (
               <div key={rp.id} className="related-product-card border p-2">
@@ -202,10 +216,8 @@ useEffect(() => {
               </div>
             ))}
           </div>
-        ) : (
-          <p>No related products found.</p>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 }

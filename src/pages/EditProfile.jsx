@@ -660,7 +660,7 @@ export default function EditProfile() {
         </div>
       </div>
 
-      <style jsx>{`
+  <style>{`
         .required::after {
           content: " *";
           color: #dc2626;

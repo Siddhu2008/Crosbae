@@ -282,10 +282,20 @@
   font-size: 0.85rem;
   font-weight: 600;
   background: #bfa17f;
-  color: #fff;
+  /* per-tag main/sub colors can be provided via inline CSS variables (see getTagStyle)
+     fall back to white for main and a slightly translucent white for sub */
+  color: var(--tag-main-color, #fff);
   padding: 0.3rem 0.5rem;
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(191,161,127,0.08);
+}
+
+.product-tag .tag-sub {
+  display: block;
+  font-size: 0.75rem;
+  opacity: 0.95;
+  margin-top: 3px;
+  color: var(--tag-sub-color, rgba(255,255,255,0.95));
 }
 
 .product-tag.expert-s-choice {

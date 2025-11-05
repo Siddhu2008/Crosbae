@@ -89,7 +89,7 @@ const OrderItemsSection = ({ order }) => {
       </div>
 
       {/* Add CSS styles */}
-      <style jsx>{`
+  <style>{`
         .od-item {
           display: flex;
           align-items: center;

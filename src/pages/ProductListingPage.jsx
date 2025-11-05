@@ -48,16 +48,58 @@ export default function ProductListingPage() {
   const toggleFilterSidebar = () => setShowFilter(!showFilter);
 
   const getTagStyle = (tag) => {
+    // Return background and CSS variables for main/sub text colors so
+    // we can style first and second lines differently while still
+    // allowing per-tag text colors.
     switch (tag) {
       case "NEW":
-        return { background: "linear-gradient(to right, #00c9a7, #92fe9d)", color: "#fff" };
+        return {
+          background: "linear-gradient(to right, #00c9a7, #92fe9d)",
+          "--tag-main-color": "#ffffff",
+          "--tag-sub-color": "rgba(255,255,255,0.9)",
+        };
       case "Flat 50% OFF":
-        return { background: "linear-gradient(to right, #e52d27, #b31217)", color: "#fff" };
+        return {
+          background: "linear-gradient(to right, #e52d27, #b31217)",
+          "--tag-main-color": "#ffffff",
+          "--tag-sub-color": "rgba(255,255,255,0.9)",
+        };
       case "Best Seller":
-        return { background: "linear-gradient(to right, #f7971e, #ffd200)", color: "#000" };
+        return {
+          background: "linear-gradient(to right, #f7971e, #ffd200)",
+          "--tag-main-color": "#111111",
+          "--tag-sub-color": "rgba(0,0,0,0.75)",
+        };
       default:
-        return { background: "linear-gradient(to right, #bfa17f, #f5e6ca)", color: "#fff" };
+        return {
+          background: "linear-gradient(to right, #bfa17f, #f5e6ca)",
+          "--tag-main-color": "#ffffff",
+          "--tag-sub-color": "rgba(255,255,255,0.95)",
+        };
     }
+  };
+
+  // Format tag for display: show only first two words on line1; allow at most one extra line from comma-separated parts.
+  // Limit to first two tag elements overall when rendering.
+  const formatTagDisplay = (tag) => {
+    if (tag === null || tag === undefined) return { left: "", right: null };
+    const str = String(tag).trim();
+    if (!str) return { left: "", right: null };
+
+    // split by comma into parts, but only keep up to two parts
+    const parts = str.split(",").map((s) => s.trim()).filter(Boolean).slice(0, 2);
+
+    // left: take up to first two words of first part
+    const first = parts[0] || "";
+    const words = first.split(/\s+/).filter(Boolean);
+    let left = words.slice(0, 2).join(" ");
+    if (words.length > 2) left += "...";
+
+    // right: second comma part if present, trimmed and truncated to 40 chars
+    let right = parts[1] || null;
+    if (right && right.length > 40) right = right.slice(0, 37) + "...";
+
+    return { left, right };
   };
 
   const [productsWithImages, setProductsWithImages] = useState([]);
@@ -273,11 +315,20 @@ export default function ProductListingPage() {
                 <div className="product-image-section">
                   {p.tags?.length > 0 && (
                     <div className="product-tags">
-                      {(Array.isArray(p.tags) ? p.tags : [p.tags]).map((tag, i) => (
-                        <span key={i} className="product-tag" style={getTagStyle(tag)}>
-                          {tag}
-                        </span>
-                      ))}
+                      {(Array.isArray(p.tags) ? p.tags : [p.tags]).slice(0, 2).map((tag, i) => {
+                        const { left, right } = formatTagDisplay(tag);
+                        return (
+                          <span key={i} className="product-tag" style={getTagStyle(tag)}>
+                            {left}
+                            {right && (
+                              <>
+                                <br />
+                                <span className="tag-sub">{right}</span>
+                              </>
+                            )}
+                          </span>
+                        );
+                      })}
                     </div>
                   )}
                   <button

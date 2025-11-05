@@ -71,12 +71,22 @@ export const AuthProvider = ({ children }) => {
     setUser(null);
   };
 
+  // 🔹 Fetch helper that attaches Authorization header for fetch-based calls
+  const fetchWithAuth = async (url, options = {}) => {
+    const token = localStorage.getItem("access");
+    const headers = { ...(options.headers || {}) };
+    if (token) headers.Authorization = `Bearer ${token}`;
+    const opts = { ...options, headers };
+    return fetch(url, opts);
+  };
+
   return (
     <AuthContext.Provider
       value={{
         user,
         setUser,
         login,
+        fetchWithAuth,
         loginWithGoogle,
         logout: handleLogout,
         loading,

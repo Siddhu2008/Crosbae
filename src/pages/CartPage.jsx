@@ -535,7 +535,7 @@ export default function CartPage() {
       )}
 
       {/* Add CSS for modal positioning */}
-      <style jsx>{`
+  <style>{`
         .modal-overlay {
           position: fixed;
           top: 0;
