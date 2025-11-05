@@ -53,13 +53,13 @@ export default function Footer() {
             <h6 className="footer-heading">Customer Service</h6>
             <ul>
               <li>
-                <Link to="/contact">Shipping Info</Link>
+                <Link to="/shipping-policy">Shipping Policy</Link>
               </li>
               <li>
-                <Link to="/contact">Returns & Exchange</Link>
+                <Link to="/refund-return-policy">Returns & Exchange</Link>
               </li>
               <li>
-                <Link to="/contact">Size Guide</Link>
+                <Link to="/size-guide-and-jewelry-care-policy">Size Guide</Link>
               </li>
               <li>
                 <Link to="/faq">FAQ</Link>
@@ -83,7 +83,7 @@ export default function Footer() {
             </p>
             <p>
               <i className="bi bi-envelope-fill text-warning me-2"></i>
-              hello@crosbae.com
+              support@crosbae.com
             </p>
             <p className="fw-bold mb-0">Business Hours:</p>
             <p>
@@ -98,9 +98,9 @@ export default function Footer() {
         <div className="footer-bottom">
           <p className="footer-copy">© 2025 Cros Bae. All rights reserved.</p>
           <div className="footer-links">
-            <a href="#">Privacy Policy</a>
-            <a href="#">Terms of Service</a>
-            <a href="#">Cookie Policy</a>
+            <a href="/privacy-policy">Privacy Policy</a>
+            <a href="/terms-and-conditions">Terms and Conditions</a>
+            <a href="/cookies-policy">Cookie Policy</a>
           </div>
         </div>
       </div>

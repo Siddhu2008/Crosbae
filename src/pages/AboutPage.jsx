@@ -25,16 +25,9 @@ export default function AboutPage() {
         <div className="container">
           <h2>Our Story</h2>
           <p>
-            Founded with a passion for beauty and sophistication,{" "}
-            <strong>Crosbae</strong> has grown into a leading name in luxury
-            imitation jewelry. Each piece in our collection reflects an
-            unwavering commitment to quality, creativity, and contemporary
-            fashion sensibilities.
-          </p>
-          <p>
-            Inspired by timeless elegance and designed for today’s modern women,
-            Crosbae’s jewelry embodies more than just style — it tells a story
-            of confidence, grace, and individuality.
+            Welcome to Crosbae – where elegance meets everyday sparkle!
+At Crosbae, we create anti-tarnish jewelry designed to shine longer and make you feel special every day. Our mission is simple: Luxury at minimal cost – high quality, stunning designs, and affordable prices compared to other brands.
+
           </p>
         </div>
       </section>
@@ -72,18 +65,37 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <section className="why-choose">
-        <div className="container">
-          <h2>Why Choose Crosbae?</h2>
-          <ul className="features-list">
-            <li>✨ Timeless & Trendy Designs</li>
-            <li>💎 Premium Quality Craftsmanship</li>
-            <li>📦 Worldwide Shipping & Easy Returns</li>
-            <li>🤝 Trusted by Thousands of Customers</li>
-            <li>🛡️ 100% Satisfaction Guarantee</li>
-          </ul>
-        </div>
-      </section>
+      <section className="why-choose py-20 bg-gradient-to-b from-[#fffaf3] to-[#fdf6e3] text-center">
+  <div className="container max-w-5xl mx-auto px-6">
+    <h2 className="text-3xl md:text-4xl font-semibold text-[#a3832c] uppercase tracking-wide mb-10">
+      Why Choose Crosbae?
+    </h2>
+
+    <ul className="features-list grid grid-cols-1 md:grid-cols-2 gap-8 text-[#3a2e14]">
+      <li className="bg-[#f2d186] rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300 p-6 text-lg font-serif leading-relaxed">
+        <strong className="block text-[#a3832c] mb-2">• Design to be Yours:</strong>
+        Jewelry made to reflect your style and personality.
+      </li>
+      <li className="bg-[#f2d186] rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300 p-6 text-lg font-serif leading-relaxed">
+        <strong className="block text-[#a3832c] mb-2">• Long-Lasting Shine:</strong>
+        Anti-tarnish pieces that stay beautiful over time.
+      </li>
+      <li className="bg-[#f2d186] rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300 p-6 text-lg font-serif leading-relaxed">
+        <strong className="block text-[#a3832c] mb-2">• Versatile Elegance:</strong>
+        Perfect for daily wear or special occasions.
+      </li>
+      <li className="bg-[#f2d186] rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300 p-6 text-lg font-serif leading-relaxed">
+        <strong className="block text-[#a3832c] mb-2">• Customer First:</strong>
+        We’re always here to assist via Email or WhatsApp.
+      </li>
+    </ul>
+
+    <p className="mt-12 text-lg md:text-xl font-serif text-[#3a2e14] max-w-3xl mx-auto leading-relaxed italic">
+      Crosbae jewelry isn’t just an accessory — it’s a statement of your style and confidence.
+    </p>
+  </div>
+</section>
+
 
       <section className="cta-section">
         <div className="container">

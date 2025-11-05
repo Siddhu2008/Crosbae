@@ -1,0 +1,111 @@
+/* Mobile-first, responsive Terms & Policy styles */
+.terms-conditions {
+  box-sizing: border-box;
+  padding: 3.5rem 1rem; /* mobile-friendly spacing */
+  background-color: #fffaf3;
+  font-family: "Georgia", serif;
+  color: #2b2a4d;
+  line-height: 1.7;
+  width: 100%;
+  margin: 0 auto;
+}
+
+/* Headings: use fluid type so they scale across devices */
+.terms-conditions h1,
+.terms-conditions h2 {
+  color: #c6a34f;
+  font-family: "Georgia", serif;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.terms-conditions h1 {
+  font-size: clamp(1.6rem, 6vw, 3rem);
+  text-align: center; /* title remains centered */
+  margin-bottom: 1rem;
+}
+
+.terms-conditions h2 {
+  border-bottom: 2px solid #c6a34f;
+  padding-bottom: 0.3rem;
+  margin-top: 1.5rem;
+  margin-bottom: 0.75rem;
+  font-size: clamp(1.05rem, 4vw, 1.8rem);
+}
+
+/* Links */
+.terms-conditions a {
+  color: #a3832c;
+  text-decoration: underline;
+  transition: color 0.2s ease;
+}
+
+.terms-conditions a:hover {
+  color: #d4af37;
+}
+
+/* Lists */
+.terms-conditions ul {
+  margin-left: 1.25rem;
+  padding-left: 0; /* rely on margin-left */
+}
+
+.terms-conditions li {
+  margin-bottom: 0.5rem;
+}
+
+/* Small devices tweaks */
+.terms-conditions p,
+.terms-conditions li,
+.terms-conditions a {
+  font-size: clamp(0.95rem, 2.5vw, 1.05rem);
+}
+
+/* Helper: remove bottom margin/padding for every <section> inside pages that opt-in */
+.terms-conditions.no-section-mb section {
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.terms-conditions.no-section-mb section p,
+.terms-conditions.no-section-mb section ul,
+.terms-conditions.no-section-mb section ol {
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+/* Larger screens */
+@media (min-width: 640px) {
+  .terms-conditions {
+    padding: 4.5rem 1.5rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .terms-conditions {
+    padding-top: 7.5rem;
+    padding-bottom: 3.5rem;
+    max-width: 800px;
+  }
+
+  .terms-conditions h1 {
+    margin-bottom: 1.5rem;
+  }
+
+  .terms-conditions h2 {
+    font-size: 1.8rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .terms-conditions {
+    max-width: 900px;
+  }
+}
+
+/* Mobile-only: add extra top spacing for the page title on small screens */
+@media (max-width: 639px) {
+  .terms-conditions h1 {
+    margin-top: 40px; /* 120px top margin for mobile devices */
+  }
+}

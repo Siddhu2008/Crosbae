@@ -23,7 +23,17 @@ export default function ContactPage() {
             <strong>📞 Phone:</strong> +91 98765 43210
           </p>
           <p>
-            <strong>📧 Email:</strong> hello@crosbae.com
+            <strong>📧 Email:</strong> support@crosbae.com
+          </p>
+          <p>
+            <strong>🌐 Website:</strong> <a
+          href="https://www.crosbae.com"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-blue-600 hover:underline text-decoration-none"
+        >
+          https://www.crosbae.com
+        </a>
           </p>
 
           <div className="business-hours">

@@ -33,7 +33,12 @@ import { CheckoutPage } from "./pages/CheckoutPage";
 import PlaceOrderPage from "./pages/PlaceOrderPage";
 import AddAddress from "./components/AddAddress";
 import EditAddress from "./components/EditAddress";
-
+import CookiesPolicy from "./components/policies/CookiesPolicy";
+import ShippingPolicy from "./components/policies/ShippingPolicy";
+import RefundReturnPolicy from "./components/policies/RefundReturnPolicy";
+import PrivacyPolicy from "./components/policies/PrivacyPolicy";
+import SizeGuideAndJewelryCarePolicy from "./components/policies/SizeGuideAndJewelryCarePolicy";
+import TermsAndConditions from "./components/policies/TermsAndConditions";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import "./main.css"; 
@@ -87,6 +92,13 @@ const AppContent = () => {
         <Route path="/place-order" element={<PlaceOrderPage />} />
         <Route path="/add-address" element={<AddAddress />} />
         <Route path="/edit-address/:id" element={<EditAddress />} />
+        <Route path="/cookies-policy" element={<CookiesPolicy/>}/>
+        <Route path="/shipping-policy" element={<ShippingPolicy/>}/>
+        <Route path="/refund-return-policy" element={<RefundReturnPolicy/>}/>
+        <Route path="/privacy-policy" element={<PrivacyPolicy/>}/>
+        <Route path="/size-guide-and-jewelry-care-policy" element={<SizeGuideAndJewelryCarePolicy/>}/>
+        <Route path="/terms-and-conditions" element={<TermsAndConditions/>}/>
+
       </Routes>
       <Footer />
     </div>
