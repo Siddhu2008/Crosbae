@@ -12,7 +12,7 @@
   font-family: "Poppins", sans-serif;
   margin: 56px auto;
   max-width: 1100px;
-  padding: 0 16px 40px;
+  padding: 40px 16px 40px;
   color: #222;
   background: #fafafa;
 }
@@ -244,7 +244,7 @@
 @media (min-width: 768px) and (max-width: 1023px) {
   .order-details {
     max-width: 900px;
-    padding: 0 32px 60px;
+    padding: 40px 32px 60px;
   }
 
   .od-title {
@@ -287,7 +287,7 @@
 @media (min-width: 1024px) {
   .order-details {
     max-width: 1200px;
-    padding: 0 40px 80px;
+    padding: 40px 40px 80px;
   }
 
   .od-summary-box {

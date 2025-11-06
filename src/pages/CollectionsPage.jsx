@@ -70,35 +70,40 @@ export default function CollectionsPage() {
 
       <div className="collections-grid">
         {categoriesWithProducts.map((item, index) => (
-          <div
-            className="royal-card"
-            key={item.id || index}
-            data-aos="zoom-in"
-            data-aos-delay={index * 150}
+          <Link
+            to={`/shop?category=${item.id}`}
+            className="text-decoration-none"
           >
-            <div className="img-wrapper">
-              <img
-                src={
-                  item.image
-                    ? `https://cdn.crosbae.com/${item.image}`
-                    : item.products && item.products.length
-                    ? item.products[0].images?.[0]
-                    : "https://via.placeholder.com/400x300"
-                }
-                alt={item.name || item.title}
-                className="card-img-top"
-              />
-              <div className="overlay">
-                <Link to={`/shop?category=${item.id}`} className="btn-expo">
-                  Explore {item.name || item.title}
-                </Link>
+            <div
+              className="royal-card"
+              key={item.id || index}
+              data-aos="zoom-in"
+              data-aos-delay={index * 150}
+            >
+              <div className="img-wrapper">
+                <img
+                  src={
+                    item.image
+                      ? `https://cdn.crosbae.com/${item.image}`
+                      : item.products && item.products.length
+                        ? item.products[0].images?.[0]
+                        : "https://via.placeholder.com/400x300"
+                  }
+                  alt={item.name || item.title}
+                  className="card-img-top"
+                />
+                <div className="overlay">
+                  <Link to={`/shop?category=${item.id}`} className="btn-expo">
+                    Explore {item.name || item.title}
+                  </Link>
+                </div>
+              </div>
+              <div className="card-body">
+                <h5 className="card-title">{item.name || item.title}</h5>
+                {item.description ? <p className="card-desc">{item.description}</p> : null}
               </div>
             </div>
-            <div className="card-body">
-              <h5 className="card-title">{item.name || item.title}</h5>
-              {item.description ? <p className="card-desc">{item.description}</p> : null}
-            </div>
-          </div>
+          </Link>
         ))}
       </div>
     </div>

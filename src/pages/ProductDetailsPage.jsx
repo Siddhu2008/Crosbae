@@ -2,6 +2,10 @@ import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { useProduct } from "../contexts/ProductContext";
 import { useBrand } from "../contexts/BrandContext";
+import { useCategory } from "../contexts/CategoryContext";
+import { useMetalType } from "../contexts/MetalTypeContext";
+import { useStoneType } from "../contexts/StoneTypeContext";
+import { usePurity } from "../contexts/PurityContext";
 import { useCertificate } from "../contexts/CertificateContext";
 import useCart from "../hooks/useCart";
 import Seo from "../components/Seo";
@@ -11,6 +15,10 @@ export default function ProductDetail() {
   const { id } = useParams();
   const { state: productState } = useProduct();
   const brandState = useBrand();
+  const { state: categoryState } = useCategory();
+  const { state: metalState } = useMetalType();
+  const { state: stoneState } = useStoneType();
+  const { state: purityState } = usePurity();
   const { state: certificateState } = useCertificate();
   const token = localStorage.getItem("access");
   const { addToCart } = useCart(token);
@@ -38,30 +46,90 @@ export default function ProductDetail() {
   };
 
   // Load product
+  // helper to lookup a name by id/value in a context list
+  const lookupName = (list, id) => {
+    if (!list || id === null || id === undefined) return null;
+    const strId = String(id);
+    const found = list.find((it) => {
+      // common id-like keys we might see from different APIs
+      const idCandidates = [it.id, it.value, it.key, it.pk];
+      for (const c of idCandidates) {
+        if (c !== undefined && c !== null && String(c) === strId) return true;
+      }
+      // sometimes the stored product field already contains the name; try matching there too
+      const nameCandidates = [it.name, it.label, it.value, it.metal, it.type, it.title, it.display];
+      for (const n of nameCandidates) {
+        if (n !== undefined && n !== null && String(n) === strId) return true;
+      }
+      return false;
+    });
+    if (!found) return null;
+    // prefer common human-friendly fields in order
+    return (
+      found.name || found.label || found.title || found.display || found.metal || found.type || found.value || null
+    );
+  };
+
+  // small helper: get first non-null field from product for various possible key names
+  const extractFrom = (obj, keys) => {
+    if (!obj) return undefined;
+    for (const k of keys) {
+      if (obj[k] !== undefined && obj[k] !== null) return obj[k];
+    }
+    return undefined;
+  };
+
   useEffect(() => {
     const found = (productState.products || []).find((p) => String(p.id) === String(id));
     if (found) {
       const updatedProduct = { ...found };
 
       // Brand resolution
-      if (updatedProduct.brand === "NA" && brandState.brands.length > 0) {
-        const brandFromContext = brandState.brands.find((b) => b.id === updatedProduct.brand_id);
-        updatedProduct.brand = brandFromContext ? brandFromContext.name : null;
-      } else if (updatedProduct.brand === "NA") updatedProduct.brand = null;
+      if (brandState?.brands?.length) {
+        const brandFromContext = brandState.brands.find((b) => String(b.id) === String(updatedProduct.brand) || String(b.id) === String(updatedProduct.brand_id) || String(b.name) === String(updatedProduct.brand));
+        if (brandFromContext) updatedProduct.brand = brandFromContext.name;
+      }
+      if (updatedProduct.brand === "NA") updatedProduct.brand = null;
 
       // Certification resolution
-      if (updatedProduct.certification === "NA" && certificateState.certificates?.length > 0) {
-        const certFromContext = certificateState.certificates.find(
-          (c) => c.id === updatedProduct.certification_id
-        );
-        updatedProduct.certification = certFromContext ? certFromContext.name : null;
-      } else if (updatedProduct.certification === "NA") updatedProduct.certification = null;
+      if (certificateState?.certificates?.length) {
+        const certFromContext = certificateState.certificates.find((c) => String(c.id) === String(updatedProduct.certification) || String(c.id) === String(updatedProduct.certification_id) || String(c.name) === String(updatedProduct.certification));
+        if (certFromContext) updatedProduct.certification = certFromContext.name;
+      }
+      if (updatedProduct.certification === "NA") updatedProduct.certification = null;
+
+      // Category, metal type, stone type, purity resolution
+      const originalCategoryId = updatedProduct.category_id ?? updatedProduct.category;
+      const categoryName = lookupName(categoryState?.categories, originalCategoryId);
+      if (categoryName) {
+        updatedProduct._categoryId = originalCategoryId;
+        updatedProduct.category = categoryName;
+      }
+
+      const originalMetalId = extractFrom(updatedProduct, ["metal_type_id", "metal_type", "metalType_id", "metalType", "metal"]);
+      const metalName = lookupName(metalState?.metalTypes, originalMetalId);
+      if (metalName) updatedProduct.metalType = metalName;
+      else if (originalMetalId && !isNaN(Number(originalMetalId))) {
+        // if we didn't resolve a friendly name, keep numeric id hidden by leaving metalType undefined
+        delete updatedProduct.metalType;
+      }
+
+      const originalStoneId = extractFrom(updatedProduct, ["stone_type_id", "stone_type", "stoneType_id", "stoneType", "stone"]);
+      const stoneName = lookupName(stoneState?.stoneTypes, originalStoneId);
+      if (stoneName) updatedProduct.stoneType = stoneName;
+      else if (originalStoneId && !isNaN(Number(originalStoneId))) {
+        delete updatedProduct.stoneType;
+      }
+
+  const originalPurityId = extractFrom(updatedProduct, ["purity_id", "purity", "purityId"]);
+  const purityName = lookupName(purityState?.purities, originalPurityId);
+  if (purityName) updatedProduct.purity = purityName;
 
       setProduct(updatedProduct);
       setSelectedImage(updatedProduct.images?.[0]);
     }
     setLoading(false);
-  }, [id, productState.products, brandState.brands, certificateState.certificates]);
+  }, [id, productState.products, brandState.brands, certificateState.certificates, categoryState?.categories, metalState?.metalTypes, stoneState?.stoneTypes, purityState?.purities]);
 // Scroll to top on product change
 useEffect(() => {
   window.scrollTo({ top: 0, behavior: "smooth" });
@@ -88,9 +156,16 @@ useEffect(() => {
   useEffect(() => {
     if (!product || !productState.products) return;
     setRelatedLoading(true);
-    const related = productState.products.filter(
-      (p) => String(p.id) !== String(product.id) && String(p.category) === String(product.category)
-    );
+    // Try to match by original category id where possible, otherwise by resolved name
+    const productCategoryKey = product._categoryId ?? product.category;
+    const related = productState.products.filter((p) => {
+      if (String(p.id) === String(product.id)) return false;
+      const pCatId = p.category_id ?? p.category;
+      if (product._categoryId && pCatId) return String(pCatId) === String(product._categoryId);
+      // fallback: compare resolved names
+      const pCatName = lookupName(categoryState?.categories, p.category ?? p.category_id) || p.category;
+      return String(pCatName) === String(product.category);
+    });
     setRelatedProducts(related);
     setRelatedLoading(false);
   }, [product, productState.products]);
