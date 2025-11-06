@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
+import Swal from "sweetalert2";
+
 import { useProduct } from "../contexts/ProductContext";
 import { useBrand } from "../contexts/BrandContext";
 import { useCategory } from "../contexts/CategoryContext";
@@ -7,7 +9,7 @@ import { useMetalType } from "../contexts/MetalTypeContext";
 import { useStoneType } from "../contexts/StoneTypeContext";
 import { usePurity } from "../contexts/PurityContext";
 import { useCertificate } from "../contexts/CertificateContext";
-import useCart from "../hooks/useCart";
+import { useCart } from "../contexts/CartContext";
 import Seo from "../components/Seo";
 import "../styles/ProductDetailsPage.css";
 
@@ -20,8 +22,7 @@ export default function ProductDetail() {
   const { state: stoneState } = useStoneType();
   const { state: purityState } = usePurity();
   const { state: certificateState } = useCertificate();
-  const token = localStorage.getItem("access");
-  const { addToCart } = useCart(token);
+  const { addToCart } = useCart();
 
   const [product, setProduct] = useState(null);
   const [selectedImage, setSelectedImage] = useState(null);
@@ -225,11 +226,46 @@ useEffect(() => {
           </div>
 
           <div className="cta-buttons">
-            <button onClick={() => addToCart(product, quantity)} className="btn-add-cart">
-              🛒 Add to Cart
-            </button>
-            <Link to="/checkout" className="btn-buy-now">⚡ Buy Now</Link>
-          </div>
+  <button
+    className="btn-add-cart"
+    onClick={async () => {
+      try {
+        // CartContext.addToCart expects a productId and quantity
+        await addToCart(product.id ?? product._id ?? product.product_id, quantity);
+
+        Swal.fire({
+          title: "Added to Cart!",
+          text: `${product.productName || product.name} has been successfully added to your cart.`,
+          icon: "success",
+          showCancelButton: true,
+          confirmButtonText: "Go to Cart 🛒",
+          cancelButtonText: "Continue Shopping",
+          reverseButtons: true,
+          confirmButtonColor: "#000",
+          cancelButtonColor: "#aaa",
+        }).then((result) => {
+          if (result.isConfirmed) {
+            window.location.href = "/cart";
+          }
+        });
+      } catch (error) {
+        Swal.fire({
+          title: "Error!",
+          text: "Failed to add item to cart. Please try again.",
+          icon: "error",
+          confirmButtonText: "Okay",
+        });
+      }
+    }}
+  >
+    🛒 Add to Cart
+  </button>
+
+  <Link to="/checkout" className="btn-buy-now">
+    ⚡ Buy Now
+  </Link>
+</div>
+
         </div>
       </div>
 

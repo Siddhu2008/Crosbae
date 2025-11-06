@@ -1,4 +1,5 @@
 import { getCart, addToCart, updateCartItem } from "../api/cart";
+import Swal from "sweetalert2";
 
 export default function useCart(token) {
   const addToCartHandler = async (product, quantity = 1) => {
@@ -17,15 +18,18 @@ export default function useCart(token) {
         await updateCartItem(existingItem.id, {
           quantity: existingItem.quantity + quantity,
         }, token);
-        alert("Cart updated!");
       } else {
         // 🆕 If not exists → add new
         await addToCart({ product: product.id, quantity }, token);
-        alert("Added to cart!");
       }
     } catch (err) {
       console.error("Error adding to cart:", err?.response?.data || err);
-      alert("Failed to add/update cart");
+      Swal.fire({
+        title: "Error!",
+        text: "Failed to add/update cart",
+        icon: "error",
+        confirmButtonText: "Okay",
+      });
     }
   };
 

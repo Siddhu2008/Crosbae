@@ -1,5 +1,6 @@
 import React, { useState, useMemo, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
+import Swal from "sweetalert2"; // 👈 add this import at the top
 import { useProduct } from "../contexts/ProductContext";
 import { useCategory } from "../contexts/CategoryContext";
 import { useMetalType } from "../contexts/MetalTypeContext";
@@ -333,13 +334,64 @@ export default function ProductListingPage() {
                   )}
                   <button
                     className={`like-btn ${wishlistProductIds?.[p.id] ? "liked" : ""}`}
-                    onClick={(e) => {
+                    onClick={async (e) => {
                       e.stopPropagation();
-                      toggleWishlist(p);
+
+                      const token = localStorage.getItem("access");
+                      if (!token) {
+                        Swal.fire({
+                          title: "Login Required!",
+                          text: "Please log in to manage your wishlist.",
+                          icon: "warning",
+                          confirmButtonText: "Go to Login",
+                        }).then(() => {
+                          window.location.href = "/login";
+                        });
+                        return;
+                      }
+
+                      try {
+                        const isLiked = wishlistProductIds?.[p.id];
+                        await toggleWishlist(p);
+
+                        if (isLiked) {
+                          Swal.fire({
+                            title: "Removed from Wishlist",
+                            text: `${p.name || p.productName} has been removed from your wishlist.`,
+                            icon: "info",
+                            showConfirmButton: false,
+                            timer: 1500,
+                          });
+                        } else {
+                          Swal.fire({
+                            title: "Added to Wishlist 💖",
+                            text: `${p.name || p.productName} has been added to your wishlist.`,
+                            icon: "success",
+                            showCancelButton: true,
+                            confirmButtonText: "Go to Wishlist",
+                            cancelButtonText: "Continue Shopping",
+                            reverseButtons: true,
+                            confirmButtonColor: "#000",
+                            cancelButtonColor: "#aaa",
+                          }).then((result) => {
+                            if (result.isConfirmed) {
+                              window.location.href = "/wishlist";
+                            }
+                          });
+                        }
+                      } catch (error) {
+                        Swal.fire({
+                          title: "Error!",
+                          text: "Something went wrong. Please try again.",
+                          icon: "error",
+                          confirmButtonText: "Okay",
+                        });
+                      }
                     }}
                   >
                     ♥
                   </button>
+
                   <Link to={`/product/${p.id}`} className="product-image-link">
                     <img
                       src={
@@ -364,16 +416,43 @@ export default function ProductListingPage() {
                   <div className="product-bottom-row">
                     <button
                       className="cart-btn"
-                      onClick={() => {
+                      onClick={async () => {
                         if (!addToCart) {
                           window.location.href = "/login";
                           return;
                         }
-                        addToCart(p.id);
+
+                        try {
+                          await addToCart(p.id);
+
+                          Swal.fire({
+                            title: "Added to Cart!",
+                            text: `${p.productName || p.name} has been successfully added to your cart.`,
+                            icon: "success",
+                            showCancelButton: true,
+                            confirmButtonText: "Go to Cart 🛒",
+                            cancelButtonText: "Continue Shopping",
+                            reverseButtons: true,
+                            confirmButtonColor: "#000",
+                            cancelButtonColor: "#aaa",
+                          }).then((result) => {
+                            if (result.isConfirmed) {
+                              window.location.href = "/cart";
+                            }
+                          });
+                        } catch (error) {
+                          Swal.fire({
+                            title: "Error!",
+                            text: "Failed to add item to cart. Please try again.",
+                            icon: "error",
+                            confirmButtonText: "Okay",
+                          });
+                        }
                       }}
                     >
                       🛒 <span>Add to Cart</span>
                     </button>
+
                   </div>
                 </div>
               </div>
