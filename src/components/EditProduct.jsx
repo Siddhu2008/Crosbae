@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "../styles/AdminDashboard.css";
 import API_URL from "../api/auth";
+import { useLoader } from "../contexts/LoaderContext";
 
 export default function EditProfile() {
   const navigate = useNavigate();
@@ -18,11 +19,13 @@ export default function EditProfile() {
   });
   const [preview, setPreview] = useState(null);
   const [loading, setLoading] = useState(true);
+  const { showLoader, hideLoader } = useLoader();
 
   const token = localStorage.getItem("access");
 
   useEffect(() => {
     const fetchUser = async () => {
+      showLoader();
       try {
         const res = await axios.get(API_URL+"/auth/me", {
           headers: { Authorization: `Bearer ${token}` },
@@ -36,6 +39,7 @@ export default function EditProfile() {
         alert("Failed to fetch user data.");
       } finally {
         setLoading(false);
+        hideLoader();
       }
     };
     fetchUser();
@@ -91,7 +95,7 @@ export default function EditProfile() {
     }
   };
 
-  if (loading) return <div>Loading...</div>;
+  // global loader handles loading state
 
   return (
     <div

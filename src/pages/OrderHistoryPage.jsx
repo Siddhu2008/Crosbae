@@ -4,10 +4,11 @@ import { Link } from "react-router-dom";
 import "../styles/OrderHistory.css";
 import API_URL from "../api/auth";
 import { useProduct } from "../contexts/ProductContext";
+import { useLoader } from "../contexts/LoaderContext";
 
 export default function OrderHistoryPage() {
   const [orders, setOrders] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const { showLoader, hideLoader } = useLoader();
   const token = localStorage.getItem("access");
 
   const { state: productState } = useProduct();
@@ -15,6 +16,7 @@ export default function OrderHistoryPage() {
 
   useEffect(() => {
     const fetchOrders = async () => {
+      showLoader();
       try {
         const res = await fetch(`${API_URL}/orders/`, {
           headers: { Authorization: `Bearer ${token}` },
@@ -25,19 +27,13 @@ export default function OrderHistoryPage() {
       } catch (err) {
         console.error("Error loading orders:", err);
       } finally {
-        setLoading(false);
+        hideLoader();
       }
     };
     fetchOrders();
   }, [token]);
 
-  if (loading) {
-    return (
-      <div className="order-history">
-        <p>Loading orders...</p>
-      </div>
-    );
-  }
+  // global loader handles loading state now
 
   // 🔍 Helper: Enrich product data like in OrderItemsSection
   const getEnrichedProductData = (orderItem) => {

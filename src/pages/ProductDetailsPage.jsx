@@ -3,6 +3,7 @@ import { useParams, Link } from "react-router-dom";
 import Swal from "sweetalert2";
 
 import { useProduct } from "../contexts/ProductContext";
+import { useLoader } from "../contexts/LoaderContext";
 import { useBrand } from "../contexts/BrandContext";
 import { useCategory } from "../contexts/CategoryContext";
 import { useMetalType } from "../contexts/MetalTypeContext";
@@ -28,9 +29,9 @@ export default function ProductDetail() {
   const [selectedImage, setSelectedImage] = useState(null);
   const [quantity, setQuantity] = useState(1);
   const [reviews, setReviews] = useState([]);
-  const [loading, setLoading] = useState(true);
   const [relatedProducts, setRelatedProducts] = useState([]);
   const [relatedLoading, setRelatedLoading] = useState(true);
+  const { showLoader, hideLoader } = useLoader();
 
   // utility to check presence of a value (not null/undefined/empty/'None'/'nan')
   const isPresent = (v) => {
@@ -129,7 +130,7 @@ export default function ProductDetail() {
       setProduct(updatedProduct);
       setSelectedImage(updatedProduct.images?.[0]);
     }
-    setLoading(false);
+    hideLoader();
   }, [id, productState.products, brandState.brands, certificateState.certificates, categoryState?.categories, metalState?.metalTypes, stoneState?.stoneTypes, purityState?.purities]);
 // Scroll to top on product change
 useEffect(() => {
@@ -171,7 +172,6 @@ useEffect(() => {
     setRelatedLoading(false);
   }, [product, productState.products]);
 
-  if (loading) return <div className="loading">Loading...</div>;
   if (!product) return <div>Product not found.</div>;
 
   return (

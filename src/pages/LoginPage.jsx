@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
 import { getGoogleClientId, googleLogin, login } from "../api/auth";
 import { useAuth } from "../contexts/AuthContext";
-import Loader from "../components/Loader";
+import { useLoader } from "../contexts/LoaderContext";
 
 const LoginPage = () => {
   const [clientId, setClientId] = useState("");
@@ -11,6 +11,7 @@ const LoginPage = () => {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+  const { showLoader, hideLoader } = useLoader();
 
   const navigate = useNavigate();
   const { setUser } = useAuth();
@@ -27,7 +28,8 @@ const LoginPage = () => {
   // Handle normal email/password login
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
+  setLoading(true);
+  showLoader();
     try {
       const data = await login({ username: email, password });
       localStorage.setItem("access", data.access);
@@ -37,13 +39,16 @@ const LoginPage = () => {
     } catch (err) {
       console.error("Login failed:", err);
       alert("Invalid credentials or network error");
+    } finally {
+      setLoading(false);
+      hideLoader();
     }
-    setLoading(false);
   };
 
   // Handle Google login
   const handleGoogleLogin = async (credentialResponse) => {
-    setLoading(true);
+  setLoading(true);
+  showLoader();
     try {
       const data = await googleLogin(credentialResponse.credential);
       localStorage.setItem("access", data.access);
@@ -53,8 +58,10 @@ const LoginPage = () => {
     } catch (err) {
       console.error("Google login failed:", err);
       alert("Google login failed");
+    } finally {
+      setLoading(false);
+      hideLoader();
     }
-    setLoading(false);
   };
 
   return (
@@ -62,7 +69,7 @@ const LoginPage = () => {
       className="container-fluid min-vh-100 d-flex justify-content-center align-items-center bg-light px-3"
       style={{ paddingTop: "8rem", paddingBottom: "3rem" }}
     >
-      {loading && <Loader />}
+  {/* global loader handles loading overlay */}
 
       <div className="card shadow p-4" style={{ maxWidth: 400, width: "100%" }}>
         <h3 className="mb-4 text-center">Sign in</h3>
@@ -144,7 +151,6 @@ const LoginPage = () => {
             style={{ background: "#f19e04ff" }}
             disabled={loading}
           >
-            {loading ? <span className="spinner-border spinner-border-sm me-2"></span> : null}
             {loading ? "Signing in..." : "Sign in"}
           </button>
         </form>

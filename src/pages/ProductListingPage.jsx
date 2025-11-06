@@ -306,10 +306,7 @@ export default function ProductListingPage() {
       )}
 
       {/* Product Grid */}
-      {loading ? (
-        <Loader />
-      ) : (
-        <div className="product-listing-page">
+      <div className="product-listing-page">
           <div className="product-grid">
             {[...matchedProducts, ...paginatedProducts].map((p) => (
               <div className="product-card" key={p.id}>
@@ -472,7 +469,6 @@ export default function ProductListingPage() {
             </div>
           )}
         </div>
-      )}
-    </div>
+      </div>
   );
 }

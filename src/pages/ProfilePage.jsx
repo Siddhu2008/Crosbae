@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { getUserProfile, getUserAddresses } from "../api/user";
 import "../styles/ProfilePage.css";
+import { useLoader } from "../contexts/LoaderContext";
 import API_URL from "../api/auth";
 
 export default function ProfilePage() {
@@ -12,6 +13,7 @@ export default function ProfilePage() {
   const [addresses, setAddresses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const { showLoader, hideLoader } = useLoader();
 
   const token = localStorage.getItem("access");
 
@@ -23,6 +25,7 @@ export default function ProfilePage() {
     }
 
     const fetchData = async () => {
+      showLoader();
       try {
         // ✅ Fetch user profile
         const userData = await getUserProfile(token);
@@ -66,6 +69,7 @@ export default function ProfilePage() {
         setError(err.message || "Failed to load profile data");
       } finally {
         setLoading(false);
+        hideLoader();
       }
     };
 
@@ -90,13 +94,7 @@ export default function ProfilePage() {
     }
   };
 
-  if (loading) {
-    return (
-      <div className="profile-container my-5">
-        <p>Loading profile...</p>
-      </div>
-    );
-  }
+  // global loader handles profile loading
 
   if (error) {
     return (

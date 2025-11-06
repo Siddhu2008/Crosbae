@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { getUserProfile, updateUserProfile } from "../api/user";
 import "../styles/AdminDashboard.css";
+import { useLoader } from "../contexts/LoaderContext";
 
 export default function EditProfile() {
   const navigate = useNavigate();
@@ -20,12 +21,14 @@ export default function EditProfile() {
   const [loading, setLoading] = useState(true);
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { showLoader, hideLoader } = useLoader();
 
   const token = localStorage.getItem("access");
 
   const fetchUser = useCallback(async () => {
     try {
       setLoading(true);
+      showLoader();
       const data = await getUserProfile(token);
       console.log("Fetched user data:", data);
       
@@ -55,6 +58,7 @@ export default function EditProfile() {
       alert("Failed to fetch user data.");
     } finally {
       setLoading(false);
+      hideLoader();
     }
   }, [token]);
 
@@ -326,17 +330,7 @@ export default function EditProfile() {
 
   const currentProfilePic = getFullImageUrl(user.image_url);
 
-  if (loading) return (
-    <div style={{ 
-      display: "flex", 
-      justifyContent: "center", 
-      alignItems: "center", 
-      height: "100vh",
-      paddingTop: "120px" 
-    }}>
-      <div>Loading...</div>
-    </div>
-  );
+  // global loader displays while fetching profile
 
   return (
     <div

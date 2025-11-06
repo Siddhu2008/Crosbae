@@ -4,11 +4,12 @@ import "../styles/OrderDetails.css";
 import API_URL from "../api/auth";
 import { useCart } from "../contexts/CartContext";
 import OrderItemsSelection from "../components/OrderItemsSelection";
+import { useLoader } from "../contexts/LoaderContext";
 
 export default function OrderDetailsPage() {
   const { id } = useParams();
   const [order, setOrder] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const { showLoader, hideLoader } = useLoader();
   const token = localStorage.getItem("access");
   const { addToCart } = useCart();
   const navigate = useNavigate();
@@ -26,6 +27,7 @@ export default function OrderDetailsPage() {
 
   useEffect(() => {
     const fetchOrder = async () => {
+      showLoader();
       try {
         const res = await fetch(`${API_URL}/orders/${id}/`, {
           headers: { Authorization: `Bearer ${token}` },
@@ -36,18 +38,13 @@ export default function OrderDetailsPage() {
       } catch (err) {
         console.error("Error fetching order:", err);
       } finally {
-        setLoading(false);
+        hideLoader();
       }
     };
     fetchOrder();
   }, [id, token]);
 
-  if (loading)
-    return (
-      <div className="order-details container">
-        <p>Loading order...</p>
-      </div>
-    );
+  // global loader handles loading state now
   if (!order)
     return (
       <div className="order-details container">

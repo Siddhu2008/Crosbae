@@ -15,13 +15,7 @@ export default function MatchForYou() {
     products: products.filter((p) => String(p.category) === String(cat.id)),
   }));
 
-  if (loading) {
-    return (
-      <section className="PerfectMatch text-center py-5">
-        <h4>Loading categories...</h4>
-      </section>
-    );
-  }
+  // global loader will show while categories load
 
   if (error) {
     return (

@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import '../styles/AddAddress.css';
 import API_URL from "../api/auth";
 import { useAuth } from '../contexts/AuthContext';
+import { useLoader } from '../contexts/LoaderContext';
 
 export default function EditAddress({ onSave, onCancel }) {
   const navigate = useNavigate();
@@ -23,11 +24,13 @@ export default function EditAddress({ onSave, onCancel }) {
   });
 
   const [loading, setLoading] = useState(true);
+  const { showLoader, hideLoader } = useLoader();
 
   // ✅ Load address data when component mounts
   useEffect(() => {
   const fetchAddressAndPhone = async () => {
-    try {
+      try {
+        showLoader();
       if (!token) throw new Error("Not authenticated");
 
       const headers = { 'Authorization': `Bearer ${token}` };
@@ -63,11 +66,13 @@ export default function EditAddress({ onSave, onCancel }) {
         phone_number: phoneNumber || "",
       }));
 
-      setLoading(false);
+  setLoading(false);
+  hideLoader();
     } catch (err) {
       console.error(err);
       alert(err.message || "Error loading address.");
       setLoading(false);
+      hideLoader();
     }
   };
 
@@ -135,9 +140,7 @@ export default function EditAddress({ onSave, onCancel }) {
     }
   };
 
-  if (loading) {
-    return <div className="add-address-container">Loading address...</div>;
-  }
+  // global loader handles loading state
 
   return (
     <section className="add-address-container">
