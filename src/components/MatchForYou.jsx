@@ -47,13 +47,18 @@ export default function MatchForYou() {
             key={category.id || index}
           >
             <div className="category-card text-center">
+              {/* ✅ Redirects to the Shop Page with category filter */}
               <Link
-                to={`/collections/${category.slug || category.id}`}
+                to={`/shop?category=${category.id}`}
                 className="text-decoration-none"
               >
                 <img
                   src={
-                    (category.image && "https://cdn.crosbae.com/" + category.image) || (category.products && category.products[0] && category.products[0].images?.[0]) || "https://via.placeholder.com/300"
+                    (category.image && "https://cdn.crosbae.com/" + category.image) ||
+                    (category.products &&
+                      category.products[0] &&
+                      category.products[0].images?.[0]) ||
+                    "https://via.placeholder.com/300"
                   }
                   alt={category.name}
                   className="img-fluid"
@@ -67,4 +72,3 @@ export default function MatchForYou() {
     </section>
   );
 }
-

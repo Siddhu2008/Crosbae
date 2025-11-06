@@ -116,3 +116,12 @@
     font-size: 1.35rem;
   } 
 }
+.occasion-card-link {
+  text-decoration: none;
+  color: inherit;
+}
+
+.occasion-card:hover {
+  transform: scale(1.03);
+  transition: all 0.3s ease;
+}

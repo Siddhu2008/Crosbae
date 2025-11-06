@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import "../styles/OccupationSection.css";
 
 export default function OccupationSection() {
@@ -31,17 +32,23 @@ export default function OccupationSection() {
       <p className="text-1xl">
         Find the perfect jewel for every significant moment in life.
       </p>
+
       <div className="occasion-grid">
         {occasions.map((occasion, index) => (
-          <div
-            className="occasion-card"
+          <Link
             key={index}
-            data-aos="fade-up"
-            data-aos-delay={occasion.delay}
+            to={`/shop?occasion=${encodeURIComponent(occasion.title)}`}
+            className="occasion-card-link"
           >
-            <img src={occasion.img} alt={`${occasion.title} Jewelry`} />
-            <p>{occasion.title}</p>
-          </div>
+            <div
+              className="occasion-card"
+              data-aos="fade-up"
+              data-aos-delay={occasion.delay}
+            >
+              <img src={occasion.img} alt={`${occasion.title} Jewelry`} />
+              <p>{occasion.title}</p>
+            </div>
+          </Link>
         ))}
       </div>
     </section>
