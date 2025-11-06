@@ -1,38 +1,35 @@
-import React, { useContext } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
-import { useProduct } from "../contexts/ProductContext"; // Adjust path as needed
-
-// ... inside your component ...
+import { useProduct } from "../contexts/ProductContext";
 
 const OrderItemsSection = ({ order }) => {
   const { state: productState } = useProduct();
   const { products } = productState;
   const navigate = useNavigate();
 
-  // Function to get enriched product data
+  // Get enriched product data
   const getEnrichedProductData = (orderItem) => {
-    // Try to find product in ProductContext first
-    const productFromContext = products.find(p => p.id === orderItem.product);
-    
+    const productFromContext = products.find(
+      (p) => p.id === orderItem.product
+    );
+
     if (productFromContext) {
       return {
         name: productFromContext.name,
         price: productFromContext.price,
         image: productFromContext.images?.[0]?.url_full || "",
-        isAvailable: true
+        isAvailable: true,
       };
     }
-    
-    // Fallback to order API data if product not found in context
+
     return {
       name: orderItem.product_name || "Product Not Available",
       price: orderItem.product_price || orderItem.price,
-      image: "", // No image available from order data
-      isAvailable: false
+      image: "",
+      isAvailable: false,
     };
   };
 
-  // Function to handle item click
   const handleItemClick = (productId, isAvailable) => {
     if (isAvailable && productId) {
       navigate(`/product/${productId}`);
@@ -42,138 +39,153 @@ const OrderItemsSection = ({ order }) => {
   return (
     <section className="od-section">
       <h2 className="od-subtitle">Items</h2>
-      <div className="od-items">
+
+      <div className="od-card-grid">
         {order.details.map((item, index) => {
           const productData = getEnrichedProductData(item);
           const isClickable = productData.isAvailable && item.product;
-          
+
           return (
-            <div 
-              key={`${item.id}-${index}`} 
-              className={`od-item ${isClickable ? 'clickable' : 'unavailable'}`}
-              onClick={() => handleItemClick(item.product, productData.isAvailable)}
-              style={{ cursor: isClickable ? 'pointer' : 'default' }}
+            <div
+              key={`${item.id}-${index}`}
+              className={`od-card ${isClickable ? "clickable" : "unavailable"}`}
+              onClick={() =>
+                handleItemClick(item.product, productData.isAvailable)
+              }
+              style={{ cursor: isClickable ? "pointer" : "default" }}
             >
-              <img
-                src={productData.image || "/fallback-image.jpg"}
-                alt={productData.name}
-                className="od-thumb"
-                onError={(e) => {
-                  e.target.src = "/fallback-image.jpg";
-                }}
-              />
-              <div className="od-item-info">
-                <p className="od-item-name">
-                  {productData.name}
-                  {!productData.isAvailable && (
-                    <span className="unavailable-badge"> (No Longer Available)</span>
-                  )}
-                </p>
-                <p className="od-item-meta">
+              <div className="od-card-img-wrap">
+                <img
+                  src={productData.image || "/fallback-image.jpg"}
+                  alt={productData.name}
+                  className="od-card-img"
+                  onError={(e) => (e.target.src = "/fallback-image.jpg")}
+                />
+                {!productData.isAvailable && (
+                  <span className="od-badge-unavailable">Unavailable</span>
+                )}
+              </div>
+
+              <div className="od-card-body">
+                <p className="od-card-name">{productData.name}</p>
+                <p className="od-card-meta">
                   Qty: {item.quantity} • ₹{productData.price}
                 </p>
                 {!productData.isAvailable && (
-                  <p className="od-item-note">
+                  <p className="od-card-note">
                     This product is no longer available in our catalog
                   </p>
                 )}
               </div>
-              {isClickable && (
-                <div className="od-item-arrow">
-                  <i className="bi bi-chevron-right"></i>
-                </div>
-              )}
             </div>
           );
         })}
       </div>
 
-      {/* Add CSS styles */}
-  <style>{`
-        .od-item {
-          display: flex;
-          align-items: center;
-          padding: 12px;
+      <style>{`
+        .od-card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+  margin-top: 16px;
+}
+
+        .od-card {
+          background: #fff;
           border: 1px solid #e2e8f0;
-          border-radius: 8px;
-          margin-bottom: 12px;
-          transition: all 0.2s ease;
+          border-radius: 10px;
+          overflow: hidden;
+          box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+          transition: all 0.25s ease;
           position: relative;
+          display: flex;
+          flex-direction: column;
         }
-        
-        .od-item.clickable:hover {
-          background-color: #f7fafc;
+
+        .od-card.clickable:hover {
+          transform: translateY(-4px);
+          box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
           border-color: #d1a054;
-          transform: translateY(-1px);
-          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         }
-        
-        .od-item.unavailable {
-          opacity: 0.7;
-          background-color: #f8f9fa;
+
+        .od-card.unavailable {
+          opacity: 0.8;
+          background-color: #f9fafb;
         }
-        
-        .od-thumb {
-          width: 60px;
-          height: 60px;
+
+        .od-card-img-wrap {
+          position: relative;
+          width: 100%;
+          height: 180px;
+          overflow: hidden;
+        }
+
+        .od-card-img {
+          width: 100%;
+          height: 100%;
           object-fit: cover;
-          border-radius: 6px;
-          margin-right: 16px;
+          transition: transform 0.3s ease;
         }
-        
-        .od-item-info {
+
+        .od-card.clickable:hover .od-card-img {
+          transform: scale(1.05);
+        }
+
+        .od-card-body {
+          padding: 12px 14px;
           flex: 1;
         }
-        
-        .od-item-name {
+
+        .od-card-name {
           font-weight: 600;
-          margin-bottom: 4px;
+          font-size: 15px;
           color: #2d3748;
+          margin-bottom: 6px;
         }
-        
-        .od-item-meta {
+
+        .od-card-meta {
           color: #718096;
           font-size: 14px;
-          margin-bottom: 4px;
+          margin-bottom: 6px;
         }
-        
-        .od-item-note {
+
+        .od-card-note {
           color: #e53e3e;
           font-size: 12px;
           font-style: italic;
           margin: 0;
         }
-        
-        .unavailable-badge {
-          color: #e53e3e;
-          font-size: 12px;
-          font-weight: normal;
+
+        .od-badge-unavailable {
+          position: absolute;
+          top: 10px;
+          right: 10px;
+          background-color: #e53e3e;
+          color: white;
+          font-size: 11px;
+          font-weight: 500;
+          padding: 4px 8px;
+          border-radius: 5px;
         }
-        
-        .od-item-arrow {
-          color: #cbd5e0;
-          font-size: 16px;
-        }
-        
-        .od-item.clickable:hover .od-item-arrow {
-          color: #d1a054;
-        }
-        
+
         @media (max-width: 768px) {
-          .od-item {
-            padding: 10px;
-          }
-          
-          .od-thumb {
-            width: 50px;
-            height: 50px;
-            margin-right: 12px;
-          }
+          .od-card-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+  }
+
+  .od-card-img-wrap {
+    height: 140px;
+  }
         }
+          @media (min-width: 1024px) {
+  .od-card-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
       `}</style>
     </section>
   );
 };
-
 
 export default OrderItemsSection;
