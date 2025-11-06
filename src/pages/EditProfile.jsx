@@ -18,7 +18,7 @@ export default function EditProfile() {
     image_file: null,
   });
   const [preview, setPreview] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [_loading, setLoading] = useState(true);
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { showLoader, hideLoader } = useLoader();
@@ -29,8 +29,7 @@ export default function EditProfile() {
     try {
       setLoading(true);
       showLoader();
-      const data = await getUserProfile(token);
-      console.log("Fetched user data:", data);
+  const data = await getUserProfile(token);
       
       const userData = {
         id: data.id || data.user?.id || "",
@@ -224,7 +223,7 @@ export default function EditProfile() {
         updateData.append("is_active", "true");
         updateData.append("image_file", user.image_file);
 
-        console.log("Sending FormData with file");
+  // sending FormData with file
       } else {
         const profilePicValue = user.image_url || null;
         
@@ -238,11 +237,10 @@ export default function EditProfile() {
           is_active: true,
           image_url: profilePicValue,
         };
-        console.log("Sending JSON data:", updateData);
+  // sending JSON data
       }
 
-      console.log("Updating user ID:", user.id);
-      console.log("Update data:", updateData);
+  // updating user id and data
 
       await updateUserProfile(user.id, updateData, token);
       

@@ -12,7 +12,6 @@ export const login = async (userData) => {
   localStorage.removeItem("refresh");
   const res = await axios.post(`${API_URL}/auth/login/`, userData);
   const { access, refresh } = res.data;
-  console.log(res.data)
   localStorage.setItem("access", access);
   localStorage.setItem("refresh", refresh);
   return res.data;

@@ -6,7 +6,7 @@ import { useProduct } from "../contexts/ProductContext";
 
 export default function MatchForYou() {
   const { state } = useCategory();
-  const { categories, loading, error } = state;
+  const { categories, loading: _loading, error } = state;
   const { state: productState } = useProduct();
   const products = productState?.products || [];
 

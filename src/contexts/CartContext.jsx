@@ -2,6 +2,7 @@ import { createContext, useContext, useReducer, useEffect } from "react";
 import axios from "axios";
 import { useAuth } from "./AuthContext";
 
+/* eslint-disable react-refresh/only-export-components */
 const CartContext = createContext();
 import { API_URL } from "../api/api";
 const initialState = {

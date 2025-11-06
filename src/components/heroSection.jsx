@@ -5,7 +5,7 @@ import "../styles/heroSection.css";
 export default function HeroSection() {
   const slidesRef = useRef([]);
   const dotsRef = useRef([]);
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const [_currentIndex, setCurrentIndex] = useState(0);
   const autoSlideInterval = 5000;
   const autoSlideTimer = useRef(null);
 

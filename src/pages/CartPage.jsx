@@ -271,8 +271,7 @@ export default function CartPage() {
             return;
           }
 
-          const verifyData = await verifyRes.json();
-          console.log("Payment verified:", verifyData);
+          await verifyRes.json();
           navigate(`/order/${order_uuid}`);
         },
         prefill: {

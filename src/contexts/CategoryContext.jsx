@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import React, { createContext, useReducer, useEffect, useContext } from "react";
 import axios from "axios";
 import API_URL from "../api/auth";

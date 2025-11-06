@@ -31,7 +31,7 @@ export default function ProductDetail() {
   const [reviews, setReviews] = useState([]);
   const [relatedProducts, setRelatedProducts] = useState([]);
   const [relatedLoading, setRelatedLoading] = useState(true);
-  const { showLoader, hideLoader } = useLoader();
+  const { hideLoader } = useLoader();
 
   // utility to check presence of a value (not null/undefined/empty/'None'/'nan')
   const isPresent = (v) => {
@@ -158,8 +158,7 @@ useEffect(() => {
   useEffect(() => {
     if (!product || !productState.products) return;
     setRelatedLoading(true);
-    // Try to match by original category id where possible, otherwise by resolved name
-    const productCategoryKey = product._categoryId ?? product.category;
+  // Try to match by original category id where possible, otherwise by resolved name
     const related = productState.products.filter((p) => {
       if (String(p.id) === String(product.id)) return false;
       const pCatId = p.category_id ?? p.category;
@@ -249,6 +248,7 @@ useEffect(() => {
           }
         });
       } catch (error) {
+        console.error(error);
         Swal.fire({
           title: "Error!",
           text: "Failed to add item to cart. Please try again.",

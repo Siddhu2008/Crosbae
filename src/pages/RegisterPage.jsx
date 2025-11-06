@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { GoogleOAuthProvider } from "@react-oauth/google";
-import { getGoogleClientId, register, login } from "../api/auth";
+import { getGoogleClientId, register } from "../api/auth";
 import GoogleLoginButton from "../components/GoogleLoginButton";
 import { useAuth } from "../contexts/AuthContext";
 
@@ -132,11 +132,11 @@ const RegisterPage = () => {
 
       const res = await register(payload);
 
-    console.log("Registration response:", res); // Debug log
+  // Registration response received
 
     // Option 1: Check if user data is returned (successful creation)
     if (res.data && res.data.id) {
-      console.log("User created successfully with ID:", res.data.id);
+    // User created successfully
       
       // If tokens are returned, use them
       if (res.data.access) {

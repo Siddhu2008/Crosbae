@@ -1,8 +1,7 @@
 import React, { useRef, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
-import tvImage from "../assets/images/tv.png";
-import jewelryVideo from "../assets/videos/jewelry.mp4";
+// video is loaded from CDN; local imports removed to avoid unused variables
 import "../styles/NewArrivals.css"
 
 

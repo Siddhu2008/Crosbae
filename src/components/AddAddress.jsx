@@ -2,11 +2,11 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/AddAddress.css';
 import API_URL from "../api/auth";
-import { useAuth } from '../contexts/AuthContext'; // Get user/token from context
+// Auth context available if needed via useAuth() — not used in this component
 
 export default function AddAddress({ onSave, onCancel }) {
   const navigate = useNavigate();
-  const { user } = useAuth(); // You can also expose token from here
+  // Auth context available if needed via useAuth()
 
   const token = localStorage.getItem("access"); // or pass it through AuthContext
 

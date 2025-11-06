@@ -18,7 +18,7 @@ export default function EditProfile() {
     profilePicFile: null,
   });
   const [preview, setPreview] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [_loading, setLoading] = useState(true);
   const { showLoader, hideLoader } = useLoader();
 
   const token = localStorage.getItem("access");
@@ -36,6 +36,7 @@ export default function EditProfile() {
           profilePicFile: null,
         });
       } catch (err) {
+        console.error(err);
         alert("Failed to fetch user data.");
       } finally {
         setLoading(false);
@@ -91,6 +92,7 @@ export default function EditProfile() {
       alert("Profile updated successfully!");
       navigate("/profile");
     } catch (err) {
+      console.error(err);
       alert("Failed to update profile.");
     }
   };

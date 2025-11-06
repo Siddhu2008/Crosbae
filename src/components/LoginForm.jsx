@@ -8,8 +8,7 @@ export default function LoginForm({ onLogin }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await login({ username, password });
-      console.log("Login response:", res.data);
+  const res = await login({ username, password });
       onLogin(res.data);
       localStorage.setItem("access", res.data.access);
 
@@ -24,6 +23,7 @@ export default function LoginForm({ onLogin }) {
         alert("User ID not found in login response.");
       }
     } catch (err) {
+      console.error(err);
       alert("Invalid credentials");
     }
   };

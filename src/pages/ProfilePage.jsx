@@ -11,7 +11,6 @@ export default function ProfilePage() {
 
   const [user, setUser] = useState(null);
   const [addresses, setAddresses] = useState([]);
-  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const { showLoader, hideLoader } = useLoader();
 
@@ -20,7 +19,6 @@ export default function ProfilePage() {
   useEffect(() => {
     if (!token) {
       setError("User not authenticated");
-      setLoading(false);
       return;
     }
 
@@ -68,7 +66,6 @@ export default function ProfilePage() {
       } catch (err) {
         setError(err.message || "Failed to load profile data");
       } finally {
-        setLoading(false);
         hideLoader();
       }
     };

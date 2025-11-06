@@ -1,11 +1,9 @@
 import React, { useState } from "react";
-import { Link, useSearchParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Seo from "../components/Seo";
 
 const ResetPasswordPage = () => {
-  // Example: we could get a token from the query string
-  const [searchParams] = useSearchParams();
-  const token = searchParams.get("token"); // optional, for API calls
+  // Example: we could get a token from the query string (not used currently)
 
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");

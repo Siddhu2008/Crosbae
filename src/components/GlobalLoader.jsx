@@ -8,7 +8,6 @@ import { usePurity } from "../contexts/PurityContext";
 import { useCertificate } from "../contexts/CertificateContext";
 import { useCart } from "../contexts/CartContext";
 import { useLoader } from "../contexts/LoaderContext";
-import { useLocation } from "react-router-dom";
 import "../styles/Loader.css";
 
 export default function GlobalLoader() {
@@ -22,7 +21,7 @@ export default function GlobalLoader() {
   const cert = useCertificate();
   const cart = useCart();
   const { loading: routeLoading } = useLoader();
-  const location = useLocation();
+  // location not required for current skeleton rendering
 
   const candidates = [
     prod?.state?.loading ?? prod?.loading,
@@ -39,47 +38,7 @@ export default function GlobalLoader() {
   const isAnyLoading = candidates.some((v) => !!v);
   if (!isAnyLoading) return null;
 
-  const path = location.pathname || "/";
-
-  const productSkeleton = () => (
-    <div className="skeleton-product">
-      <div className="skeleton-thumb" />
-      <div className="skeleton-product-details">
-        <div className="skeleton-line big" />
-        <div className="skeleton-line medium" />
-        <div className="skeleton-line small" />
-        <div className="skeleton-row">
-          <div className="skeleton-rect" style={{ width: 120, height: 40 }} />
-          <div className="skeleton-rect" style={{ width: 180, height: 40 }} />
-        </div>
-        <div className="skeleton-grid-row">
-          <div className="skeleton-box" />
-          <div className="skeleton-box" />
-          <div className="skeleton-box" />
-        </div>
-      </div>
-    </div>
-  );
-
-  const gridSkeleton = (count = 8) => (
-    <div className="skeleton-grid">
-      {Array.from({ length: count }).map((_, i) => (
-        <div className="skeleton-card" key={i}>
-          <div className="skeleton-card-img" />
-          <div className="skeleton-line" style={{ width: "70%" }} />
-          <div className="skeleton-line" style={{ width: "50%" }} />
-        </div>
-      ))}
-    </div>
-  );
-
-  const genericSkeleton = () => (
-    <div className="skeleton-generic">
-      <div className="skeleton-line big" />
-      <div className="skeleton-line medium" />
-      <div className="skeleton-line small" />
-    </div>
-  );
+  // siteSkeleton below is the rendered skeleton; smaller helpers removed to satisfy lint
 
   // Render a centered site-style skeleton (two stacked rounded cards + small lines)
   const siteSkeleton = () => (

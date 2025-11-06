@@ -26,7 +26,7 @@ export default function AddProduct() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Product added:", product);
+    // Product submit - handled by backend integration (debug logs removed)
     // Integrate with backend here (e.g., send to Firebase, Node API, etc.)
     setProduct(initialState);
     setPreview(null);

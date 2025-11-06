@@ -32,7 +32,7 @@ export default defineConfig({
 
               // Set modified cookies on the proxied response
               res.setHeader('set-cookie', newCookies);
-            } catch (e) {
+              } catch {
               // ignore
             }
           });

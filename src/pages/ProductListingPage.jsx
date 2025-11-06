@@ -27,14 +27,14 @@ export default function ProductListingPage() {
 
   const { state } = useProduct();
   const productsList = state?.products || [];
-  const loading = state?.loading; // ✅ loader
+  const _loading = state?.loading; // local loader flag (unused here)
 
   const { state: categoryState } = useCategory();
   const categories = categoryState?.categories || [];
   const { state: metalState } = useMetalType();
-  const metalTypes = metalState?.metalTypes || [];
+  const _metalTypes = metalState?.metalTypes || [];
   const { state: stoneState } = useStoneType();
-  const stoneTypes = stoneState?.stoneTypes || [];
+  const _stoneTypes = stoneState?.stoneTypes || [];
   const { state: purityState } = usePurity();
   const purities = purityState?.purities || [];
   const location = useLocation();
@@ -377,6 +377,7 @@ export default function ProductListingPage() {
                           });
                         }
                       } catch (error) {
+                        console.error(error);
                         Swal.fire({
                           title: "Error!",
                           text: "Something went wrong. Please try again.",
@@ -438,6 +439,7 @@ export default function ProductListingPage() {
                             }
                           });
                         } catch (error) {
+                          console.error(error);
                           Swal.fire({
                             title: "Error!",
                             text: "Failed to add item to cart. Please try again.",

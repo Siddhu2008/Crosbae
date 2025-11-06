@@ -65,7 +65,7 @@ const LoginPage = () => {
       className="container-fluid min-vh-100 d-flex justify-content-center align-items-center bg-light px-3"
       style={{ paddingTop: "8rem", paddingBottom: "3rem" }}
     >
-  {/* global loader handles loading overlay */}
+  {/* page loader handles loading overlay */}
 
       <div className="card shadow p-4" style={{ maxWidth: 400, width: "100%", position: "relative" }}>
         {/* internal overlay shown only for this page while authenticating */}

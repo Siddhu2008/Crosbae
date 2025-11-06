@@ -1,4 +1,5 @@
 // src/contexts/ProductContext.jsx
+/* eslint-disable react-refresh/only-export-components */
 import React, { createContext, useReducer, useEffect, useContext } from "react";
 import api from "../api/api"; // ✅ unified API instance
 

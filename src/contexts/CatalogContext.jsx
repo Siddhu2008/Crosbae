@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useReducer, useEffect } from "react";
+/* eslint-disable react-refresh/only-export-components */
 import axios from "axios";
 import { API_URL } from "../api/api";
 const CatalogContext = createContext();

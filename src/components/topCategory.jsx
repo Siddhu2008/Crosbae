@@ -10,8 +10,7 @@ export default function TopCategory() {
   const animationIdRef = useRef(null);
   const isHoveringRef = useRef(false);
   const isDraggingRef = useRef(false);
-  const startXRef = useRef(0);
-  const scrollLeftRef = useRef(0);
+  // startXRef and scrollLeftRef were declared previously for drag behavior but are unused now
   const totalScrollWidthRef = useRef(0);
   const totalScrollableRef = useRef(0);
 

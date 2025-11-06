@@ -2,13 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import '../styles/AddAddress.css';
 import API_URL from "../api/auth";
-import { useAuth } from '../contexts/AuthContext';
+// useAuth imported but not needed in this component
 import { useLoader } from '../contexts/LoaderContext';
 
 export default function EditAddress({ onSave, onCancel }) {
   const navigate = useNavigate();
   const { id } = useParams(); // Get address ID from URL
-  const { user } = useAuth();
   const token = localStorage.getItem("access");
 
   const [form, setForm] = useState({
@@ -23,7 +22,7 @@ export default function EditAddress({ onSave, onCancel }) {
     phone_number: '',
   });
 
-  const [loading, setLoading] = useState(true);
+  const [_loading, setLoading] = useState(true);
   const { showLoader, hideLoader } = useLoader();
 
   // ✅ Load address data when component mounts
