@@ -44,6 +44,7 @@ import "aos/dist/aos.css";
 import "./main.css"; 
 import "./styles/Loader.css";
 import { useLoader } from "./contexts/LoaderContext";
+import GlobalLoader from "./components/GlobalLoader";
 
 // Component to handle blur automatically on route change
 const AppContent = () => {
@@ -61,6 +62,7 @@ const AppContent = () => {
 
   return (
     <div className={loading ? "blur-content" : ""}>
+      <GlobalLoader />
       <Navbar />
         <ScrollToTop />
       <Routes>
