@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
 import { getGoogleClientId, googleLogin, login } from "../api/auth";
 import { useAuth } from "../contexts/AuthContext";
-import { useLoader } from "../contexts/LoaderContext";
+// local internal loader will be used instead of global loader
 
 const LoginPage = () => {
   const [clientId, setClientId] = useState("");
@@ -11,7 +11,7 @@ const LoginPage = () => {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
-  const { showLoader, hideLoader } = useLoader();
+  // internal overlay spinner will be displayed while `loading` is true
 
   const navigate = useNavigate();
   const { setUser } = useAuth();
@@ -29,7 +29,6 @@ const LoginPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
   setLoading(true);
-  showLoader();
     try {
       const data = await login({ username: email, password });
       localStorage.setItem("access", data.access);
@@ -41,14 +40,12 @@ const LoginPage = () => {
       alert("Invalid credentials or network error");
     } finally {
       setLoading(false);
-      hideLoader();
     }
   };
 
   // Handle Google login
   const handleGoogleLogin = async (credentialResponse) => {
   setLoading(true);
-  showLoader();
     try {
       const data = await googleLogin(credentialResponse.credential);
       localStorage.setItem("access", data.access);
@@ -60,7 +57,6 @@ const LoginPage = () => {
       alert("Google login failed");
     } finally {
       setLoading(false);
-      hideLoader();
     }
   };
 
@@ -71,7 +67,30 @@ const LoginPage = () => {
     >
   {/* global loader handles loading overlay */}
 
-      <div className="card shadow p-4" style={{ maxWidth: 400, width: "100%" }}>
+      <div className="card shadow p-4" style={{ maxWidth: 400, width: "100%", position: "relative" }}>
+        {/* internal overlay shown only for this page while authenticating */}
+        {loading && (
+          <div
+            aria-hidden={!loading}
+            style={{
+              position: "absolute",
+              inset: 0,
+              background: "rgba(255,255,255,0.85)",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              zIndex: 10,
+              borderRadius: 6,
+            }}
+          >
+            <div className="text-center">
+              <div className="spinner-border text-primary" role="status">
+                <span className="visually-hidden">Signing in...</span>
+              </div>
+              <div className="mt-2">Signing in...</div>
+            </div>
+          </div>
+        )}
         <h3 className="mb-4 text-center">Sign in</h3>
 
         {/* Google Login */}

@@ -238,7 +238,30 @@ const RegisterPage = () => {
       className="container-fluid min-vh-100 d-flex justify-content-center align-items-center bg-light px-5"
       style={{ paddingTop: "8rem", paddingBottom: "3rem" }}
     >
-      <div className="card shadow p-4" style={{ maxWidth: 450, width: "100%" }}>
+      <div className="card shadow p-4" style={{ maxWidth: 450, width: "100%", position: "relative" }}>
+        {/* internal overlay shown only for this page while submitting */}
+        {isSubmitting && (
+          <div
+            aria-hidden={!isSubmitting}
+            style={{
+              position: "absolute",
+              inset: 0,
+              background: "rgba(255,255,255,0.9)",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              zIndex: 10,
+              borderRadius: 8,
+            }}
+          >
+            <div className="text-center">
+              <div className="spinner-border text-primary" role="status">
+                <span className="visually-hidden">Signing up...</span>
+              </div>
+              <div className="mt-2">Creating your account...</div>
+            </div>
+          </div>
+        )}
         <h3 className="mb-4 text-center">Sign up</h3>
 
         {/* Non-field errors */}
