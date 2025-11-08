@@ -113,7 +113,31 @@ export default function ProductListingPage() {
             (img) => (typeof img === "string" ? img : img.url_full || img.url || "/fallback-image.jpg")
           );
         }
-        return { ...product, images: images.length ? images : ["/fallback-image.jpg"] };
+        // Normalize common field names so filters work regardless of API shape
+        const normalized = {
+          ...product,
+          images: images.length ? images : ["/fallback-image.jpg"],
+          // category can be named differently in various endpoints
+          category: product.category ?? product.category_id ?? product._categoryId ?? product.categoryId,
+          // metal and stone types may differ in naming
+          metalType: product.metalType ?? product.metal_type ?? product.metal_type_id ?? product.metal_typeId,
+          stoneType: product.stoneType ?? product.stone_type ?? product.stone_type_id ?? product.stone_typeId,
+          // purity variations
+          purity: product.purity ?? product.purity_level ?? product.purityId,
+          // tags may be a comma-separated string or array
+          tags: Array.isArray(product.tags)
+            ? product.tags
+            : typeof product.tags === "string"
+            ? product.tags.split(",").map((s) => s.trim()).filter(Boolean)
+            : product.tags
+        };
+
+        // ensure name fields exist consistently
+        if (!normalized.productName && (normalized.name || normalized.title)) {
+          normalized.productName = normalized.name || normalized.title;
+        }
+
+        return normalized;
       });
       setProductsWithImages(updatedProducts);
     } else setProductsWithImages([]);
@@ -125,12 +149,19 @@ export default function ProductListingPage() {
     if (filters.category.length) result = result.filter((p) => filters.category.includes(String(p.category)));
     if (filters.purity.length) result = result.filter((p) => filters.purity.includes(String(p.purity)));
     if (filters.metalType.length) result = result.filter(
-      (p) => p.metal_type && filters.metalType.includes(String(p.metal_type))
+      (p) => (p.metalType ?? p.metal_type) && filters.metalType.includes(String(p.metalType ?? p.metal_type))
     );
     if (filters.stoneType.length) result = result.filter(
-      (p) => p.stone_type && filters.stoneType.includes(String(p.stone_type))
+      (p) => (p.stoneType ?? p.stone_type) && filters.stoneType.includes(String(p.stoneType ?? p.stone_type))
     );
     if (filters.occasion.length) result = result.filter((p) => filters.occasion.includes(p.occasion));
+    // support tag-based filtering if implemented (tags in filter sidebar)
+    if (filters.tags && filters.tags.length) {
+      result = result.filter((p) => {
+        const tags = Array.isArray(p.tags) ? p.tags.map(String) : [];
+        return filters.tags.some((t) => tags.includes(String(t)));
+      });
+    }
     if (sortOption === "priceLowHigh") result.sort((a, b) => a.price - b.price);
     else if (sortOption === "priceHighLow") result.sort((a, b) => b.price - a.price);
     else if (sortOption === "newest") result.sort((a, b) => new Date(b.date) - new Date(a.date));
@@ -260,25 +291,58 @@ export default function ProductListingPage() {
           })}
         </div>
 
-        {/* Occasion */}
-        <div className="mb-4">
-          <h6>Occasion</h6>
-          {["Wedding", "Party", "Festive", "Anniversary", "Daily Wear", "Engagement"].map((occasion) => (
-            <div key={occasion} className="form-check">
-              <input
-                className="form-check-input"
-                type="checkbox"
-                value={occasion}
-                id={`occ-${occasion}`}
-                checked={filters.occasion.includes(occasion)}
-                onChange={(e) => handleCheckboxChange(e, "occasion")}
-              />
-              <label className="form-check-label" htmlFor={`occ-${occasion}`}>
-                {occasion}
-              </label>
-            </div>
-          ))}
-        </div>
+       {/* Metal Type */}
+<div className="mb-4">
+  <h6>Metal Type</h6>
+  {( _metalTypes || [] ).map((m) => {
+    // ✅ use backend field names properly
+    const val = m.id ?? m.metal_name ?? m.value ?? String(m);
+    const label = m.metal_name || m.name || m.label || String(m);
+
+    return (
+      <div key={val} className="form-check">
+        <input
+          className="form-check-input"
+          type="checkbox"
+          value={String(val)}
+          id={`metal-${val}`}
+          checked={filters.metalType.includes(String(val))}
+          onChange={(e) => handleCheckboxChange(e, "metalType")}
+        />
+        <label className="form-check-label" htmlFor={`metal-${val}`}>
+          {label}
+        </label>
+      </div>
+    );
+  })}
+</div>
+
+{/* Stone Type */}
+<div className="mb-4">
+  <h6>Stone Type</h6>
+  {( _stoneTypes || [] ).map((s) => {
+    // ✅ use backend field names properly
+    const val = s.id ?? s.stone_name ?? s.value ?? String(s);
+    const label = s.stone_name || s.name || s.label || String(s);
+
+    return (
+      <div key={val} className="form-check">
+        <input
+          className="form-check-input"
+          type="checkbox"
+          value={String(val)}
+          id={`stone-${val}`}
+          checked={filters.stoneType.includes(String(val))}
+          onChange={(e) => handleCheckboxChange(e, "stoneType")}
+        />
+        <label className="form-check-label" htmlFor={`stone-${val}`}>
+          {label}
+        </label>
+      </div>
+    );
+  })}
+</div>
+
 
         {/* Apply & Clear */}
         <div className="border-top p-3 d-flex justify-content-between">

@@ -8,13 +8,14 @@ import { API_URL } from "../api/api";
 const initialState = {
   items: [],
   loading: false,
+  initialized: false,
   error: null,
 };
 
 function cartReducer(state, action) {
   switch (action.type) {
     case "FETCH_START":
-      return { ...state, loading: true, error: null };
+      return { ...state, loading: true, error: null, initialized: true };
     case "FETCH_SUCCESS":
       return { ...state, loading: false, items: action.payload };
     case "FETCH_ERROR":

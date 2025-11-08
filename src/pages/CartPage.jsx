@@ -25,6 +25,7 @@ export default function CartPage() {
     items: cartItems, 
     loading: cartLoading, 
     error: cartError,
+    initialized: cartInitialized,
     updateCartItem,
     removeFromCart,
     fetchCart 
@@ -306,6 +307,8 @@ export default function CartPage() {
       </p>
     </div>
   );
+  
+  
 
   return (
     <>
@@ -314,7 +317,10 @@ export default function CartPage() {
 
         <h2 className="cart-title text-center my-3">Shopping Cart</h2>
         
-        {cartLoading ? (
+        {/* If user is authenticated and cart hasn't been fetched yet, show loader first */}
+        {token && !cartInitialized ? (
+          <Loader type="cart" />
+        ) : cartLoading ? (
           <Loader type="cart" />
         ) : cartError ? (
           <div className="cart-error text-center">

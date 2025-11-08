@@ -121,3 +121,932 @@
   .skeleton-grid{ grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
   .skeleton-thumb{ width:100%; height:220px; }
 }
+
+/* --- Shop/Product Loader Skeleton --- */
+.shop-skeleton {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1.5rem;
+  padding: 2rem;
+}
+
+.skeleton-card {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  animation: fadeIn 0.4s ease-in-out;
+}
+
+.skeleton-img {
+  width: 100%;
+  height: 200px;
+  border-radius: 12px;
+  background: #e3e3e3;
+  margin-bottom: 1rem;
+}
+
+.skeleton-title {
+  width: 70%;
+  height: 18px;
+  border-radius: 4px;
+  background: #e3e3e3;
+  margin-bottom: 0.6rem;
+}
+
+.skeleton-sub {
+  width: 50%;
+  height: 14px;
+  border-radius: 4px;
+  background: #e3e3e3;
+  margin-bottom: 0.8rem;
+}
+
+.skeleton-price {
+  width: 40%;
+  height: 16px;
+  border-radius: 4px;
+  background: #e3e3e3;
+  margin-bottom: 1rem;
+}
+
+.skeleton-btn {
+  width: 80%;
+  height: 38px;
+  border-radius: 25px;
+  background: #e3e3e3;
+}
+
+/* shimmer animation */
+.shimmer {
+  position: relative;
+  overflow: hidden;
+}
+.shimmer::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -150px;
+  height: 100%;
+  width: 150px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  animation: shimmer 1.2s infinite;
+}
+@keyframes shimmer {
+  100% {
+    transform: translateX(150%);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+/* --- Shop/Product Loader Skeleton (Crosbae Luxury Style) --- */
+.shop-skeleton {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 2rem;
+  padding: 2.5rem;
+  background-color: #fbf8f3;
+}
+
+.skeleton-card {
+  background: #fffaf1;
+  border-radius: 20px;
+  box-shadow: 0 4px 14px rgba(202, 173, 112, 0.25);
+  padding: 1.2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: all 0.3s ease-in-out;
+  animation: fadeIn 0.4s ease-in-out;
+}
+
+.skeleton-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 18px rgba(202, 173, 112, 0.35);
+}
+
+/* Image placeholder */
+.skeleton-img {
+  width: 100%;
+  height: 240px;
+  border-radius: 14px;
+  background: #f1e8d2;
+  margin-bottom: 1.2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Text placeholders */
+.skeleton-title {
+  width: 70%;
+  height: 18px;
+  border-radius: 6px;
+  background: #f1e8d2;
+  margin-bottom: 0.6rem;
+}
+
+.skeleton-price {
+  width: 40%;
+  height: 16px;
+  border-radius: 6px;
+  background: #f1e8d2;
+  margin-bottom: 1rem;
+}
+
+/* Add to cart button placeholder */
+.skeleton-btn {
+  width: 80%;
+  height: 42px;
+  border-radius: 25px;
+  background: #f1e8d2;
+  position: relative;
+  overflow: hidden;
+}
+
+/* gold shimmer effect */
+.shimmer {
+  position: relative;
+  overflow: hidden;
+}
+.shimmer::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -150px;
+  height: 100%;
+  width: 150px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 228, 150, 0.5),
+    rgba(255, 247, 220, 0.2),
+    transparent
+  );
+  animation: shimmer 1.4s infinite;
+}
+
+/* subtle fade-in animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes shimmer {
+  100% {
+    transform: translateX(150%);
+  }
+}
+/* --- Collection Page Skeleton (Crosbae Luxury Style) --- */
+.collection-skeleton-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: #fbf8f3;
+  padding: 3rem 2rem;
+  min-height: 100vh;
+}
+
+.collection-title {
+  width: 250px;
+  height: 32px;
+  border-radius: 8px;
+  background: #f1e8d2;
+  margin-bottom: 3rem;
+}
+
+/* Grid Layout */
+.collection-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+  width: 100%;
+  max-width: 1200px;
+}
+
+/* Individual Card Skeleton */
+.collection-card-skeleton {
+  background: #fffaf1;
+  border-radius: 16px;
+  padding: 0.8rem;
+  box-shadow: 0 4px 14px rgba(202, 173, 112, 0.2);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: all 0.3s ease;
+}
+
+.collection-card-skeleton:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 18px rgba(202, 173, 112, 0.35);
+}
+
+/* Image Placeholder */
+.collection-img-skeleton {
+  width: 100%;
+  height: 200px;
+  border-radius: 12px;
+  background: #f1e8d2;
+  margin-bottom: 1rem;
+  overflow: hidden;
+}
+
+/* Label Placeholder */
+.collection-label-skeleton {
+  width: 60%;
+  height: 18px;
+  border-radius: 8px;
+  background: #f1e8d2;
+}
+
+/* Gold shimmer animation */
+.shimmer {
+  position: relative;
+  overflow: hidden;
+}
+
+.shimmer::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -150px;
+  height: 100%;
+  width: 150px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 228, 150, 0.45),
+    rgba(255, 247, 220, 0.25),
+    transparent
+  );
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  100% {
+    transform: translateX(150%);
+  }
+}
+/* --- Profile Page Skeleton (Crosbae Luxury Style) --- */
+.profile-skeleton-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #fbf8f3;
+  min-height: 100vh;
+  padding: 3rem 1rem;
+}
+
+.profile-card-skeleton {
+  background: #fffaf1;
+  width: 100%;
+  max-width: 550px;
+  border-radius: 20px;
+  box-shadow: 0 8px 20px rgba(202, 173, 112, 0.25);
+  padding: 2.5rem 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.4rem;
+}
+
+/* Avatar */
+.profile-avatar-skeleton {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: #f1e8d2;
+  margin-bottom: 0.6rem;
+}
+
+/* Name + Email */
+.profile-name-skeleton {
+  width: 180px;
+  height: 22px;
+  border-radius: 8px;
+  background: #f1e8d2;
+}
+
+.profile-email-skeleton {
+  width: 140px;
+  height: 16px;
+  border-radius: 8px;
+  background: #f1e8d2;
+  margin-bottom: 1rem;
+}
+
+/* Info lines (Username, Gender, DOB) */
+.profile-details-skeleton {
+  width: 90%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  align-items: center;
+}
+
+.profile-line-skeleton {
+  width: 70%;
+  height: 16px;
+  border-radius: 6px;
+  background: #f1e8d2;
+}
+
+/* Address Section */
+.address-section-skeleton {
+  background: #fff4e6;
+  border-radius: 14px;
+  padding: 1.5rem;
+  width: 90%;
+  margin-top: 1rem;
+  box-shadow: 0 3px 8px rgba(202, 173, 112, 0.15);
+}
+
+.address-title-skeleton {
+  width: 60%;
+  height: 20px;
+  border-radius: 8px;
+  background: #f1e8d2;
+  margin: 0 auto 1.2rem;
+}
+
+.address-line-skeleton {
+  width: 80%;
+  height: 14px;
+  border-radius: 6px;
+  background: #f1e8d2;
+  margin: 0.5rem auto;
+}
+
+.address-line-skeleton.short {
+  width: 60%;
+}
+
+/* Buttons */
+.address-buttons-skeleton {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.8rem;
+  margin-top: 1rem;
+}
+
+.address-btn-skeleton {
+  width: 60px;
+  height: 28px;
+  border-radius: 6px;
+  background: #f1e8d2;
+}
+
+/* Shimmer Effect */
+.shimmer {
+  position: relative;
+  overflow: hidden;
+}
+
+.shimmer::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -150px;
+  height: 100%;
+  width: 150px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 228, 150, 0.5),
+    rgba(255, 247, 220, 0.3),
+    transparent
+  );
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  100% {
+    transform: translateX(150%);
+  }
+}
+/* --- Crosbae Luxury Orders Skeleton --- */
+.orders-skeleton-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+  padding: 3rem 1rem;
+  background: #fbf8f3;
+  min-height: 100vh;
+}
+
+.order-card-skeleton {
+  background: #fffaf1;
+  width: 95%;
+  max-width: 900px;
+  border-radius: 18px;
+  box-shadow: 0 6px 18px rgba(202, 173, 112, 0.2);
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+/* Header */
+.order-header-skeleton {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  align-items: center;
+}
+
+.order-id-skeleton,
+.order-date-skeleton,
+.order-status-skeleton,
+.order-total-skeleton {
+  height: 18px;
+  border-radius: 6px;
+  background: #f1e8d2;
+}
+
+/* Progress bar */
+.order-progress-skeleton {
+  height: 6px;
+  border-radius: 4px;
+  width: 100%;
+  background: #f1e8d2;
+}
+
+/* Product Items */
+.order-items-skeleton {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  margin-top: 0.5rem;
+}
+
+.order-item-skeleton {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: #fff4e6;
+  border-radius: 14px;
+  padding: 1rem;
+  box-shadow: 0 2px 8px rgba(202, 173, 112, 0.15);
+  flex: 1;
+  min-width: 240px;
+}
+
+.order-thumb-skeleton {
+  width: 60px;
+  height: 60px;
+  border-radius: 12px;
+  background: #f1e8d2;
+  flex-shrink: 0;
+}
+
+.order-lines-skeleton {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.order-line-skeleton {
+  width: 80%;
+  height: 14px;
+  border-radius: 6px;
+  background: #f1e8d2;
+}
+
+.order-line-skeleton.short {
+  width: 60%;
+}
+
+/* Footer Buttons */
+.order-buttons-skeleton {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 0.8rem;
+}
+
+.order-btn-skeleton {
+  width: 110px;
+  height: 32px;
+  border-radius: 8px;
+  background: #f1e8d2;
+}
+
+.order-btn-skeleton.wide {
+  width: 140px;
+}
+
+/* Shimmer Effect */
+.shimmer {
+  position: relative;
+  overflow: hidden;
+}
+
+.shimmer::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -150px;
+  height: 100%;
+  width: 150px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 228, 150, 0.5),
+    rgba(255, 247, 220, 0.3),
+    transparent
+  );
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  100% {
+    transform: translateX(150%);
+  }
+}
+.cart-skeleton-wrapper {
+  display: flex;
+  justify-content: center;
+  padding: 40px 20px;
+}
+
+.cart-skeleton-content {
+  display: flex;
+  gap: 40px;
+  width: 100%;
+  max-width: 1100px;
+}
+
+.cart-items-skeleton {
+  flex: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.cart-item-skeleton {
+  display: flex;
+  gap: 16px;
+  background: #fff;
+  border-radius: 8px;
+  padding: 16px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.cart-img-skeleton {
+  width: 80px;
+  height: 80px;
+  border-radius: 6px;
+  background: #eee;
+}
+
+.cart-info-skeleton {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.cart-title-skeleton,
+.cart-sku-skeleton,
+.cart-price-skeleton {
+  height: 14px;
+  width: 60%;
+  background: #eee;
+  border-radius: 4px;
+}
+
+.cart-qty-skeleton {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.qty-btn-skeleton,
+.qty-num-skeleton {
+  width: 25px;
+  height: 25px;
+  background: #eee;
+  border-radius: 4px;
+}
+
+.order-summary-skeleton {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  background: #fff;
+  padding: 24px;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.summary-line-skeleton {
+  height: 14px;
+  background: #eee;
+  border-radius: 4px;
+}
+
+.summary-line-skeleton.long { width: 80%; }
+.summary-line-skeleton.short { width: 50%; }
+
+.summary-total-skeleton {
+  height: 18px;
+  width: 70%;
+  background: #ddd;
+  border-radius: 4px;
+}
+
+.summary-btn-skeleton {
+  height: 40px;
+  width: 100%;
+  background: #f2c94c;
+  border-radius: 6px;
+}
+
+.shimmer {
+  background: linear-gradient(90deg, #eee 25%, #f5f5f5 50%, #eee 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.2s infinite;
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+/* === CONTACT PAGE SKELETON === */
+.contact-skeleton-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px 20px;
+}
+
+.contact-header-skeleton {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.contact-title-skeleton {
+  width: 300px;
+  height: 32px;
+  background: #eee;
+  border-radius: 6px;
+  margin: 0 auto 12px;
+}
+
+.contact-subtitle-skeleton {
+  width: 450px;
+  height: 16px;
+  background: #eee;
+  border-radius: 6px;
+  margin: 0 auto;
+}
+
+.contact-body-skeleton {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  flex-wrap: wrap;
+  width: 100%;
+  max-width: 1100px;
+}
+
+.contact-info-skeleton,
+.contact-form-skeleton {
+  flex: 1;
+  min-width: 300px;
+  background: #fff7e6;
+  border-radius: 8px;
+  padding: 24px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.info-line-skeleton {
+  height: 14px;
+  background: #eee;
+  border-radius: 4px;
+  margin-bottom: 12px;
+}
+.info-line-skeleton.long { width: 80%; }
+.info-line-skeleton.short { width: 50%; }
+
+.form-input-skeleton {
+  width: 100%;
+  height: 36px;
+  background: #eee;
+  border-radius: 6px;
+  margin-bottom: 16px;
+}
+
+.form-button-skeleton {
+  width: 100%;
+  height: 40px;
+  background: #f2c94c;
+  border-radius: 6px;
+}
+
+/* === ABOUT PAGE SKELETON === */
+.about-skeleton-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px 20px;
+}
+
+.about-header-skeleton {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.about-title-skeleton {
+  width: 320px;
+  height: 36px;
+  background: #eee;
+  border-radius: 6px;
+  margin-bottom: 10px;
+}
+
+.about-subtitle-skeleton {
+  width: 400px;
+  height: 16px;
+  background: #eee;
+  border-radius: 6px;
+}
+
+.about-story-skeleton {
+  width: 100%;
+  max-width: 800px;
+  text-align: center;
+  margin: 40px 0;
+}
+
+.story-title-skeleton {
+  width: 180px;
+  height: 24px;
+  background: #eee;
+  border-radius: 6px;
+  margin: 0 auto 16px;
+}
+
+.story-line-skeleton {
+  height: 14px;
+  background: #eee;
+  border-radius: 4px;
+  margin: 8px auto;
+}
+.story-line-skeleton.long { width: 80%; }
+.story-line-skeleton.short { width: 50%; }
+
+.mission-vision-skeleton {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  flex-wrap: wrap;
+}
+
+.mv-card-skeleton {
+  width: 320px;
+  height: 150px;
+  background: #fff7e6;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Shared shimmer animation */
+.shimmer {
+  background: linear-gradient(90deg, #eee 25%, #f5f5f5 50%, #eee 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.2s infinite;
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+/* === FORM PAGE SKELETON === */
+.form-skeleton-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px 20px;
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.form-header-skeleton {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.form-title-skeleton {
+  width: 250px;
+  height: 28px;
+  background: #eee;
+  border-radius: 6px;
+  margin: 0 auto 10px;
+}
+
+.form-subtitle-skeleton {
+  width: 400px;
+  height: 14px;
+  background: #eee;
+  border-radius: 6px;
+  margin: 0 auto;
+}
+
+.form-body-skeleton {
+  width: 100%;
+  background: #fff;
+  padding: 30px 24px;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.form-field-skeleton {
+  height: 42px;
+  background: #eee;
+  border-radius: 6px;
+}
+
+.form-button-skeleton {
+  height: 45px;
+  width: 150px;
+  align-self: center;
+  background: #f2c94c;
+  border-radius: 6px;
+  margin-top: 10px;
+}
+
+/* Shimmer effect */
+.shimmer {
+  background: linear-gradient(90deg, #eee 25%, #f5f5f5 50%, #eee 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.2s infinite;
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+.navbar-sk-skeleton {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #f7f7f7;
+  padding: 1rem 2rem;
+  border-bottom: 1px solid #eee;
+}
+
+.navbar-sk-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  max-width: 1200px;
+}
+
+.navbar-sk-logo,
+.action-sk-icon,
+.nav-sk-link {
+  background: #ddd;
+  border-radius: 4px;
+  height: 20px;
+}
+
+.navbar-sk-logo {
+  width: 100px;
+  height: 24px;
+}
+
+.navbar-sk-links {
+  display: flex;
+  gap: 1rem;
+}
+
+.navbar-sk-actions {
+  display: flex;
+  gap: 0.75rem;
+}

@@ -45,6 +45,7 @@ const wishlistProducts = allProducts.filter((p) =>
           </Link>
         </div>
       ) : (
+        
         <div className="wishlist-grid">
           {wishlistProducts.map((product) => {
             const imgUrl =
@@ -59,11 +60,13 @@ const wishlistProducts = allProducts.filter((p) =>
 
             return (
               <div className="wishlist-card" key={product.id}>
+                <Link to={`/product/${product.id}`}>
                 <img
                   src={imgUrl}
                   alt={product.productName || product.name || "Wishlist product"}
                   className="wishlist-img"
                 />
+                </Link>
                 <div className="wishlist-info">
                   <h5>{product.productName || product.name || "Unnamed Product"}</h5>
                   <p className="wishlist-desc">{shortDescription}</p>
