@@ -1,9 +1,9 @@
 import { createContext, useContext, useReducer } from "react";
 import axios from "axios";
 import { useAuth } from "./AuthContext";
+import { getUserProfile } from "../api/user"; // ✅ fetch customer_id
 import { API_URL } from "../api/api";
 
-/* eslint-disable react-refresh/only-export-components */
 const ReviewContext = createContext();
 
 const initialState = {
@@ -33,51 +33,63 @@ export const ReviewProvider = ({ children }) => {
   const { user } = useAuth();
   const token = localStorage.getItem("access");
 
-  // Fetch reviews for a specific product
+  // Fetch reviews for a product
   const fetchReviews = async (productId) => {
+    if (!productId) return [];
     try {
       dispatch({ type: "FETCH_START" });
-      const res = await axios.get(`${API_URL}/demo/review`, {
-        params: { productId },
+      const res = await axios.get(`${API_URL}/reviews/`, {
+        params: { product: productId },
         headers: user ? { Authorization: `Bearer ${token}` } : {},
         withCredentials: !!user,
       });
-      dispatch({ type: "FETCH_SUCCESS", payload: res.data });
-      return res.data;
+      const data = res.data.results || res.data;
+      dispatch({ type: "FETCH_SUCCESS", payload: data });
+      return data;
     } catch (err) {
+      console.error("Error fetching reviews:", err);
       dispatch({ type: "FETCH_ERROR", payload: err.message });
       return [];
     }
   };
 
   // Post a new review
-  const postReview = async (productId, review) => {
-    if (!user) {
-      window.location.href = "/login";
-      return;
-    }
-    try {
-      const formData = new FormData();
-      formData.append("name", review.name);
-      formData.append("rating", review.rating);
-      formData.append("comment", review.comment);
-      review.media?.forEach((fileObj) => {
-        formData.append("media", fileObj.file);
-      });
-      formData.append("productId", productId);
+ const postReview = async (productId, review) => {
+  if (!user) {
+    window.location.href = "/login";
+    return;
+  }
 
-      const res = await axios.post(`${API_URL}/demo/review`, formData, {
-        headers: { Authorization: `Bearer ${token}`, "Content-Type": "multipart/form-data" },
-        withCredentials: true,
-      });
+  try {
+    const formData = new FormData();
+    formData.append("title", review.title);
+    formData.append("customer", review.customer);
+    formData.append("rating", review.rating);
+    formData.append("review", review.comment);
+    formData.append("product", productId); // ✅ Add this line
 
-      dispatch({ type: "ADD_REVIEW", payload: res.data });
-      return res.data;
-    } catch (err) {
-      console.error("Error posting review:", err);
-      throw err;
+    // Append media files if any
+    if (review.media?.length > 0) {
+      review.media.forEach((m) => formData.append("media", m.file));
     }
-  };
+
+    const res = await axios.post(`${API_URL}/reviews/`, formData, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "multipart/form-data",
+      },
+      withCredentials: true,
+    });
+
+    dispatch({ type: "ADD_REVIEW", payload: res.data });
+    return res.data;
+  } catch (err) {
+    console.error("Error posting review:", err.response?.data || err.message);
+    throw err;
+  }
+};
+
+
 
   return (
     <ReviewContext.Provider value={{ ...state, fetchReviews, postReview }}>

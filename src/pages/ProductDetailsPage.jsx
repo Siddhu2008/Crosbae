@@ -10,6 +10,7 @@ import { useStoneType } from "../contexts/StoneTypeContext";
 import { usePurity } from "../contexts/PurityContext";
 import { useCertificate } from "../contexts/CertificateContext";
 import { useCart } from "../contexts/CartContext";
+import { useAuth } from "../contexts/AuthContext";
 import Seo from "../components/Seo";
 import "../styles/ProductDetailsPage.css";
 import { useReview } from "../contexts/ReviewContext";
@@ -24,6 +25,7 @@ export default function ProductDetail() {
   const { state: purityState } = usePurity();
   const { state: certificateState } = useCertificate();
   const { addToCart } = useCart();
+  const { user } = useAuth();
   const { hideLoader } = useLoader();
   const { fetchReviews, postReview } = useReview();
   const [rating, setRating] = useState(0);
@@ -74,6 +76,15 @@ export default function ProductDetail() {
       found.stone_name ||
       null
     );
+  };
+
+  // normalize reviews into an array
+  const normalizeReviews = (r) => {
+    if (Array.isArray(r)) return r;
+    if (!r) return [];
+    if (r.results && Array.isArray(r.results)) return r.results;
+    if (typeof r === "object") return [r];
+    return [];
   };
 
   // small helper: get first non-null field from product for various possible key names
@@ -149,12 +160,8 @@ export default function ProductDetail() {
       const purityName = lookupName(purityState?.purities, purityId, "name");
       if (purityName) updatedProduct.purity = purityName;
 
-      // ✅ Reviews directly from product
-      if (Array.isArray(updatedProduct.reviews)) {
-        setReviews(updatedProduct.reviews);
-      } else {
-        setReviews([]);
-      }
+      // ✅ Reviews directly from product (normalize)
+      setReviews(normalizeReviews(updatedProduct.reviews));
 
       setProduct(updatedProduct);
       setSelectedImage(updatedProduct.images?.[0]);
@@ -180,7 +187,7 @@ export default function ProductDetail() {
     if (!product) return;
     const loadReviews = async () => {
       const data = await fetchReviews(product.id);
-      setReviews(data || []);
+      setReviews(normalizeReviews(data));
     };
     loadReviews();
   }, [product]);
@@ -540,17 +547,20 @@ export default function ProductDetail() {
                   e.preventDefault();
                   const formData = new FormData(e.target);
                   const newReview = {
-                    name: formData.get("name"),
+                    title: formData.get("title"),
+                    customer: formData.get("customer"),
+                    name: formData.get("customer"), // backward compatibility
                     rating: parseInt(formData.get("rating")),
-                    comment: formData.get("comment"),
+                    comment: formData.get("review") || formData.get("comment"),
+                    review: formData.get("review") || formData.get("comment"),
                     media: Array.from(e.target.media.files).map((file) => ({
                       file,
                       type: file.type.startsWith("video") ? "video" : "image",
                     })),
                   };
 
-                  if (!newReview.name || !newReview.rating || !newReview.comment) {
-                    Swal.fire("Missing Fields", "Please fill all fields.", "warning");
+                  if (!newReview.customer || !newReview.rating || !newReview.comment || !newReview.title) {
+                    Swal.fire("Missing Fields", "Please fill all fields (title, name, rating, review).", "warning");
                     return;
                   }
 
@@ -575,8 +585,21 @@ export default function ProductDetail() {
                 }}
               >
                 <div className="form-group">
+                  <label>Title</label>
+                  <input type="text" name="title" placeholder="Short summary (e.g. Great quality)" required />
+                </div>
+
+                <div className="form-group">
                   <label>Your Name</label>
-                  <input type="text" name="name" required />
+                  <input
+                    type="text"
+                    name="customer"
+                    placeholder="Your name"
+                    defaultValue={
+                      user?.full_name || user?.name || user?.first_name || user?.username || ""
+                    }
+                    required
+                  />
                 </div>
 
                 <div className="form-group">
@@ -597,7 +620,7 @@ export default function ProductDetail() {
 
                 <div className="form-group">
                   <label>Your Review</label>
-                  <textarea name="comment" rows="4" required></textarea>
+                  <textarea name="review" rows="4" required></textarea>
                 </div>
 
                 <div className="form-group">
